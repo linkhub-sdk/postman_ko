@@ -1,0 +1,1757 @@
+{
+	"info": {
+		"_postman_id": "59d17dc0-5290-48f4-809d-90abb7234f30",
+		"name": "Common KO_Popbill 문자 API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetToken",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/*********************************************************************************",
+							" *",
+							" * GetToken은 POPBiLL API를 호출할 때 인증 헤더에 입력할 Bearer token을",
+							" * 발급하는 샘플 코드입니다.",
+							" * ",
+							" **********************************************************************************/",
+							"",
+							"// LinkID와 SecretKey는 자격증명으로 POPBiLL에서 제공된 값으로 변경하시기 바랍니다.",
+							"var LinkID = 'TESTER';  // ex. 'LINKHUB'",
+							"var SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I='; //ex. 'CAuU7dpL4viqfoT6G+HJjqWzHhg3hRDD5sKIkp7Yqwc='",
+							"",
+							"/*",
+							" * 아래는 HMAC Message Digest 를 구성하는 코드입니다.",
+							" */",
+							"",
+							"// access_id 는 사용자의 사업자번호 입니다. (10자리 숫자('-' 제외))",
+							"// Scopes 배열은 발급된 토큰으로 사용할 수 있는 서비스 코드 목록입니다.",
+							"// 150 - SMS, 151 - LMS, 152 - MMS",
+							"var Access_id = '1234567890'; // 사업자번호.",
+							"var Scopes = ['member', '150', '151', '152'];",
+							"var TokenRequest = stringify({access_id : Access_id, scope : Scopes});",
+							"var Body = CryptoJS.SHA256(TokenRequest).toString(CryptoJS.enc.Base64);",
+							"",
+							"var RequestDT = new Date().toISOString();",
+							"",
+							"var digestTarget =",
+							"      'POST\\n' +",
+							"      Body + '\\n' +",
+							"      RequestDT +'\\n' +",
+							"      '*\\n' +",
+							"      '2.0\\n' +",
+							"      '/POPBILL_TEST/Token';",
+							"",
+							"var HMACDigest = generateSignature(digestTarget, SecretKey);",
+							"var Authorization = 'LINKHUB '+LinkID + ' '+HMACDigest;",
+							"",
+							"// HMAC 인증을 위한 요청 헤더.",
+							"pm.collectionVariables.set(\"DateTime\", RequestDT);",
+							"pm.collectionVariables.set(\"TokenRequest\", TokenRequest);",
+							"pm.collectionVariables.set(\"Authorization\", Authorization);",
+							"",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function generateSignature(message, key) {",
+							"    var keyDec = CryptoJS.enc.Base64.parse(key)",
+							"    var enc = CryptoJS.HmacSHA256(message, keyDec).toString(CryptoJS.enc.Base64);",
+							"    return enc;",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "f66680ad-947f-4084-b42b-e5c96b7289f7"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.clear();",
+							"",
+							"if(pm.response.code == 200 ) {",
+							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "c282dacb-3eda-4ddb-99ac-386f67dc0ae3"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-lh-date",
+						"value": "{{DateTime}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-version",
+						"value": "2.0",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "close",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{Authorization}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-forwarded",
+						"value": "*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{TokenRequest}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://auth.linkhub.co.kr/POPBILL_TEST/Token",
+					"protocol": "https",
+					"host": [
+						"auth",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"POPBILL_TEST",
+						"Token"
+					]
+				},
+				"description": "ㆍPOPBill API 사용에 필요한 Token Request."
+			},
+			"response": []
+		},
+		{
+			"name": "GetSenderNumberMgtURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "982ce753-b421-4837-9ca1-68def6030854"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/?TG=SENDER",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						""
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "SENDER"
+						}
+					]
+				},
+				"description": "ㆍ발신번호를 등록하고 내역을 확인하는 문자 발신번호 관리 페이지 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/message/java/api#GetSenderNumberMgtURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetSenderNumberList",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "20322090-be50-40b2-854e-8b89e204b506"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/SenderNumber",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						"SenderNumber"
+					]
+				},
+				"description": "ㆍ팝빌에 등록한 연동회원의 문자 발신번호 목록을 확인합니다.\n\nhttps://docs.popbill.com/message/java/api#GetSenderNumberList"
+			},
+			"response": []
+		},
+		{
+			"name": "SendSMS_one",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "ba5962e7-5d27-4b41-8816-681f89f931f6"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"snd\" : \"070-4304-2991\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"content\" : \"테스트 내용\",\r\n    \"sndDT\" : \"\",\r\n    \"adsYN\" : \"\",\r\n    \"requestNum\" : \"20211201_001\",\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"수신자명\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/SMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"SMS"
+					]
+				},
+				"description": "ㆍ최대 90byte의 단문(SMS) 메시지 1건 전송을 팝빌에 접수합니다.\n\nhttps://docs.popbill.com/message/java/api#SendSMS"
+			},
+			"response": []
+		},
+		{
+			"name": "SendSMS_Multi",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "b0f9a655-334c-49cd-93fe-31925132225d"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"snd\" : \"070-4304-2991\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"sndDT\" : \"\",\r\n    \"adsYN\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"수신자명\",\r\n            \"msg\" : \"대량 전송 내용1\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"수신자명\",\r\n            \"msg\" : \"대량 전송 내용2\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/SMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"SMS"
+					]
+				},
+				"description": "ㆍ최대 90byte의 단문(SMS) 메시지 다수건 전송을 팝빌에 접수합니다. (최대 1,000건)\n\nㆍ수신자마다 개별 내용을 전송할 수 있습니다(대량전송).\n\nhttps://docs.popbill.com/message/java/api#SendSMS_Multi"
+			},
+			"response": []
+		},
+		{
+			"name": "SendSMS_Same",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "8f6f2830-711e-4f0e-8442-cfd013f64d3d"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"snd\" : \"070-4304-2991\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"content\" : \"동보전송 내용\",\r\n    \"sndDT\" : \"\",\r\n    \"adsYN\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"수신자명\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"수신자명\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/SMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"SMS"
+					]
+				},
+				"description": "ㆍ최대 90byte의 단문(SMS) 메시지 다수건 전송을 팝빌에 접수합니다. (최대 1,000건)\n\nㆍ모든 수신자에게 동일한 내용을 전송하거나(동보전송).\n\nhttps://docs.popbill.com/message/java/api#SendSMS_Multi"
+			},
+			"response": []
+		},
+		{
+			"name": "SendLMS_one",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "c95a3261-7be7-4ef8-ac5e-f171b792549a"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"snd\" : \"070-4304-2991\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"content\" : \"LMS 단건 내용\",\r\n    \"subject\" : \"LMS 제목\",\r\n    \"sndDT\" : \"\",\r\n    \"adsYN\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"수신자명\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/LMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"LMS"
+					]
+				},
+				"description": "ㆍ최대 2,000byte의 장문(LMS) 메시지 1건 전송을 팝빌에 접수합니다.\n\nhttps://docs.popbill.com/message/java/api#SendLMS"
+			},
+			"response": []
+		},
+		{
+			"name": "SendLMS_Multi",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "e14aa634-c621-4489-a0cb-743a46acd314"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"snd\" : \"070-4304-2991\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"subject\" : \"LMS 제목\",\r\n    \"sndDT\" : \"\",\r\n    \"adsYN\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"수신자명\",\r\n            \"msg\" : \"LMS 대량 전송 내용1\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"수신자명\",\r\n            \"msg\" : \"LMS 대량 전송 내용2\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/LMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"LMS"
+					]
+				},
+				"description": "ㆍ최대 2,000byte의 장문(LMS) 메시지 다수건 전송을 팝빌에 접수합니다. (최대 1,000건)\n\nㆍ수신자마다 개별 내용을 전송할 수 있습니다(대량전송).\n\nhttps://docs.popbill.com/message/java/api#SendLMS_Multi"
+			},
+			"response": []
+		},
+		{
+			"name": "SendLMS_Same",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "b10f13bb-8740-47b5-9178-72e0322c8ea3"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"snd\" : \"070-4304-2991\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"content\" : \"LMS 동보전송 내용\",\r\n    \"subject\" : \"LMS 동보 제목\",\r\n    \"sndDT\" : \"\",\r\n    \"adsYN\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"수신자명\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"수신자명\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/LMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"LMS"
+					]
+				},
+				"description": "ㆍ최대 2,000byte의 장문(LMS) 메시지 다수건 전송을 팝빌에 접수합니다. (최대 1,000건)\n\nㆍ모든 수신자에게 동일한 내용을 전송하거나(동보전송).\n\nhttps://docs.popbill.com/message/java/api#SendLMS_Multi"
+			},
+			"response": []
+		},
+		{
+			"name": "SendMMS",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 수신자 정보 리스트(최대 1,000건)",
+							"var msgs = [];",
+							"",
+							"// 수신자 정보",
+							"var Message = {",
+							"    \"rcv\" : \"010111222\",    // 수신번호",
+							"    \"rcvnm\" : \"테스트\",      // 수신자명",
+							"}",
+							"",
+							"msgs.push(Message);",
+							"",
+							"var RequestBody = {",
+							"    snd : \"070-4304-2991\",              // 발신번호",
+							"    sndnm : \"발신자명\",                 // 발신자명",
+							"    content : \"MMS 단건 내용\",          // 메시지 내용",
+							"    subject : \"MMS 제목\",               // 메시지 제목",
+							"    sndDT : \"\",                         // 예약일시 (형식 : yyyyMMddHHmmss)",
+							"    adsYN : false,                      // 광고여부 true - 광고, false - 일반",
+							"    requestNum : \"\",                    // 전송요청 번호 : 팝빌이 접수 단위를 식별할 수 있도록 파트너가 할당한 식별번호",
+							"    msgs : msgs,                        // 수신자 전송 정보 (최대 1,000건)",
+							"};",
+							"",
+							"function stringify(obj) {",
+							"    return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function getSHA1Base64(input){",
+							"    return CryptoJS.SHA1(input).toString(CryptoJS.enc.Base64);",
+							"}",
+							"",
+							"pm.collectionVariables.set(\"jsonData\", stringify(RequestBody));",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"id": "3516c685-ed9e-4566-aef8-e4bb3e7622ba"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/wjkim/Documents/dotnet-test.jpg"
+						},
+						{
+							"key": "form",
+							"value": "{{jsonData}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/MMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"MMS"
+					],
+					"query": [
+						{
+							"key": "P",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "ㆍ최대 2,000byte의 메시지와 이미지로 구성된 포토문자(MMS) 1건 전송을 팝빌에 접수합니다.\n\n※ 이미지 파일 포맷/규격 : 최대 300Kbyte(JPEG, JPG), 가로/세로 1,000px 이하 권장\n\nhttps://docs.popbill.com/message/java/api#SendMMS"
+			},
+			"response": []
+		},
+		{
+			"name": "SendMMS_Multi",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 수신자 정보 리스트(최대 1,000건)",
+							"var msgs = [];",
+							"",
+							"// 수신자 정보",
+							"for(var i=1; i<=2; i++){",
+							"    var Message = {",
+							"        \"rcv\" : \"010111222\",            // 수신번호",
+							"        \"rcvnm\" : \"테스트\",             // 수신자명",
+							"        \"msg\" : \"대량 전송 내용\" + i,   // 메시지 내용",
+							"        \"sjt\" : \"대량 메시지 제목\"      // 메시지 제목",
+							"    }",
+							"    msgs.push(Message);",
+							"}",
+							"",
+							"var RequestBody = {",
+							"    snd : \"070-4304-2991\",              // 발신번호",
+							"    sndnm : \"발신자명\",                  // 발신자명",
+							"    sndDT : \"\",                         // 예약일시 (형식 : yyyyMMddHHmmss)",
+							"    adsYN : false,                      // 광고여부 true - 광고, false - 일반",
+							"    requestNum : \"\",                    // 전송요청 번호 : 팝빌이 접수 단위를 식별할 수 있도록 파트너가 할당한 식별번호",
+							"    msgs : msgs,                        // 수신자 전송 정보 (최대 1,000건)",
+							"};",
+							"",
+							"function stringify(obj) {",
+							"    return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function getSHA1Base64(input){",
+							"    return CryptoJS.SHA1(input).toString(CryptoJS.enc.Base64);",
+							"}",
+							"",
+							"pm.collectionVariables.set(\"jsonData\", stringify(RequestBody));",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"id": "be2b81a8-fcc8-4408-b3c4-7f06122c39f2"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/wjkim/Documents/dotnet-test.jpg"
+						},
+						{
+							"key": "form",
+							"value": "{{jsonData}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/MMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"MMS"
+					],
+					"query": [
+						{
+							"key": "P",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "ㆍ최대 2,000byte의 메시지와 이미지로 구성된 포토문자(MMS) 다수건 전송을 팝빌에 접수합니다. (최대 1,000건)\n\n※ 이미지 파일 포맷/규격 : 최대 300Kbyte(JPEG), 가로/세로 1,000px 이하 권장\n\nㆍ수신자마다 개별 내용을 전송할 수 있습니다.\n\nhttps://docs.popbill.com/message/java/api#SendMMS"
+			},
+			"response": []
+		},
+		{
+			"name": "SendMMS_Same",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 수신자 정보 리스트(최대 1,000건)",
+							"var msgs = [];",
+							"",
+							"// 수신자 정보",
+							"for(var i=1; i<=2; i++){",
+							"    var Message = {",
+							"        \"rcv\" : \"010111222\",            // 수신번호",
+							"        \"rcvnm\" : \"테스트\",             // 수신자명",
+							"    }",
+							"    msgs.push(Message);",
+							"}",
+							"",
+							"var RequestBody = {",
+							"    snd : \"070-4304-2991\",              // 발신 번호",
+							"    sndnm : \"발신자명\",                  // 발신자명",
+							"    content : \"MMS 단건 내용\",           // 메시지 내용",
+							"    subject : \"MMS 제목\",               // 메시지 제목",
+							"    sndDT : \"\",                         // 예약일시 (형식 : yyyyMMddHHmmss)",
+							"    adsYN : false,                      // 광고여부 true - 광고, false - 일반",
+							"    requestNum : \"\",                    // 전송요청 번호 : 팝빌이 접수 단위를 식별할 수 있도록 파트너가 할당한 식별번호",
+							"    msgs : msgs,                        // 수신자 전송 정보 (최대 1,000건)",
+							"};",
+							"",
+							"function stringify(obj) {",
+							"    return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function getSHA1Base64(input){",
+							"    return CryptoJS.SHA1(input).toString(CryptoJS.enc.Base64);",
+							"}",
+							"",
+							"pm.collectionVariables.set(\"jsonData\", stringify(RequestBody));",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"id": "8f6f0f5b-a1fc-49e6-a066-2413d9bc80f4"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/wjkim/Documents/dotnet-test.jpg"
+						},
+						{
+							"key": "form",
+							"value": "{{jsonData}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/MMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"MMS"
+					],
+					"query": [
+						{
+							"key": "P",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "ㆍ최대 2,000byte의 메시지와 이미지로 구성된 포토문자(MMS) 다수건 전송을 팝빌에 접수합니다. (최대 1,000건)\n\n※ 이미지 파일 포맷/규격 : 최대 300Kbyte(JPEG), 가로/세로 1,000px 이하 권장\n\nㆍ수신자마다 개별 내용을 전송할 수 있습니다.\n\nhttps://docs.popbill.com/message/java/api#SendMMS"
+			},
+			"response": []
+		},
+		{
+			"name": "SendXMS_one",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "f713cbe8-d0c8-4253-9199-44b2b3a65a57"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"snd\" : \"070-4304-2991\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"content\" : \"XMS 단건 내용\",\r\n    \"subject\" : \"XML 제목\",\r\n    \"sndDT\" : \"\",\r\n    \"adsYN\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"수신자명\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/XMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"XMS"
+					]
+				},
+				"description": "ㆍ메시지 크기(90byte)에 따라 단문/장문(SMS/LMS)을 자동으로 인식하여 1건의 메시지를 전송을 팝빌에 접수합니다.\n\nhttps://docs.popbill.com/message/java/api#SendXMS"
+			},
+			"response": []
+		},
+		{
+			"name": "SendXMS_Multi",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "59d0b84d-de9c-40b7-b277-d0b93de090f8"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"snd\" : \"070-4304-2991\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"subject\" : \"XMS 제목\",\r\n    \"sndDT\" : \"\",\r\n    \"adsYN\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"수신자명\",\r\n            \"msg\" : \"XMS 대량 전송 내용1\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"수신자명\",\r\n            \"msg\" : \"XMS 대량 전송 내용2XMS 대량 전송 내용2XMS 대량 전송 내용2XMS 대량 전송 내용2XMS 대량 전송 내용2XMS 대량 전송 내용2XMS 대량 전송 내용2XMS 대량 전송 내용2XMS 대량 전송 내용2XMS 대량 전송 내용2\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/XMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"XMS"
+					]
+				},
+				"description": "ㆍ메시지 크기(90byte)에 따라 단문/장문(SMS/LMS)을 자동으로 인식하여 다수건의 메시지 전송을 팝빌에 접수합니다. (최대 1,000건)\n\nㆍ수신자마다 개별 내용을 전송할 수 있습니다(대량전송).\n\n※ 단문(SMS) = 90byte 이하의 메시지, 장문(LMS) = 2000byte 이하의 메시지.\n\nhttps://docs.popbill.com/message/java/api#SendXMS_Multi"
+			},
+			"response": []
+		},
+		{
+			"name": "SendXMS_Same",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "624f490b-2613-4c35-87e4-96b0745c0d5f"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"snd\" : \"070-4304-2991\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"content\" : \"XMS 동보전송 내용\",\r\n    \"subject\" : \"XMS 동보 제목\",\r\n    \"sndDT\" : \"\",\r\n    \"adsYN\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"수신자명\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"수신자명\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/XMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"XMS"
+					]
+				},
+				"description": "ㆍ메시지 크기(90byte)에 따라 단문/장문(SMS/LMS)을 자동으로 인식하여 다수건의 메시지 전송을 팝빌에 접수합니다. (최대 1,000건)\n\nㆍ모든 수신자에게 동일한 내용을 전송하거나(동보전송).\n\n※ 단문(SMS) = 90byte 이하의 메시지, 장문(LMS) = 2000byte 이하의 메시지.\n\nhttps://docs.popbill.com/message/java/api#SendXMS_Multi"
+			},
+			"response": []
+		},
+		{
+			"name": "CancelReserve",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 문자 전송 접수시 팝빌로부터 반환받은 접수번호",
+							"var receiptNum = '021111721565100001'",
+							"pm.collectionVariables.set(\"receiptNum\", receiptNum);"
+						],
+						"type": "text/javascript",
+						"id": "5dba7b81-58cd-4288-a62b-7e31e89f2197"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/{{receiptNum}}/Cancel",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						"{{receiptNum}}",
+						"Cancel"
+					]
+				},
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 예약접수된 문자 메시지 전송을 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://docs.popbill.com/message/java/api#CancelReserve"
+			},
+			"response": []
+		},
+		{
+			"name": "CancelReserveRN",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 문자 전송 접수시 팝빌로부터 반환받은 접수번호",
+							"var requestNum = '20211117_TEST001'",
+							"pm.collectionVariables.set(\"requestNum\", requestNum);"
+						],
+						"type": "text/javascript",
+						"id": "384c5b5e-2040-4a5c-8a9e-41ddba433db8"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/Cancel/{{requestNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						"Cancel",
+						"{{requestNum}}"
+					]
+				},
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 예약접수된 문자 전송을 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://docs.popbill.com/kakao/message/api#CancelReserveRN"
+			},
+			"response": []
+		},
+		{
+			"name": "GetMessages",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 문자 전송 접수시 팝빌로부터 반환받은 접수번호",
+							"var receiptNum = '021120117000000003'",
+							"pm.collectionVariables.set(\"receiptNum\", receiptNum);"
+						],
+						"type": "text/javascript",
+						"id": "02717067-e239-4f00-94c3-f6897554cf61"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/{{receiptNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						"{{receiptNum}}"
+					]
+				},
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 문자 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/message/java/api#GetMessages"
+			},
+			"response": []
+		},
+		{
+			"name": "CheckSenderNumber",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8f8d6cab-1786-416f-bc18-a26c2dd914bb",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 확인할 발신번호",
+							"var senderNumber = '07043042991'",
+							"pm.collectionVariables.set(\"senderNumber\", senderNumber);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/CheckSenderNumber/{{senderNumber}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						"CheckSenderNumber",
+						"{{senderNumber}}"
+					]
+				},
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 문자 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/message/java/api#GetMessages"
+			},
+			"response": []
+		},
+		{
+			"name": "GetMessagesRN",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 문자 전송 접수시 파트너가 할당한 전송요청 번호",
+							"var requestNum = '20211201_001'",
+							"pm.collectionVariables.set(\"requestNum\", requestNum);"
+						],
+						"type": "text/javascript",
+						"id": "17469828-c54f-4fe1-bf2c-ebc17c2b494d"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/Get/{{requestNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						"Get",
+						"{{requestNum}}"
+					]
+				},
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 문자 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/message/java/api#GetMessagesRN"
+			},
+			"response": []
+		},
+		{
+			"name": "Search",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f969aa37-ce68-46d8-b4aa-12de8db2e563",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 조회 기간의 시작일자 (형식 : yyyyMMdd)",
+							"var SDate = '20211201'",
+							"pm.collectionVariables.set(\"Search_SDate\", SDate);",
+							"",
+							"// 조회 기간의 종료일자 (형식 : yyyyMMdd)",
+							"var EDate = '20211210'",
+							"pm.collectionVariables.set(\"Search_EDate\", EDate);",
+							"",
+							"// [배열] 전송상태 : \"1\" / \"2\" / \"3\" / \"4\" 중 선택 (다중 선택 가능)",
+							"// └ 1 = 대기, 2 = 성공, 3 = 실패, 4 = 취소",
+							"var State = ['1,2,3,4'];",
+							"pm.collectionVariables.set(\"Search_State\", State.join(','));",
+							"",
+							"// [배열] 검색대상 : \"SMS\" / \"LMS\" / \"MMS\" 중 선택 (다중 선택 가능)",
+							"// └ SMS = 단문, LMS = 장문, MMS = 포토문자",
+							"var Item = ['SMS', 'LMS', 'MMS'];",
+							"pm.collectionVariables.set(\"Search_Item\", Item.join(','));",
+							"",
+							"// 전송유형별 조회 : null / \"0\" / \"1\" 중 택 1",
+							"// └ null = 전체, 0 = 즉시전송건, 1 = 예약전송건",
+							"var ReserveYN = [];",
+							"pm.collectionVariables.set(\"Search_ReserveYN\", ReserveYN);",
+							"",
+							"// 사용자권한별 조회 : true / false 중 택 1",
+							"// └ true = 해당 담당자 계정으로 접수한 카카오톡만 조회 (개인권한), false = 접수한 카카오톡 전체 조회 (관리자권한)",
+							"var SenderYN = true;",
+							"pm.collectionVariables.set(\"Search_SenderYN\", SenderYN);",
+							"",
+							"// 목록 페이지번호",
+							"var Page = 1;",
+							"pm.collectionVariables.set(\"Search_Page\", Page);",
+							"",
+							"// 페이지당 표시할 목록 개수 (최대 1,000)",
+							"var PerPage = 500;",
+							"pm.collectionVariables.set(\"Search_PerPage\", PerPage);",
+							"",
+							"// 알림톡/친구톡 접수일시를 기준으로 하는 목록 정렬 방향 : \"D\" / \"A\" 중 택 1",
+							"// └ D = 내림차순(기본값), A = 오름차순",
+							"var Order = '';",
+							"pm.collectionVariables.set(\"Search_Order\", Order);",
+							"",
+							"// \t조회하고자 하는 수신자명",
+							"var QString = '';",
+							"pm.collectionVariables.set(\"Search_QString\", encodeURIComponent(QString));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/Search?SDate={{Search_SDate}}&EDate={{Search_EDate}}&State={{Search_State}}&Item={{Search_Item}}&ReserveYN={{Search_ReserveYN}}&SenderYN={{Search_SenderYN}}&Page={{Search_Page}}&PerPage={{Search_PerPage}}&Order={{Search_Order}}&QString={{Search_QString}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						"Search"
+					],
+					"query": [
+						{
+							"key": "SDate",
+							"value": "{{Search_SDate}}"
+						},
+						{
+							"key": "EDate",
+							"value": "{{Search_EDate}}"
+						},
+						{
+							"key": "State",
+							"value": "{{Search_State}}"
+						},
+						{
+							"key": "Item",
+							"value": "{{Search_Item}}"
+						},
+						{
+							"key": "ReserveYN",
+							"value": "{{Search_ReserveYN}}"
+						},
+						{
+							"key": "SenderYN",
+							"value": "{{Search_SenderYN}}"
+						},
+						{
+							"key": "Page",
+							"value": "{{Search_Page}}"
+						},
+						{
+							"key": "PerPage",
+							"value": "{{Search_PerPage}}"
+						},
+						{
+							"key": "Order",
+							"value": "{{Search_Order}}"
+						},
+						{
+							"key": "QString",
+							"value": "{{Search_QString}}"
+						}
+					]
+				},
+				"description": "ㆍ검색조건에 해당하는 문자 전송내역을 조회합니다. (조회기간 단위 : 최대 2개월)\n\n※ 문자 접수일시로부터 6개월 이내 접수건만 조회할 수 있습니다.\n\nhttps://docs.popbill.com/message/java/api#Search"
+			},
+			"response": []
+		},
+		{
+			"name": "GetSentListURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "5c2e8a50-812c-4d72-972c-9295587815df"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/?TG=BOX",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						""
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "BOX"
+						}
+					]
+				},
+				"description": "ㆍ팝빌 사이트와 동일한 카카오톡 전송내역을 확인하는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/message/java/api#GetSentListURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetAutoDenyList",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "a27bc6a2-7c6f-4539-ba6a-19a64ed5e35c"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/Denied",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						"Denied"
+					]
+				},
+				"description": "ㆍ전용 080 번호에 등록된 수신거부 목록을 반환합니다.\n\nhttps://docs.popbill.com/message/java/api#GetAutoDenyList"
+			},
+			"response": []
+		},
+		{
+			"name": "GetUnitCost",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"",
+							"// \t문자전송 유형 : SMS / LMS / MMS 중 택 1",
+							"// └ SMS = 단문, LMS = 장문, MMS = 포토문자",
+							"var type = 'SMS'",
+							"pm.collectionVariables.set(\"GetUnitCost_type\", type);"
+						],
+						"type": "text/javascript",
+						"id": "63c2d759-a415-4f38-9b88-faae347b8aeb"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/UnitCost?Type={{GetUnitCost_type}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						"UnitCost"
+					],
+					"query": [
+						{
+							"key": "Type",
+							"value": "{{GetUnitCost_type}}"
+						}
+					]
+				},
+				"description": "ㆍ문자 전송시 과금되는 포인트 단가를 확인합니다.\n\nhttps://docs.popbill.com/message/java/api#GetUnitCost"
+			},
+			"response": []
+		},
+		{
+			"name": "GetChargeInfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// \t문자전송 유형 : SMS / LMS / MMS 중 택 1",
+							"// └ SMS = 단문, LMS = 장문, MMS = 포토문자",
+							"var type = 'SMS'",
+							"pm.collectionVariables.set(\"GetChargeInfo_type\", type);"
+						],
+						"type": "text/javascript",
+						"id": "b6097f1d-e128-4ed9-bd4c-510630249b6b"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/ChargeInfo?Type={{GetChargeInfo_type}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						"ChargeInfo"
+					],
+					"query": [
+						{
+							"key": "Type",
+							"value": "{{GetChargeInfo_type}}"
+						}
+					]
+				},
+				"description": "ㆍ팝빌 문자 API 서비스 과금정보를 확인합니다.\n\nhttps://docs.popbill.com/message/java/api#GetChargeInfo"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "22653d02-64b9-4f24-95bb-c700794ff615",
+			"key": "API_Session_Token",
+			"value": ""
+		},
+		{
+			"id": "7e37453d-58cc-4d6a-ab57-b809f3530ef3",
+			"key": "receiptNum",
+			"value": ""
+		},
+		{
+			"id": "9040a574-1447-4a26-9c42-2f9133ea8b88",
+			"key": "senderNumber",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}

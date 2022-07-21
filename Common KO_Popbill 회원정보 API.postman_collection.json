@@ -1,0 +1,753 @@
+{
+	"info": {
+		"_postman_id": "a94dac5e-0edd-4aee-b9d7-80c8bbe5f399",
+		"name": "Common KO_Popbill 회원정보 API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetToken",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/*********************************************************************************",
+							" *",
+							" * GetToken은 POPBiLL API를 호출할 때 인증 헤더에 입력할 Bearer token을",
+							" * 발급하는 샘플 코드입니다.",
+							" * ",
+							" **********************************************************************************/",
+							"",
+							"// LinkID와 SecretKey는 자격증명으로 POPBiLL에서 제공된 값으로 변경하시기 바랍니다.",
+							"var LinkID = 'TESTER';  // ex. 'LINKHUB'",
+							"var SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I='; //ex. 'CAuU7dpL4viqfoT6G+HJjqWzHhg3hRDD5sKIkp7Yqwc='",
+							"",
+							"/*",
+							" * 아래는 HMAC Message Digest 를 구성하는 코드입니다.",
+							" */",
+							"",
+							"// access_id 는 사용자의 사업자번호 입니다. (10자리 숫자('-' 제외))",
+							"// Scopes 배열은 발급된 토큰으로 사용할 수 있는 서비스 코드 목록입니다.",
+							"var Access_id = '1234567890'; // 사업자번호.",
+							"var Scopes = ['member', '110']; // 사용중인 API의 ItemCode 입력",
+							"var TokenRequest = stringify({access_id : Access_id, scope : Scopes});",
+							"var Body = CryptoJS.SHA256(TokenRequest).toString(CryptoJS.enc.Base64);",
+							"",
+							"var RequestDT = new Date().toISOString();",
+							"",
+							"var digestTarget =",
+							"      'POST\\n' +",
+							"      Body + '\\n' +",
+							"      RequestDT +'\\n' +",
+							"      '*\\n' +",
+							"      '2.0\\n' +",
+							"      '/POPBILL_TEST/Token';",
+							"",
+							"var HMACDigest = generateSignature(digestTarget, SecretKey);",
+							"var Authorization = 'LINKHUB '+LinkID + ' '+HMACDigest;",
+							"",
+							"// HMAC 인증을 위한 요청 헤더.",
+							"pm.collectionVariables.set(\"DateTime\", RequestDT);",
+							"pm.collectionVariables.set(\"TokenRequest\", TokenRequest);",
+							"pm.collectionVariables.set(\"Authorization\", Authorization);",
+							"",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function generateSignature(message, key) {",
+							"    var keyDec = CryptoJS.enc.Base64.parse(key)",
+							"    var enc = CryptoJS.HmacSHA256(message, keyDec).toString(CryptoJS.enc.Base64);",
+							"    return enc;",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "671bc322-9acb-4d09-8cb8-0fef9c0beda7"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.clear();",
+							"",
+							"if(pm.response.code == 200 ) {",
+							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "d11c94d0-f243-4bf4-9ccd-f3aeebbf0e82"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-lh-date",
+						"value": "{{DateTime}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-version",
+						"value": "2.0",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "close",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{Authorization}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-forwarded",
+						"value": "*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{TokenRequest}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://auth.linkhub.co.kr/POPBILL_TEST/Token",
+					"protocol": "https",
+					"host": [
+						"auth",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"POPBILL_TEST",
+						"Token"
+					]
+				},
+				"description": "ㆍPOPBill API 사용에 필요한 Token Request."
+			},
+			"response": []
+		},
+		{
+			"name": "CheckIsMember",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 사업자 번호",
+							"var corpNum = '1234567890'",
+							"pm.collectionVariables.set(\"CheckIsMember_CorpNum\", corpNum);",
+							"",
+							"// 링크아이디",
+							"var linkID = 'TESTER'",
+							"pm.collectionVariables.set(\"CheckIsMember_LinkID\", linkID);"
+						],
+						"type": "text/javascript",
+						"id": "58c12828-f584-4783-ac3e-2bc11ca575cf"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Join?CorpNum={{CheckIsMember_CorpNum}}&LID={{CheckIsMember_LinkID}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Join"
+					],
+					"query": [
+						{
+							"key": "CorpNum",
+							"value": "{{CheckIsMember_CorpNum}}"
+						},
+						{
+							"key": "LID",
+							"value": "{{CheckIsMember_LinkID}}"
+						}
+					]
+				},
+				"description": "ㆍ사업자번호를 조회하여 연동회원 가입여부를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#CheckIsMember"
+			},
+			"response": []
+		},
+		{
+			"name": "CheckID",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 중복 체크할 아이디",
+							"var userID = 'testkorea'",
+							"pm.collectionVariables.set(\"CheckIsMember_UserID\", userID);",
+							""
+						],
+						"type": "text/javascript",
+						"id": "62bf9530-2ab1-4ea1-92e9-92ed3d8bce30"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/IDCheck?ID={{CheckIsMember_UserID}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"IDCheck"
+					],
+					"query": [
+						{
+							"key": "ID",
+							"value": "{{CheckIsMember_UserID}}"
+						}
+					]
+				},
+				"description": "ㆍ사용하고자 하는 아이디의 중복여부를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#CheckID"
+			},
+			"response": []
+		},
+		{
+			"name": "JoinMember",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "9ea13984-64c1-4720-bb46-4107ec7ecdbf",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// JoinMember info",
+							"var reqBodyObj = {",
+							"  ID : '',          // 아이디",
+							"  Password : '',    // 비밀번호",
+							"  LinkID : '',      // 파트너 링크아이디",
+							"  CorpNum :'',      // 사업자번호",
+							"  CEOName : '',     // 대표자 성명",
+							"  CorpName : '',    // 회사명",
+							"  Addr : '',        // 사업장 주소",
+							"  BizType : '',     // 업태",
+							"  BizClass : '',    // 종목",
+							"  ContactName : '', // 담당자 성명",
+							"  ContactEmail : '',// 담당자 이메일",
+							"  ContactTEL : ''  // 담당자 연락처(전화번호)",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"JoinMember_RequestBody\", RequestBody);",
+							"",
+							"console.log(RequestBody);",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{JoinMember_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Join",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Join"
+					]
+				},
+				"description": "ㆍ사용자를 연동회원으로 가입처리합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#JoinMember"
+			},
+			"response": []
+		},
+		{
+			"name": "GetCorpInfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "6ac8d988-eab6-4bee-8e19-148ee08622f5"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/CorpInfo",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"CorpInfo"
+					]
+				},
+				"description": "ㆍ연동회원의 회사정보를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetCorpInfo"
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateCorpInfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// Corpinfo",
+							"var reqBodyObj = {",
+							"  ceoname : '',     // 대표자 성명",
+							"  corpName : '',    // 회사명     ",
+							"  addr : '',        // 주소",
+							"  bizType :'',      // 업태",
+							"  bizClass : ''     // 종목",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"UpdateCorpInfo_RequestBody\", RequestBody);",
+							"",
+							"console.log(RequestBody);",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "3731e8da-8c68-4f32-8931-875cb2984aa4"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{UpdateCorpInfo_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/CorpInfo",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"CorpInfo"
+					]
+				},
+				"description": "ㆍ연동회원의 회사정보를 수정합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#UpdateCorpInfo"
+			},
+			"response": []
+		},
+		{
+			"name": "RegistContact",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4fc62a73-2ccf-4f1f-af50-62865c7ff880",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// ContactInfo",
+							"var reqBodyObj = {",
+							"  id : '',          // 아이디",
+							"  Password : '',    // 비밀번호    ",
+							"  personName : '',  // 담당자 성명",
+							"  tel :'',          // 담당자 연락처(전화번호)",
+							"  email :'',        // 담당자 이메일",
+							"  searchRole :''    // 담당자 권한",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"RegistContact_RequestBody\", RequestBody);",
+							"",
+							"console.log(RequestBody);",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{RegistContact_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/IDs/New",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"IDs",
+						"New"
+					]
+				},
+				"description": "ㆍ연동회원 사업자번호에 담당자(팝빌 로그인 계정)를 추가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#RegistContact"
+			},
+			"response": []
+		},
+		{
+			"name": "GetContactInfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// ContactInfo",
+							"var reqBodyObj = {",
+							"  id : 'testkorea'        // 아이디",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"GetContactInfo_RequestBody\", RequestBody);",
+							"",
+							"console.log(RequestBody);",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "fb306b9a-a9f7-4e46-97bc-d691800cc662"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{GetContactInfo_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Contact",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Contact"
+					]
+				},
+				"description": "ㆍ연동회원의 회사정보를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetCorpInfo"
+			},
+			"response": []
+		},
+		{
+			"name": "ListContact",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "0bd285b2-3521-4f0c-9f61-a27270aaa6fa"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/IDs",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"IDs"
+					]
+				},
+				"description": "ㆍ연동회원 사업자번호에 등록된 담당자(팝빌 로그인 계정) 목록을 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#ListContact"
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateContact",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f807ab71-7dbe-4fc6-ae9e-86a6ab8216ff",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// ContactInfo",
+							"var reqBodyObj = {",
+							"  id : '',          // 아이디",
+							"  personName : '',  // 담당자 성명",
+							"  tel :'',          // 담당자 연락처(전화번호)",
+							"  email :'',        // 담당자 이메일",
+							"  searchRole :''    // 담당자 권한",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"UpdateContact_RequestBody\", RequestBody);",
+							"",
+							"console.log(RequestBody);",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{UpdateContact_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/IDs",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"IDs"
+					]
+				},
+				"description": "ㆍ연동회원 사업자번호에 등록된 담당자(팝빌 로그인 계정) 정보를 수정합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#UpdateContact"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "90d6c0e2-6aac-4663-93af-6767028fa8f1",
+			"key": "API_Session_Token",
+			"value": ""
+		},
+		{
+			"id": "b1def4a7-2527-4fc9-8c33-34d0cf826887",
+			"key": "GetContactInfo_RequestBody",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}

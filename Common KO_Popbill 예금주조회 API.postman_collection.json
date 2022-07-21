@@ -1,0 +1,398 @@
+{
+	"info": {
+		"_postman_id": "165c54db-f2d1-462d-9486-60badecdd862",
+		"name": "Common KO_Popbill 예금주조회 API",
+		"description": "When you call GetToken Request, the token used for Bearer authentication is stored in the variable of Collection Scope.\n\n\nSo, You must always call GetToken to test the API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetToken",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/*********************************************************************************",
+							" *",
+							" * GetToken은 POPBiLL API를 호출할 때 인증 헤더에 입력할 Bearer token을",
+							" * 발급하는 샘플 코드입니다.",
+							" * ",
+							" **********************************************************************************/",
+							"",
+							"// LinkID와 SecretKey는 자격증명으로 POPBiLL에서 제공된 값으로 변경하시기 바랍니다.",
+							"var LinkID = 'TESTER';  // ex. 'LINKHUB'",
+							"var SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I='; //ex. 'CAuU7dpL4viqfoT6G+HJjqWzHhg3hRDD5sKIkp7Yqwc='",
+							"",
+							"/*",
+							" * 아래는 HMAC Message Digest 를 구성하는 코드입니다.",
+							" */",
+							"",
+							"// access_id 는 사용자의 사업자번호 입니다. (10자리 숫자('-' 제외))",
+							"// Scopes 배열은 발급된 토큰으로 사용할 수 있는 서비스 코드 목록입니다.",
+							"// 182 - 예금주성명 조회, 183 - 예금주실명 조회",
+							"var Access_id = '1234567890'; // 사업자번호.",
+							"var Scopes = ['member', '182', '183'];",
+							"var TokenRequest = stringify({access_id : Access_id, scope : Scopes});",
+							"var Body = CryptoJS.SHA256(TokenRequest).toString(CryptoJS.enc.Base64);",
+							"",
+							"var RequestDT = new Date().toISOString();",
+							"",
+							"var digestTarget =",
+							"      'POST\\n' +",
+							"      Body + '\\n' +",
+							"      RequestDT +'\\n' +",
+							"      '*\\n' +",
+							"      '2.0\\n' +",
+							"      '/POPBILL_TEST/Token';",
+							"",
+							"var HMACDigest = generateSignature(digestTarget, SecretKey);",
+							"var Authorization = 'LINKHUB '+LinkID + ' '+HMACDigest;",
+							"",
+							"// HMAC 인증을 위한 요청 헤더.",
+							"pm.collectionVariables.set(\"DateTime\", RequestDT);",
+							"pm.collectionVariables.set(\"TokenRequest\", TokenRequest);",
+							"pm.collectionVariables.set(\"Authorization\", Authorization);",
+							"",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function generateSignature(message, key) {",
+							"    var keyDec = CryptoJS.enc.Base64.parse(key)",
+							"    var enc = CryptoJS.HmacSHA256(message, keyDec).toString(CryptoJS.enc.Base64);",
+							"    return enc;",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "5257b77b-4409-48ad-b3e4-8a72a13b8fe0"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.clear();",
+							"",
+							"if(pm.response.code == 200 ) {",
+							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "6067f89d-8d5b-42ff-9cb6-551a04b23a95"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-lh-date",
+						"value": "{{DateTime}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-version",
+						"value": "2.0",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "close",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{Authorization}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-forwarded",
+						"value": "*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{TokenRequest}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://auth.linkhub.co.kr/POPBILL_TEST/Token",
+					"protocol": "https",
+					"host": [
+						"auth",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"POPBILL_TEST",
+						"Token"
+					]
+				},
+				"description": "ㆍPOPBill API 사용에 필요한 Token Request."
+			},
+			"response": []
+		},
+		{
+			"name": "CheckAccountInfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "d8789a8a-447a-41b0-9bc2-dcb4f944c6db"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea",
+						"description": "필요 시 할당하여 사용 (optional)",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/AccountCheck?c=0032&n=101120831",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"AccountCheck"
+					],
+					"query": [
+						{
+							"key": "c",
+							"value": "0032",
+							"description": "은행코드"
+						},
+						{
+							"key": "n",
+							"value": "101120831",
+							"description": "계좌번호 "
+						}
+					]
+				},
+				"description": "ㆍ1건의 예금주성명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#CheckAccountInfo"
+			},
+			"response": []
+		},
+		{
+			"name": "DepositorCheck",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "5f1b37bf-0333-441e-a3b3-7c5f25a2aa3e"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea",
+						"description": "필요 시 할당하여 사용 (optional)",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/DepositorCheck?c=0004&n=12313&t=P&p=941219",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"DepositorCheck"
+					],
+					"query": [
+						{
+							"key": "c",
+							"value": "0004"
+						},
+						{
+							"key": "n",
+							"value": "12313"
+						},
+						{
+							"key": "t",
+							"value": "P"
+						},
+						{
+							"key": "p",
+							"value": "941219"
+						}
+					]
+				},
+				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#DepositorCheck"
+			},
+			"response": []
+		},
+		{
+			"name": "UnitCost",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "5915d72b-ae95-4087-b902-a22f295ebac5"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"description": "필요 시 할당하여 사용 (optional)",
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/AccountCheck/UnitCost?serviceType=성명",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"AccountCheck",
+						"UnitCost"
+					],
+					"query": [
+						{
+							"key": "serviceType",
+							"value": "성명"
+						}
+					]
+				},
+				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#DepositorCheck"
+			},
+			"response": []
+		},
+		{
+			"name": "ChargeInfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "590104c9-3456-4fcc-bbfc-3809f1ae3b39"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"description": "필요 시 할당하여 사용 (optional)",
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/AccountCheck/ChargeInfo?serviceType=실명",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"AccountCheck",
+						"ChargeInfo"
+					],
+					"query": [
+						{
+							"key": "serviceType",
+							"value": "실명"
+						}
+					]
+				},
+				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#DepositorCheck"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "6ee1486e-1dfc-46e2-b624-2650c7a3c7d1",
+			"key": "API_Session_Token",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -1,0 +1,3857 @@
+{
+	"info": {
+		"_postman_id": "753f6d84-fe0c-492d-85a3-df400a0153a4",
+		"name": "Common KO_Popbill 전자세금계산서 API",
+		"description": "When you call GetToken Request, the token used for Bearer authentication is stored in the variable of Collection Scope.\n\n\nSo, You must always call GetToken to test the API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetToken",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/*********************************************************************************",
+							" *",
+							" * GetToken은 POPBiLL API를 호출할 때 인증 헤더에 입력할 Bearer token을",
+							" * 발급하는 샘플 코드입니다.",
+							" * ",
+							" **********************************************************************************/",
+							"",
+							"// LinkID와 SecretKey는 자격증명으로 POPBiLL에서 제공된 값으로 변경하시기 바랍니다.",
+							"var LinkID = 'TESTER';  // ex. 'LINKHUB'",
+							"var SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I='; //ex. 'CAuU7dpL4viqfoT6G+HJjqWzHhg3hRDD5sKIkp7Yqwc='",
+							"",
+							"/*",
+							" * 아래는 HMAC Message Digest 를 구성하는 코드입니다.",
+							" */",
+							"",
+							"// access_id 는 사용자의 사업자번호 입니다. (10자리 숫자('-' 제외))",
+							"// Scopes 배열은 발급된 토큰으로 사용할 수 있는 서비스 코드 목록입니다.",
+							"// (110은 POPBiLL 전자세금계산서 API를 의미합니다.)",
+							"var Access_id = '1234567890'; // 사업자번호.",
+							"var Scopes = ['member', '110'];",
+							"var TokenRequest = stringify({access_id : Access_id, scope : Scopes});",
+							"var Body = CryptoJS.SHA256(TokenRequest).toString(CryptoJS.enc.Base64);",
+							"",
+							"var RequestDT = new Date().toISOString();",
+							"",
+							"var digestTarget =",
+							"      'POST\\n' +",
+							"      Body + '\\n' +",
+							"      RequestDT +'\\n' +",
+							"      '*\\n' +",
+							"      '2.0\\n' +",
+							"      '/POPBILL_TEST/Token';",
+							"",
+							"var HMACDigest = generateSignature(digestTarget, SecretKey);",
+							"var Authorization = 'LINKHUB '+LinkID + ' '+HMACDigest;",
+							"",
+							"// HMAC 인증을 위한 요청 헤더.",
+							"pm.collectionVariables.set(\"DateTime\", RequestDT);",
+							"pm.collectionVariables.set(\"TokenRequest\", TokenRequest);",
+							"pm.collectionVariables.set(\"Authorization\", Authorization);",
+							"",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function generateSignature(message, key) {",
+							"    var keyDec = CryptoJS.enc.Base64.parse(key)",
+							"    var enc = CryptoJS.HmacSHA256(message, keyDec).toString(CryptoJS.enc.Base64);",
+							"    return enc;",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "c310b043-4bdf-4a54-9cfb-be053fcee17b"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.clear();",
+							"",
+							"if(pm.response.code == 200 ) {",
+							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "bcfdff78-31c9-4599-83d1-1ac7b316b2e4"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-lh-date",
+						"value": "{{DateTime}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-version",
+						"value": "2.0",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "close",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{Authorization}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-forwarded",
+						"value": "*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{TokenRequest}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://auth.linkhub.co.kr/POPBILL_TEST/Token",
+					"protocol": "https",
+					"host": [
+						"auth",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"POPBILL_TEST",
+						"Token"
+					]
+				},
+				"description": "ㆍPOPBill API 사용에 필요한 Token Request."
+			},
+			"response": []
+		},
+		{
+			"name": "CheckMgtKeyInUse",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 이미 사용 중인 문서번호는 중복 사용이 불가하고, 세금계산서가 삭제된 경우에만 문서번호의 재사용이 가능합니다.",
+							"var invoicerMgtKey = '20210629-01'",
+							"pm.collectionVariables.set(\"CheckMgtKeyinUse_invoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "01af5db8-a240-4e17-8093-4faf6bacc7a7"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{CheckMgtKeyinUse_invoicerMgtKey}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{CheckMgtKeyinUse_invoicerMgtKey}}"
+					]
+				},
+				"description": "ㆍ파트너가 세금계산서 관리 목적으로 할당하는 문서번호의 사용여부를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#CheckMgtKeyInUse"
+			},
+			"response": []
+		},
+		{
+			"name": "RegistIssue",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "3c66da06-edbc-405e-b198-58d839ea5071"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "ISSUE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\n*\n* 세금계산서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://docs.popbill.com/en/taxinvoice/java/api#Taxinvoice\n*\n*/\n\n{\n    // 세금계산서 지연발행 가능여부\n    // └ true = 가능, false = 불가능(default)\n    \"forceIssue\" : false,\n\n    // 세금계산서 발행 안내메일 제목\n    // - 미입력시 팝빌에서 설정한 기본값 사용\n    \"emailSubject\": \"\",\n\n    // 세금계산서 상태 이력을 관리하기 위한 메모\n    \"memo\": \"RegistIssue Memo\",\n\n    // 작성일자\n    // - 형식 : yyyyMMdd\n    \"writeDate\": \"20210930\",\n\n    // 과금방향\n    // - \"정과금\" / \"역과금\" 중 택 1\n    \"chargeDirection\": \"정과금\",\n\n    // 발행형태\n    // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1\n    \"issueType\": \"정발행\",\n\n    // 과세형태\n    // - \"과세\" / \"영세\" / \"면세\" 중 택 1\n    \"taxType\": \"과세\",\n\n    // 공급자 사업자번호\n    // └ 하이픈('-') 제외 10자리 숫자값\n    \"invoicerCorpNum\": \"1234567890\",\n\n    // 공급자 문서번호\n    // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoicerMgtKey\": \"20210930-01\",\n\n    // 공급자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoicerTaxRegID\": \"\",\n\n    // 공급자 상호\t\n    \"invoicerCorpName\": \"Seller Company Name\",\n\n    // 공급자 대표자 성명\t\n    \"invoicerCEOName\": \"Seller Company's CEO Name\",\n\n    // 공급자 주소\n    \"invoicerAddr\": \"Seller Address\",\n\n    // 공급자 업태\n    \"invoicerBizClass\": \"Seller Business Class\",\n\n    // 공급자 종목\n    \"invoicerBizType\": \"Seller Business Type\",\n\n    // 공급자 담당자 성명\n    \"invoicerContactName\": \"Business Contractor Name\",\n\n    // 공급자 담당자 연락처\n    \"invoicerTEL\": \"070-4304-2991\",\n\n    // 공급자 담당자 휴대폰\n    \"invoicerHP\": \"010-111-222\",\n\n    // 공급자 담당자 이메일\n    \"invoicerEmail\": \"seller@test.com\",\n\n    // 공급자 문자전송 여부\n    // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoicerSMSSendYN\": false,\n\n    // 공급받는자 구분\n    // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1\n    \"invoiceeType\": \"사업자\",\n\n    // 공급받는자 사업자번호\t\n    // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)\n    // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)\n    // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)\n    \"invoiceeCorpNum\": \"8888888888\",\n\n    // 공급받는자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoiceeTaxRegID\": \"\",\n\n    // 공급받는자 상호\n    \"invoiceeCorpName\": \"Buyer Corp Name\",\n\n    // 공급받는자 대표자 성명\n    \"invoiceeCEOName\": \"Buyer Corp CEO Name\",\n\n    // 공급받는자 주소\n    \"invoiceeAddr\": \"Buyer Address\",\n\n    // \t공급받는자 종목\n    \"invoiceeBizClass\": \"Buyer Business Class\",\n\n    // 공급받는자 업태\n    \"invoiceeBizType\": \"Buyer Business Type\",\n\n    // 공급받는자 주) 담당자 성명\n    \"invoiceeContactName1\": \"Buyer Contacter Name\",\n\n    // 공급받는자 주) 담당자 연락처\n    \"invoiceeTEL1\": \"070-111-222\",\n\n    // 공급받는자 주) 담당자 휴대폰\t\n    \"invoiceeHP1\": \"010-222-333\",\n\n    // 공급받는자 주) 담당자 이메일\n    \"invoiceeEmail1\": \"test@test.com\",\n\n    // 공급받는자 문자전송 여부\n    // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoiceeSMSSendYN\": null,\n\n\n    // 공급가액 합계\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"supplyCostTotal\": \"200000\",\n\n    // 세액 합계\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"taxTotal\": \"20000\",\n\n    // 합계금액\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"totalAmount\": \"220000\",\n\n    // \t수정 사유코드\n    // └ 수정세금계산서 작성시 필수\n    // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1\n    // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,\n    // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급\n    \"modifyCode\": null,\n\n    // 영수/청구\n    // - \"영수\" / \"청구\" / \"없음\" 중 택 1\n    \"purposeType\": \"영수\",\n\n    // 일련번호\n    \"serialNum\": \"\",\n\n    // 현금\n    \"cash\": \"\",\n\n    // 수표\n    \"chkBill\": \"\",\n\n    // 외상\n    \"credit\": \"\",\n\n    // 어음\n    \"note\": \"\",\n    \n    // 비고1\n    // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력\n    \"remark1\": \"remark 1\",\n\n    // 비고2\n    \"remark2\": \"remark 2\",\n\n    // 비고3\n    \"remark3\": \"remark 3\",\n\n    // 사업자등록증 첨부\n    // - true : 첨부, false : 미첨부(Default)     \n    \"businessLicenseYN\": false,\n\n    // 통장사본 첨부\t\n    // └ true : 첨부, false : 미첨부(Default)\n    \"bankBookYN\": false,\n\n    // [리스트] 거래 물품 상세 정보 (최대 99건)\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ],\n\n    // [리스트] 공급받는자 담당자 정보 (최대 5명)\n    \"addContactList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 5)\n            \"serialNum\": 1,\n\n            // 이메일\n            \"email\": \"test@test.com\",\n\n            // 담당자 성명\n            \"contactName\": \"Buyer Contacter Addtion 01\"\n        },\n        {\n            \"serialNum\": 2,\n\n            \"email\": \"test@test.com\",\n\n            \"contactName\": \"Buyer Contacter Addtion 02\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice"
+					]
+				},
+				"description": "ㆍ작성된 세금계산서 데이터를 팝빌에 저장과 동시에 발행(전자서명)하여 \"발행완료\" 상태로 처리합니다.\n\nㆍ세금계산서 발행시 포인트가 과금되며, 공급받는자에게 발행 메일이 발송됩니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#RegistIssue"
+			},
+			"response": []
+		},
+		{
+			"name": "BulkSubmit",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// \t제출아이디",
+							"// └ 최대 36자리 영문, 숫자, '-' 조합으로 구성",
+							"var submitID = '20210930-01';",
+							"pm.collectionVariables.set(\"SubmitID\", submitID);",
+							"",
+							"// [리스크] 세금계산서 객체 리스트",
+							"var TaxinvoiceList = [];",
+							"",
+							"// BulkSubmit API는 접수당 최대 100개의 세금계산서 발행을 요청 할 수 있습니다. ",
+							"// 100개의 세금계산서 생성 loop",
+							"for(var i=1; i<=100; i++){",
+							"",
+							"    // 세금계산서 객체",
+							"    // - https://docs.popbill.com/en/taxinvoice/java/api#Taxinvoice",
+							"    var Taxinvoice = {",
+							"",
+							"        // 세금계산서 발행 안내메일 제목",
+							"        // - 미입력시 팝빌에서 설정한 기본값 사용",
+							"        \"emailSubject\": \"\",",
+							"",
+							"        // 세금계산서 상태 이력을 관리하기 위한 메모",
+							"        \"memo\": \"RegistIssue Memo\",",
+							"",
+							"        // 작성일자",
+							"        // - 형식 : yyyyMMdd",
+							"        \"writeDate\": \"20210930\",",
+							"",
+							"        // 과금방향",
+							"        // - \"정과금\" / \"역과금\" 중 택 1",
+							"        \"chargeDirection\": \"정과금\",",
+							"",
+							"        // 발행형태",
+							"        // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1",
+							"        \"issueType\": \"정발행\",",
+							"",
+							"        // 과세형태",
+							"        // - \"과세\" / \"영세\" / \"면세\" 중 택 1",
+							"        \"taxType\": \"과세\",",
+							"",
+							"        // 공급자 사업자번호",
+							"        // └ 하이픈('-') 제외 10자리 숫자값",
+							"        \"invoicerCorpNum\": \"1234567890\",",
+							"",
+							"        // 공급자 문서번호",
+							"        // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호",
+							"        // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능",
+							"        \"invoicerMgtKey\": submitID + \"-\" + i,",
+							"",
+							"        // 공급자 종사업장 식별번호\t",
+							"        // └ 4자리 숫자값",
+							"        \"invoicerTaxRegID\": \"\",",
+							"",
+							"        // 공급자 상호\t",
+							"        \"invoicerCorpName\": \"Seller Company Name\",",
+							"",
+							"        // 공급자 대표자 성명\t",
+							"        \"invoicerCEOName\": \"Seller Company's CEO Name\",",
+							"",
+							"        // 공급자 주소",
+							"        \"invoicerAddr\": \"Seller Address\",",
+							"",
+							"        // 공급자 업태",
+							"        \"invoicerBizClass\": \"Seller Business Class\",",
+							"",
+							"        // 공급자 종목",
+							"        \"invoicerBizType\": \"Seller Business Type\",",
+							"",
+							"        // 공급자 담당자 성명",
+							"        \"invoicerContactName\": \"Business Contractor Name\",",
+							"",
+							"        // 공급자 담당자 연락처",
+							"        \"invoicerTEL\": \"070-4304-2991\",",
+							"",
+							"        // 공급자 담당자 휴대폰",
+							"        \"invoicerHP\": \"010-111-222\",",
+							"",
+							"        // 공급자 담당자 이메일",
+							"        \"invoicerEmail\": \"seller@test.com\",",
+							"",
+							"        // 공급자 문자전송 여부",
+							"        // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1",
+							"        // └ true = 전송, false = 미전송",
+							"        // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송",
+							"        // └ 전송시 포인트 차감되며, 실패시 환불 처리",
+							"        \"invoicerSMSSendYN\": false,",
+							"",
+							"        // 공급받는자 구분",
+							"        // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1",
+							"        \"invoiceeType\": \"사업자\",",
+							"",
+							"        // 공급받는자 사업자번호\t",
+							"        // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)",
+							"        // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)",
+							"        // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)",
+							"        \"invoiceeCorpNum\": \"8888888888\",",
+							"",
+							"        // 공급받는자 종사업장 식별번호\t",
+							"        // └ 4자리 숫자값",
+							"        \"invoiceeTaxRegID\": \"\",",
+							"",
+							"        // 공급받는자 상호",
+							"        \"invoiceeCorpName\": \"Buyer Corp Name\",",
+							"",
+							"        // 공급받는자 대표자 성명",
+							"        \"invoiceeCEOName\": \"Buyer Corp CEO Name\",",
+							"",
+							"        // 공급받는자 주소",
+							"        \"invoiceeAddr\": \"Buyer Address\",",
+							"",
+							"        // \t공급받는자 종목",
+							"        \"invoiceeBizClass\": \"Buyer Business Class\",",
+							"",
+							"        // 공급받는자 업태",
+							"        \"invoiceeBizType\": \"Buyer Business Type\",",
+							"",
+							"        // 공급받는자 주) 담당자 성명",
+							"        \"invoiceeContactName1\": \"Buyer Contacter Name\",",
+							"",
+							"        // 공급받는자 주) 담당자 연락처",
+							"        \"invoiceeTEL1\": \"070-111-222\",",
+							"",
+							"        // 공급받는자 주) 담당자 휴대폰\t",
+							"        \"invoiceeHP1\": \"010-222-333\",",
+							"",
+							"        // 공급받는자 주) 담당자 이메일",
+							"        \"invoiceeEmail1\": \"test@test.com\",",
+							"",
+							"        // 공급받는자 문자전송 여부",
+							"        // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1",
+							"        // └ true = 전송, false = 미전송",
+							"        // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송",
+							"        // └ 전송시 포인트 차감되며, 실패시 환불 처리",
+							"        \"invoiceeSMSSendYN\": null,",
+							"",
+							"",
+							"        // 공급가액 합계",
+							"        // └ 정수만 입력 가능",
+							"        // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사",
+							"        \"supplyCostTotal\": \"200000\",",
+							"",
+							"        // 세액 합계\t",
+							"        // └ 정수만 입력 가능",
+							"        // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사",
+							"        \"taxTotal\": \"20000\",",
+							"",
+							"        // 합계금액\t",
+							"        // └ 정수만 입력 가능",
+							"        // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사",
+							"        \"totalAmount\": \"220000\",",
+							"",
+							"        // \t수정 사유코드",
+							"        // └ 수정세금계산서 작성시 필수",
+							"        // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1",
+							"        // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,",
+							"        // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급",
+							"        \"modifyCode\": null,",
+							"",
+							"        // 영수/청구",
+							"        // - \"영수\" / \"청구\" / \"없음\" 중 택 1",
+							"        \"purposeType\": \"영수\",",
+							"",
+							"        // 일련번호",
+							"        \"serialNum\": \"\",",
+							"",
+							"        // 현금",
+							"        \"cash\": \"\",",
+							"",
+							"        // 수표",
+							"        \"chkBill\": \"\",",
+							"",
+							"        // 외상",
+							"        \"credit\": \"\",",
+							"",
+							"        // 어음",
+							"        \"note\": \"\",",
+							"    ",
+							"        // 비고1",
+							"        // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력",
+							"        \"remark1\": \"remark 1\",",
+							"",
+							"        // 비고2",
+							"        \"remark2\": \"remark 2\",",
+							"",
+							"        // 비고3",
+							"        \"remark3\": \"remark 3\",",
+							"",
+							"        // 사업자등록증 첨부",
+							"        // - true : 첨부, false : 미첨부(Default)     ",
+							"        \"businessLicenseYN\": false,",
+							"",
+							"        // 통장사본 첨부\t",
+							"        // └ true : 첨부, false : 미첨부(Default)",
+							"        \"bankBookYN\": false,",
+							"",
+							"        // [리스트] 거래 물품 상세 정보 (최대 99건)",
+							"        \"detailList\": [",
+							"            {",
+							"                // 일련번호",
+							"                // └ 1부터 순차적으로 입력 (최대 99)",
+							"                \"serialNum\": 1,",
+							"",
+							"                // 거래일자",
+							"                // └ 형식 : yyyyMMdd",
+							"                \"purchaseDT\": \"20201006\",",
+							"",
+							"                // 품명",
+							"                \"itemName\": \"Item Name 01\",",
+							"",
+							"                // 규격",
+							"                \"spec\": \"spec\",",
+							"",
+							"                // 수량",
+							"                // └ 소수점 아래 2번째 자리까지 입력 가능",
+							"                // └ 마이너스 입력 가능",
+							"                \"qty\": \"1\",",
+							"",
+							"                // 단가",
+							"                // └ 소수점 아래 2번째 자리까지 입력 가능",
+							"                // └ 마이너스 금액 입력 가능",
+							"                \"unitCost\": \"110000\",",
+							"",
+							"                // 공급가액",
+							"                // └ 정수만 입력 가능",
+							"                // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사",
+							"                \"supplyCost\": \"100000\",",
+							"",
+							"                // 세액",
+							"                // └ 정수만 입력 가능",
+							"                // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사",
+							"                \"tax\": \"10000\",",
+							"",
+							"                // 비고",
+							"                \"remark\": \"Item reamrk\"",
+							"            },",
+							"            {",
+							"                \"serialNum\": 2,",
+							"                \"purchaseDT\": \"20210629\",",
+							"                \"itemName\": \"Item Name 02\",",
+							"                \"spec\": \"spec\",",
+							"                \"qty\": \"1\",",
+							"                \"unitCost\": \"110000\",",
+							"                \"supplyCost\": \"100000\",",
+							"                \"tax\": \"10000\",",
+							"                \"remark\": \"Item remark\"",
+							"            }",
+							"        ],",
+							"",
+							"        // [리스트] 공급받는자 담당자 정보 (최대 5명)",
+							"        \"addContactList\": [",
+							"            {",
+							"                // 일련번호",
+							"                // └ 1부터 순차적으로 입력 (최대 5)",
+							"                \"serialNum\": 1,",
+							"",
+							"                // 이메일",
+							"                \"email\": \"test@test.com\",",
+							"",
+							"                // 담당자 성명",
+							"                \"contactName\": \"Buyer Contacter Addtion 01\"",
+							"            },",
+							"            {",
+							"                \"serialNum\": 2,",
+							"",
+							"                \"email\": \"test@test.com\",",
+							"",
+							"                \"contactName\": \"Buyer Contacter Addtion 02\"",
+							"            }",
+							"        ]",
+							"    }",
+							"",
+							"    TaxinvoiceList.push(Taxinvoice);",
+							"}",
+							"",
+							"",
+							"// BulkSubmit API - POST Request Body object",
+							"var RequestBody = {",
+							"",
+							"    // 세금계산서 지연발행 가능여부",
+							"    // └ true = 가능, false = 불가능(default)",
+							"    forceIssue : false,",
+							"",
+							"    // [리스트] 세금계산서 객체 리스트",
+							"    invoices : TaxinvoiceList",
+							"};",
+							"",
+							"",
+							"function stringify(obj) {",
+							"    return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function getSHA1Base64(input){",
+							"    return CryptoJS.SHA1(input).toString(CryptoJS.enc.Base64);",
+							"}",
+							"",
+							"pm.collectionVariables.set(\"BulkRequestBody\", stringify(RequestBody));",
+							"",
+							"// Request Body 유효성 검사를 위한 Message digest 생성",
+							"// - base64encode(sha1(requestBody))",
+							"var MessageDigest = getSHA1Base64(stringify(RequestBody));",
+							"pm.collectionVariables.set(\"BulkMessageDigest\", MessageDigest);",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"id": "87c8abf9-e0ac-4989-8f22-fd38cb44b303"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "BULKISSUE"
+					},
+					{
+						"key": "x-pb-submit-id",
+						"type": "text",
+						"value": "{{SubmitID}}"
+					},
+					{
+						"key": "x-pb-message-digest",
+						"type": "text",
+						"value": "{{BulkMessageDigest}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{BulkRequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice"
+					]
+				},
+				"description": "ㆍ최대 100건의 세금계산서 발행을 한번의 요청으로 접수합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#BulkSubmit"
+			},
+			"response": []
+		},
+		{
+			"name": "GetBulkResult",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 초대량 발행 접수시 기재한 제출아이디",
+							"var submitID = '20210930-01';",
+							"pm.collectionVariables.set(\"GetBulkResult_submitID\", submitID);"
+						],
+						"type": "text/javascript",
+						"id": "f87fc2c9-d8cf-4347-9942-e27e024eb5a6"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/BULK/{{GetBulkResult_submitID}}/State",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"BULK",
+						"{{GetBulkResult_submitID}}",
+						"State"
+					]
+				},
+				"description": "ㆍ접수시 기재한 SubmitID를 사용하여 세금계산서 접수결과를 확인합니다.\n\nㆍ개별 세금계산서 처리상태는 접수상태(txState)가 완료(2) 시 반환됩니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetBulkResult"
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "b6d4224f-a01a-4728-b93f-978eb5aeb961"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\n*\n* 세금계산서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://docs.popbill.com/en/taxinvoice/java/api#Taxinvoice\n*\n*/\n\n{\n    // 거래명세서 동시작성 여부 \n    // └ true = 사용 / false = 미사용(default) \n    \"writeSpecification\" : false,\n\n    // 작성일자\n    // - 형식 : yyyyMMdd\n    \"writeDate\": \"20210730\",\n\n    // 과금방향\n    // - \"정과금\" / \"역과금\" 중 택 1\n    \"chargeDirection\": \"정과금\",\n\n    // 발행형태\n    // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1\n    \"issueType\": \"정발행\",\n\n    // 과세형태\n    // - \"과세\" / \"영세\" / \"면세\" 중 택 1\n    \"taxType\": \"과세\",\n\n    // 공급자 사업자번호\n    // └ 하이픈('-') 제외 10자리 숫자값\n    \"invoicerCorpNum\": \"1234567890\",\n\n    // 공급자 문서번호\n    // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoicerMgtKey\": \"20210930-CER002\",\n\n    // 공급자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoicerTaxRegID\": \"\",\n\n    // 공급자 상호\t\n    \"invoicerCorpName\": \"Seller Company Name\",\n\n    // 공급자 대표자 성명\t\n    \"invoicerCEOName\": \"Seller Company's CEO Name\",\n\n    // 공급자 주소\n    \"invoicerAddr\": \"Seller Address\",\n\n    // 공급자 업태\n    \"invoicerBizClass\": \"Seller Business Class\",\n\n    // 공급자 종목\n    \"invoicerBizType\": \"Seller Business Type\",\n\n    // 공급자 담당자 성명\n    \"invoicerContactName\": \"Business Contractor Name\",\n\n    // 공급자 담당자 연락처\n    \"invoicerTEL\": \"070-4304-2991\",\n\n    // 공급자 담당자 휴대폰\n    \"invoicerHP\": \"010-111-222\",\n\n    // 공급자 담당자 이메일\n    \"invoicerEmail\": \"seller@test.com\",\n\n    // 공급자 문자전송 여부\n    // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoicerSMSSendYN\": false,\n\n    // 공급받는자 구분\n    // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1\n    \"invoiceeType\": \"사업자\",\n\n    // 공급받는자 사업자번호\t\n    // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)\n    // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)\n    // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)\n    \"invoiceeCorpNum\": \"8888888888\",\n\n    // 공급받는자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoiceeTaxRegID\": \"\",\n\n    // 공급받는자 상호\n    \"invoiceeCorpName\": \"Buyer Corp Name\",\n\n    // 공급받는자 대표자 성명\n    \"invoiceeCEOName\": \"Buyer Corp CEO Name\",\n\n    // 공급받는자 주소\n    \"invoiceeAddr\": \"Buyer Address\",\n\n    // \t공급받는자 종목\n    \"invoiceeBizClass\": \"Buyer Business Class\",\n\n    // 공급받는자 업태\n    \"invoiceeBizType\": \"Buyer Business Type\",\n\n    // 공급받는자 주) 담당자 성명\n    \"invoiceeContactName1\": \"Buyer Contacter Name\",\n\n    // 공급받는자 주) 담당자 연락처\n    \"invoiceeTEL1\": \"070-111-222\",\n\n    // 공급받는자 주) 담당자 휴대폰\t\n    \"invoiceeHP1\": \"010-222-333\",\n\n    // 공급받는자 주) 담당자 이메일\n    \"invoiceeEmail1\": \"test@test.com\",\n\n    // 공급받는자 문자전송 여부\n    // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoiceeSMSSendYN\": null,\n\n\n    // 공급가액 합계\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"supplyCostTotal\": \"200000\",\n\n    // 세액 합계\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"taxTotal\": \"20000\",\n\n    // 합계금액\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"totalAmount\": \"220000\",\n\n    // \t수정 사유코드\n    // └ 수정세금계산서 작성시 필수\n    // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1\n    // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,\n    // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급\n    \"modifyCode\": null,\n\n    // 영수/청구\n    // - \"영수\" / \"청구\" / \"없음\" 중 택 1\n    \"purposeType\": \"영수\",\n\n    // 일련번호\n    \"serialNum\": \"\",\n\n    // 현금\n    \"cash\": \"\",\n\n    // 수표\n    \"chkBill\": \"\",\n\n    // 외상\n    \"credit\": \"\",\n\n    // 어음\n    \"note\": \"\",\n    \n    // 비고1\n    // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력\n    \"remark1\": \"remark 1\",\n\n    // 비고2\n    \"remark2\": \"remark 2\",\n\n    // 비고3\n    \"remark3\": \"remark 3\",\n\n    // 사업자등록증 첨부\n    // - true : 첨부, false : 미첨부(Default)     \n    \"businessLicenseYN\": false,\n\n    // 통장사본 첨부\t\n    // └ true : 첨부, false : 미첨부(Default)\n    \"bankBookYN\": false,\n\n    // [리스트] 거래 물품 상세 정보 (최대 99건)\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ],\n\n    // [리스트] 공급받는자 담당자 정보 (최대 5명)\n    \"addContactList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 5)\n            \"serialNum\": 1,\n\n            // 이메일\n            \"email\": \"test@test.com\",\n\n            // 담당자 성명\n            \"contactName\": \"Buyer Contacter Addtion 01\"\n        },\n        {\n            \"serialNum\": 2,\n\n            \"email\": \"test@test.com\",\n\n            \"contactName\": \"Buyer Contacter Addtion 02\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice"
+					]
+				},
+				"description": "ㆍ작성된 세금계산서 데이터를 팝빌에 저장합니다.\n\nㆍ\"임시저장\" 상태의 세금계산서는 [Issue - 발행]함수를 호출하여 \"발행완료\" 처리한 경우에만 국세청으로 전송됩니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#Register"
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 수정할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-02'",
+							"pm.collectionVariables.set(\"Update_invoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "d8e5e04f-763a-435c-a992-f18045b4d877"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "PATCH"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\n*\n* 세금계산서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://docs.popbill.com/en/taxinvoice/java/api#Taxinvoice\n*\n*/\n\n{\n    // 작성일자\n    // - 형식 : yyyyMMdd\n    \"writeDate\": \"20210930\",\n\n    // 과금방향\n    // - \"정과금\" / \"역과금\" 중 택 1\n    \"chargeDirection\": \"정과금\",\n\n    // 발행형태\n    // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1\n    \"issueType\": \"정발행\",\n\n    // 과세형태\n    // - \"과세\" / \"영세\" / \"면세\" 중 택 1\n    \"taxType\": \"과세\",\n\n    // 공급자 사업자번호\n    // └ 하이픈('-') 제외 10자리 숫자값\n    \"invoicerCorpNum\": \"1234567890\",\n\n    // 공급자 문서번호\n    // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoicerMgtKey\": \"20210930-02\",\n\n    // 공급자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoicerTaxRegID\": \"\",\n\n    // 공급자 상호\t\n    \"invoicerCorpName\": \"Seller Company Name\",\n\n    // 공급자 대표자 성명\t\n    \"invoicerCEOName\": \"Seller Company's CEO Name\",\n\n    // 공급자 주소\n    \"invoicerAddr\": \"Seller Address\",\n\n    // 공급자 업태\n    \"invoicerBizClass\": \"Seller Business Class\",\n\n    // 공급자 종목\n    \"invoicerBizType\": \"Seller Business Type\",\n\n    // 공급자 담당자 성명\n    \"invoicerContactName\": \"Business Contractor Name\",\n\n    // 공급자 담당자 연락처\n    \"invoicerTEL\": \"070-4304-2991\",\n\n    // 공급자 담당자 휴대폰\n    \"invoicerHP\": \"010-111-222\",\n\n    // 공급자 담당자 이메일\n    \"invoicerEmail\": \"seller@test.com\",\n\n    // 공급자 문자전송 여부\n    // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoicerSMSSendYN\": false,\n\n    // 공급받는자 구분\n    // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1\n    \"invoiceeType\": \"사업자\",\n\n    // 공급받는자 사업자번호\t\n    // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)\n    // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)\n    // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)\n    \"invoiceeCorpNum\": \"8888888888\",\n\n    // 공급받는자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoiceeTaxRegID\": \"\",\n\n    // 공급받는자 상호\n    \"invoiceeCorpName\": \"Buyer Corp Name\",\n\n    // 공급받는자 대표자 성명\n    \"invoiceeCEOName\": \"Buyer Corp CEO Name\",\n\n    // 공급받는자 주소\n    \"invoiceeAddr\": \"Buyer Address\",\n\n    // \t공급받는자 종목\n    \"invoiceeBizClass\": \"Buyer Business Class\",\n\n    // 공급받는자 업태\n    \"invoiceeBizType\": \"Buyer Business Type\",\n\n    // 공급받는자 주) 담당자 성명\n    \"invoiceeContactName1\": \"Buyer Contacter Name\",\n\n    // 공급받는자 주) 담당자 연락처\n    \"invoiceeTEL1\": \"070-111-222\",\n\n    // 공급받는자 주) 담당자 휴대폰\t\n    \"invoiceeHP1\": \"010-222-333\",\n\n    // 공급받는자 주) 담당자 이메일\n    \"invoiceeEmail1\": \"test@test.com\",\n\n    // 공급받는자 문자전송 여부\n    // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoiceeSMSSendYN\": null,\n\n\n    // 공급가액 합계\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"supplyCostTotal\": \"200000\",\n\n    // 세액 합계\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"taxTotal\": \"20000\",\n\n    // 합계금액\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"totalAmount\": \"220000\",\n\n    // \t수정 사유코드\n    // └ 수정세금계산서 작성시 필수\n    // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1\n    // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,\n    // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급\n    \"modifyCode\": null,\n\n    // 영수/청구\n    // - \"영수\" / \"청구\" / \"없음\" 중 택 1\n    \"purposeType\": \"영수\",\n\n    // 일련번호\n    \"serialNum\": \"\",\n\n    // 현금\n    \"cash\": \"\",\n\n    // 수표\n    \"chkBill\": \"\",\n\n    // 외상\n    \"credit\": \"\",\n\n    // 어음\n    \"note\": \"\",\n    \n    // 비고1\n    // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력\n    \"remark1\": \"remark 1\",\n\n    // 비고2\n    \"remark2\": \"remark 2\",\n\n    // 비고3\n    \"remark3\": \"remark 3\",\n\n    // 사업자등록증 첨부\n    // - true : 첨부, false : 미첨부(Default)     \n    \"businessLicenseYN\": false,\n\n    // 통장사본 첨부\t\n    // └ true : 첨부, false : 미첨부(Default)\n    \"bankBookYN\": false,\n\n    // [리스트] 거래 물품 상세 정보 (최대 99건)\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ],\n\n    // [리스트] 공급받는자 담당자 정보 (최대 5명)\n    \"addContactList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 5)\n            \"serialNum\": 1,\n\n            // 이메일\n            \"email\": \"test@test.com\",\n\n            // 담당자 성명\n            \"contactName\": \"Buyer Contacter Addtion 01\"\n        },\n        {\n            \"serialNum\": 2,\n\n            \"email\": \"test@test.com\",\n\n            \"contactName\": \"Buyer Contacter Addtion 02\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{Update_invoicerMgtKey}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{Update_invoicerMgtKey}}"
+					]
+				},
+				"description": "ㆍ\"임시저장\" 상태의 세금계산서를 수정합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#Update"
+			},
+			"response": []
+		},
+		{
+			"name": "Issue",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 발행할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-11'",
+							"pm.collectionVariables.set(\"Issue_invoicerMgtKey\", invoicerMgtKey);",
+							"",
+							"// Iussue info",
+							"var reqBodyObj = {",
+							"  memo : 'Memo', // 세금계산서 상태 이력을 관리하기 위한 메모",
+							"  emailSubject : '테스트', // 세금계산서 발행 안내메일 제목",
+							"  forceIssue : false // 지연발행 가능여부 : true = 가능 / false = 불가능(default)",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"Issue_RequestBody\", RequestBody);",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "f9ef987d-5952-44e3-a5cb-a2744dbaed55"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "ISSUE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{Issue_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{Issue_invoicerMgtKey}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{Issue_invoicerMgtKey}}"
+					]
+				},
+				"description": "ㆍ\"임시저장\" 또는 \"(역)발행대기\" 상태의 세금계산서를 발행(전자서명)하며, \"발행완료\" 상태로 처리합니다.\n\nㆍ\"발행완료\"된 전자세금계산서는 국세청 전송 이전에 [CancelIssue – 발행취소] 함수로 국세청 신고 대상에서 제외할 수 있습니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#TIIssue"
+			},
+			"response": []
+		},
+		{
+			"name": "CancelIssue",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 발행 취소할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-01-96';",
+							"pm.collectionVariables.set(\"CancelIssue_invoicerMgtKey\", invoicerMgtKey);",
+							"",
+							"// 세금계산서 상태 이력을 관리하기 위한 메모",
+							"var reqBodyObj = {",
+							"  memo : 'Memo'",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"CancelIssue_RequestBody\", RequestBody);",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"id": "2a841fc6-c29a-4fae-955d-0262f22f707e"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "CANCELISSUE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{CancelIssue_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{CancelIssue_invoicerMgtKey}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{CancelIssue_invoicerMgtKey}}"
+					]
+				},
+				"description": "ㆍ국세청 전송 이전 \"발행완료\" 상태의 전자세금계산서를 \"발행취소\"하고 국세청 신고대상에서 제외합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#CancelIssue"
+			},
+			"response": []
+		},
+		{
+			"name": "RegistRequest",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "a634d355-6ede-440b-87ca-b00d68da01aa"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "REQUEST"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\n*\n* 세금계산서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://docs.popbill.com/en/taxinvoice/java/api#Taxinvoice\n*\n*/\n\n{\n    // 작성일자\n    // - 형식 : yyyyMMdd\n    \"writeDate\": \"20210930\",\n\n    // 과금방향\n    // - \"정과금\" / \"역과금\" 중 택 1\n    \"chargeDirection\": \"정과금\",\n\n    // 발행형태\n    // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1\n    \"issueType\": \"역발행\",\n\n    // 과세형태\n    // - \"과세\" / \"영세\" / \"면세\" 중 택 1\n    \"taxType\": \"과세\",\n\n    // 공급자 사업자번호\n    // └ 하이픈('-') 제외 10자리 숫자값\n    \"invoicerCorpNum\": \"8888888888\",\n\n    // 공급자 문서번호\n    // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoicerMgtKey\": \"20210930-CER003\",\n\n    // 공급자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoicerTaxRegID\": \"\",\n\n    // 공급자 상호\t\n    \"invoicerCorpName\": \"Seller Company Name\",\n\n    // 공급자 대표자 성명\t\n    \"invoicerCEOName\": \"Seller Company's CEO Name\",\n\n    // 공급자 주소\n    \"invoicerAddr\": \"Seller Address\",\n\n    // 공급자 업태\n    \"invoicerBizClass\": \"Seller Business Class\",\n\n    // 공급자 종목\n    \"invoicerBizType\": \"Seller Business Type\",\n\n    // 공급자 담당자 성명\n    \"invoicerContactName\": \"Business Contractor Name\",\n\n    // 공급자 담당자 연락처\n    \"invoicerTEL\": \"070-4304-2991\",\n\n    // 공급자 담당자 휴대폰\n    \"invoicerHP\": \"010-111-222\",\n\n    // 공급자 담당자 이메일\n    \"invoicerEmail\": \"seller@test.com\",\n\n    // 공급자 문자전송 여부\n    // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoicerSMSSendYN\": false,\n\n    // 공급받는자 구분\n    // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1\n    \"invoiceeType\": \"사업자\",\n\n    // 공급받는자 사업자번호\t\n    // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)\n    // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)\n    // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)\n    \"invoiceeCorpNum\": \"1234567890\",\n\n    // 역발행시 필수, 공급받는자의 문서 관리를 위해 파트너가 부여하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoiceeMgtKey\" : \"20210930-CEE003\",\n\n    // 공급받는자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoiceeTaxRegID\": \"\",\n\n    // 공급받는자 상호\n    \"invoiceeCorpName\": \"Buyer Corp Name\",\n\n    // 공급받는자 대표자 성명\n    \"invoiceeCEOName\": \"Buyer Corp CEO Name\",\n\n    // 공급받는자 주소\n    \"invoiceeAddr\": \"Buyer Address\",\n\n    // \t공급받는자 종목\n    \"invoiceeBizClass\": \"Buyer Business Class\",\n\n    // 공급받는자 업태\n    \"invoiceeBizType\": \"Buyer Business Type\",\n\n    // 공급받는자 주) 담당자 성명\n    \"invoiceeContactName1\": \"Buyer Contacter Name\",\n\n    // 공급받는자 주) 담당자 연락처\n    \"invoiceeTEL1\": \"070-111-222\",\n\n    // 공급받는자 주) 담당자 휴대폰\t\n    \"invoiceeHP1\": \"010-222-333\",\n\n    // 공급받는자 주) 담당자 이메일\n    \"invoiceeEmail1\": \"test@test.com\",\n\n    // 공급받는자 문자전송 여부\n    // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoiceeSMSSendYN\": null,\n\n\n    // 공급가액 합계\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"supplyCostTotal\": \"200000\",\n\n    // 세액 합계\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"taxTotal\": \"20000\",\n\n    // 합계금액\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"totalAmount\": \"220000\",\n\n    // \t수정 사유코드\n    // └ 수정세금계산서 작성시 필수\n    // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1\n    // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,\n    // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급\n    \"modifyCode\": null,\n\n    // 영수/청구\n    // - \"영수\" / \"청구\" / \"없음\" 중 택 1\n    \"purposeType\": \"영수\",\n\n    // 일련번호\n    \"serialNum\": \"\",\n\n    // 현금\n    \"cash\": \"\",\n\n    // 수표\n    \"chkBill\": \"\",\n\n    // 외상\n    \"credit\": \"\",\n\n    // 어음\n    \"note\": \"\",\n    \n    // 비고1\n    // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력\n    \"remark1\": \"remark 1\",\n\n    // 비고2\n    \"remark2\": \"remark 2\",\n\n    // 비고3\n    \"remark3\": \"remark 3\",\n\n    // 사업자등록증 첨부\n    // - true : 첨부, false : 미첨부(Default)     \n    \"businessLicenseYN\": false,\n\n    // 통장사본 첨부\t\n    // └ true : 첨부, false : 미첨부(Default)\n    \"bankBookYN\": false,\n\n    // [리스트] 거래 물품 상세 정보 (최대 99건)\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ],\n\n    // [리스트] 공급받는자 담당자 정보 (최대 5명)\n    \"addContactList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 5)\n            \"serialNum\": 1,\n\n            // 이메일\n            \"email\": \"test@test.com\",\n\n            // 담당자 성명\n            \"contactName\": \"Buyer Contacter Addtion 01\"\n        },\n        {\n            \"serialNum\": 2,\n\n            \"email\": \"test@test.com\",\n\n            \"contactName\": \"Buyer Contacter Addtion 02\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice"
+					]
+				},
+				"description": "ㆍ공급받는자가 작성한 세금계산서 데이터를 팝빌에 저장하고 공급자에게 송부하여 발행을 요청합니다.\n\nㆍ역발행 요청된 세금계산서는 \"(역)발행대기\" 상태이며, 공급자가 팝빌 사이트 또는 함수를 호출하여 발행한 경우에만 국세청으로 전송됩니다.\n\nㆍ공급자는 팝빌 사이트의 \"매출 발행 대기함\"에서 발행대기 상태의 역발행 세금계산서를 확인할 수 있습니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#RegistRequest"
+			},
+			"response": []
+		},
+		{
+			"name": "Request",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 역발행 요청할 세금계산서 문서번호",
+							"var invoiceeMgtKey = '20210930-CEE002'",
+							"pm.collectionVariables.set(\"Request_invoiceeMgtKey\", invoiceeMgtKey);",
+							"",
+							"// Request info",
+							"var reqBodyObj = {",
+							"  memo : 'Memo', // 세금계산서 상태 이력을 관리하기 위한 메모",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"Request_RequestBody\", RequestBody);",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "aa0acb0c-9c3c-4f7b-be3d-2d7ffab13448"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "REQUEST"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{Request_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/BUY/{{Request_invoiceeMgtKey}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"BUY",
+						"{{Request_invoiceeMgtKey}}"
+					]
+				},
+				"description": "ㆍ공급받는자가 저장된 역발행 세금계산서를 공급자에게 송부하여 발행 요청합니다.\n\nㆍ역발행 요청된 세금계산서는 \"(역)발행대기\" 상태이며, 공급자가 팝빌 사이트 또는 함수를 호출하여 발행한 경우에만 국세청으로 전송됩니다.\n\nㆍ공급자는 팝빌 사이트의 \"매출 발행 대기함\"에서 발행대기 상태의 역발행 세금계산서를 확인할 수 있습니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#Request"
+			},
+			"response": []
+		},
+		{
+			"name": "CancelRequest",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 삭제할 세금계산서 문서번호",
+							"var invoiceeMgtKey = '20210930-CEE001';",
+							"pm.collectionVariables.set(\"CancelRequest_invoiceeMgtKey\", invoiceeMgtKey);",
+							"",
+							"// Request info",
+							"var reqBodyObj = {",
+							"  memo : 'Memo', // 세금계산서 상태 이력을 관리하기 위한 메모",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"CancelRequest_RequestBody\", RequestBody);",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"id": "eb933128-96d7-4135-920a-ad901e9e9b98"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "CANCELREQUEST"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{CancelRequest_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/BUY/{{CancelRequest_invoiceeMgtKey}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"BUY",
+						"{{CancelRequest_invoiceeMgtKey}}"
+					]
+				},
+				"description": "ㆍ공급자가 요청받은 역발행 세금계산서를 발행하기 전, 공급받는자가 역발행요청을 취소합니다.\n\nㆍ함수 호출시 상태 값이 \"취소\"로 변경되고, 해당 역발행 세금계산서는 공급자에 의해 발행 될 수 없습니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#CancelRequest"
+			},
+			"response": []
+		},
+		{
+			"name": "Refuse",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 거부할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-CER003'",
+							"pm.collectionVariables.set(\"Refuse_invoicerMgtKey\", invoicerMgtKey);",
+							"",
+							"// Refuse info",
+							"var reqBodyObj = {",
+							"  memo : 'Memo', // 세금계산서 상태 이력을 관리하기 위한 메모",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"Refuse_RequestBody\", RequestBody);",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "7ce6a1f3-9652-4f08-b7fe-34b7bf4f6881"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "REFUSE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{Refuse_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{Refuse_invoicerMgtKey}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{Refuse_invoicerMgtKey}}"
+					]
+				},
+				"description": "ㆍ공급자가 공급받는자에게 역발행 요청 받은 세금계산서의 발행을 거부합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#Refuse"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 삭제할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-01-96';",
+							"pm.collectionVariables.set(\"Delete_invoicerMgtKey\", invoicerMgtKey);",
+							""
+						],
+						"type": "text/javascript",
+						"id": "d727a06e-670b-49d3-ac6e-0e80e5f1b91e"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "DELETE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{Delete_invoicerMgtKey}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{Delete_invoicerMgtKey}}"
+					]
+				},
+				"description": "ㆍ삭제 가능한 상태의 세금계산서를 삭제합니다.\n\nㆍ삭제 가능한 상태: \"임시저장\", \"발행취소\", \"역발행거부\", \"역발행취소\", \"전송실패\"\n\nhttps://docs.popbill.com/taxinvoice/java/api#Delete"
+			},
+			"response": []
+		},
+		{
+			"name": "SendToNTS",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 국세청으로 즉시 전송할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-01-97';",
+							"pm.collectionVariables.set(\"SendToNTS_invoicerMgtKey\", invoicerMgtKey);",
+							"",
+							"// 세금계산서 상태 이력을 관리하기 위한 메모",
+							"var reqBodyObj = {",
+							"  memo : 'memo' ",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"SendToNTS_RequestBody\", RequestBody);",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "eff41865-c20c-4af9-940c-7749b5009155"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "NTS"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{SendToNTS_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{SendToNTS_invoicerMgtKey}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{SendToNTS_invoicerMgtKey}}"
+					]
+				},
+				"description": "ㆍ\"발행완료\" 상태의 전자세금계산서를 국세청에 즉시 전송하며, 함수 호출 후 최대 30분 이내에 전송 처리가 완료됩니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#SendToNTS"
+			},
+			"response": []
+		},
+		{
+			"name": "GetInfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 상태 및 요약정보를 확인할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-01-97'",
+							"pm.collectionVariables.set(\"GetInfo_invoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "ceac6270-f806-4829-9bc7-29866605cd07"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{GetInfo_invoicerMgtKey}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{GetInfo_invoicerMgtKey}}"
+					]
+				},
+				"description": "ㆍ세금계산서 1건의 상태 및 요약정보를 확인합니다.\n\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetInfo"
+			},
+			"response": []
+		},
+		{
+			"name": "GetInfos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 상태 및 요약 정보를 확인할 세금계산서 문서번호 배열 (최대 : 1000건)",
+							"var InovicerMgtKeyList = ['20210930-01-97','20210930-01-95', '20210930-01-93']",
+							"pm.collectionVariables.set(\"GetInfos_InovicerMgtKeyList\", stringify(InovicerMgtKeyList));",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "f4df4b41-edd4-4195-a8b4-d14eb86ea7b3"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{GetInfos_InovicerMgtKeyList}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL"
+					]
+				},
+				"description": "ㆍ다수건의 세금계산서 상태 및 요약 정보를 확인합니다. (1회 호출 시 최대 1,000건 확인 가능)\n\nㆍ리턴값 'TaxinvoiceInfo'의 변수 'stateCode'를 통해 세금계산서의 상태코드를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetInfos"
+			},
+			"response": []
+		},
+		{
+			"name": "GetXML",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 상태 및 요약정보를 확인할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20220201-PB-057';",
+							"pm.collectionVariables.set(\"GetXML_invoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "05dbc616-fc80-411c-aee9-5aa9236cf145"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{GetXML_invoicerMgtKey}}?XML",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{GetXML_invoicerMgtKey}}"
+					],
+					"query": [
+						{
+							"key": "XML",
+							"value": null
+						}
+					]
+				},
+				"description": "ㆍ전자세금계산서 1건의 상세정보를 XML로 반환합니다.\r\n\r\nhttps://docs.popbill.com/taxinvoice/java/api#GetXML"
+			},
+			"response": []
+		},
+		{
+			"name": "GetDetailInfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 상세정보를 확일할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-01-97'",
+							"pm.collectionVariables.set(\"GetDetailInfo_invoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "83fbb833-af37-430e-bfee-60140cdd7c11"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{GetDetailInfo_invoicerMgtKey}}?Detail",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{GetDetailInfo_invoicerMgtKey}}"
+					],
+					"query": [
+						{
+							"key": "Detail",
+							"value": null
+						}
+					]
+				},
+				"description": "ㆍ세금계산서 1건의 상세정보를 확인합니다.\n\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetDetailInfo"
+			},
+			"response": []
+		},
+		{
+			"name": "Search",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "aaa3f233-98e2-445c-b431-5b8dd0c30809",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 조회 기준일자 유형: \"R\" / \"W\" / \"I\" 중 택 1",
+							"// └ R = 등록일자, W = 작성일자, I = 발행일자",
+							"var DType = 'I'",
+							"pm.collectionVariables.set(\"Search_DType\", DType);",
+							"",
+							"// 조회 기간의 시작일자 (형식 : yyyyMMdd)",
+							"var SDate = '20210601'",
+							"pm.collectionVariables.set(\"Search_SDate\", SDate);",
+							"",
+							"// 조회 기간의 종료일자 (형식 : yyyyMMdd)",
+							"var EDate = '20210629'",
+							"pm.collectionVariables.set(\"Search_EDate\", EDate);",
+							"",
+							"// [배열] 세금계산서 상태코드",
+							"// └ 상태코드 2, 3번째 자리에 와일드카드(*) 사용가능. 예) \"3**\", \"60*\"",
+							"var State = ['3**'];",
+							"pm.collectionVariables.set(\"Search_State\", State.join(','));",
+							"",
+							"// [배열] 세금계산서 문서유형 : \"N\" / \"M\" 중 선택 (다중 선택 가능)",
+							"// └ N = 일반, M = 수정 세금계산서",
+							"var Type = ['N','M'];",
+							"pm.collectionVariables.set(\"Search_Type\", Type.join(','));",
+							"",
+							"// [배열] 과세형태 : \"T\" / \"N\" / \"Z\" 중 선택 (다중 선택 가능)",
+							"// └ T = 과세, N = 면세, Z = 영세",
+							"var TaxType = ['T','N','Z'];",
+							"pm.collectionVariables.set(\"Search_TaxType\", TaxType.join(','));",
+							"",
+							"// [배열] 발행형태 : \"N\" / \"R\" / \"T\" 중 선택 (다중 선택 가능)",
+							"// └ N = 정발행, R = 역발행, T = 위수탁발행",
+							"var IssueType = ['N'];",
+							"pm.collectionVariables.set(\"Search_IssueType\", IssueType.join(','));",
+							"",
+							"// 지연발행 여부 : null / true / false 중 택 1",
+							"// └ null = 전체, true = 지연발행, false = 정상발행",
+							"var LateOnly = '';",
+							"pm.collectionVariables.set(\"Search_LateOnly\", LateOnly);",
+							"",
+							"// 종사업자번호의 주체 : \"S\" / \"B\" / \"T\" 중 택 1",
+							"// └ S = 공급자, B = 공급받는자, T = 수탁자",
+							"var TaxRegIDType = ['S'];",
+							"pm.collectionVariables.set(\"Search_TaxRegIDType\", TaxRegIDType.join(','));",
+							"",
+							"// 종사업장번호",
+							"// └ 다수건 검색시 콤마(\",\")로 구분. 예) 1234, 1000",
+							"var TaxRegID = [''];",
+							"pm.collectionVariables.set(\"Search_TaxRegID\", TaxRegID.join(','));",
+							"",
+							"// 종사업장번호 유무 : null / \"0\" / \"1\" 중 택 1",
+							"// └ null = 전체, 0 = 없음, 1 = 있음",
+							"var TaxRegIDYN = '';",
+							"pm.collectionVariables.set(\"Search_TaxRegIDYN\", TaxRegIDYN);",
+							"",
+							"// 거래처 상호 / 사업자번호 (사업자) / 주민등록번호 (개인) / \"9999999999999\" (외국인) 중 검색하고자 하는 정보 입력",
+							"// └ 사업자번호 / 주민등록번호는 하이픈('-')을 제외한 숫자만 입력",
+							"var QString = '';",
+							"pm.collectionVariables.set(\"Search_QString\", encodeURIComponent(QString));",
+							"",
+							"// \t목록 페이지번호 (기본값 1)",
+							"var Page = 1;",
+							"pm.collectionVariables.set(\"Search_Page\", Page);",
+							"",
+							"// 페이지당 표시할 목록 개수 (기본값 500, 최대 1,000)",
+							"var PerPage = 20;",
+							"pm.collectionVariables.set(\"Search_PerPage\", PerPage);",
+							"",
+							"// {DType} 값을 기준으로 하는 목록 정렬 방향 : \"D\" / \"A\" 중 택 1",
+							"// └ D = 내림차순(기본값), A = 오름차순",
+							"var Order = 'D';",
+							"pm.collectionVariables.set(\"Search_Order\", Order);",
+							"",
+							"// 연동문서 여부 : null / \"0\" / \"1\" 중 택 1",
+							"// └ null = 전체, 0 = 일반문서, 1 = 연동문서",
+							"var InterOPYN = '';",
+							"pm.collectionVariables.set(\"Search_InterOPYN\", InterOPYN);",
+							"",
+							"// [배열] 전자세금계산서 등록 유형 : \"P\" / \"H\" 중 선택 (다중 선택 가능)",
+							"// └ P = 팝빌에서 등록(발행), H = 홈택스 또는 ASP에서 등록(발행)",
+							"var RegType = ['P','H'];",
+							"pm.collectionVariables.set(\"Search_RegType\", RegType.join(','));",
+							"",
+							"// [배열] 휴폐업상태 : \"N\" / \"0\" / \"1\" / \"2\" / \"3\" / \"4\" 중 선택 (다중 선택 가능)",
+							"// └ N = 미확인, 0 = 미등록, 1 = 사업중, 2 = 폐업, 3 = 휴업, 4 = 확인실패",
+							"var CloseDownState = ['0','1','2','3','4'];",
+							"pm.collectionVariables.set(\"Search_CloseDownState\", CloseDownState.join(','));",
+							"",
+							"// \t세금계산서의 문서번호 / 국세청 승인번호 중 검색하고자 하는 정보 입력",
+							"var MgtKey = '';",
+							"pm.collectionVariables.set(\"Search_MgtKey\", MgtKey);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL?DType={{Search_DType}}&SDate={{Search_SDate}}&EDate={{Search_EDate}}&State={{Search_State}}&Type={{Search_Type}}&TaxType={{Search_TaxType}}&IssueType={{Search_IssueType}}&LateOnly={{Search_LateOnly}}&TaxRegIDType={{Search_TaxRegIDType}}&TaxRegID={{Search_TaxRegID}}&TaxRegIDYN={{Search_TaxRegIDYN}}&QString={{Search_QString}}&Page={{Search_Page}}&PerPage={{Search_PerPage}}&Order={{Search_Order}}&InterOPYN={{Search_InterOPYN}}&RegType={{Search_RegType}}&CloseDownState={{Search_CloseDownState}}&MgtKey={{Search_MgtKey}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL"
+					],
+					"query": [
+						{
+							"key": "DType",
+							"value": "{{Search_DType}}"
+						},
+						{
+							"key": "SDate",
+							"value": "{{Search_SDate}}",
+							"description": "조회기간 단위 : 최대 6개월"
+						},
+						{
+							"key": "EDate",
+							"value": "{{Search_EDate}}",
+							"description": "조회기간 단위 : 최대 6개월"
+						},
+						{
+							"key": "State",
+							"value": "{{Search_State}}"
+						},
+						{
+							"key": "Type",
+							"value": "{{Search_Type}}"
+						},
+						{
+							"key": "TaxType",
+							"value": "{{Search_TaxType}}"
+						},
+						{
+							"key": "IssueType",
+							"value": "{{Search_IssueType}}"
+						},
+						{
+							"key": "LateOnly",
+							"value": "{{Search_LateOnly}}"
+						},
+						{
+							"key": "TaxRegIDType",
+							"value": "{{Search_TaxRegIDType}}"
+						},
+						{
+							"key": "TaxRegID",
+							"value": "{{Search_TaxRegID}}"
+						},
+						{
+							"key": "TaxRegIDYN",
+							"value": "{{Search_TaxRegIDYN}}"
+						},
+						{
+							"key": "QString",
+							"value": "{{Search_QString}}"
+						},
+						{
+							"key": "Page",
+							"value": "{{Search_Page}}"
+						},
+						{
+							"key": "PerPage",
+							"value": "{{Search_PerPage}}"
+						},
+						{
+							"key": "Order",
+							"value": "{{Search_Order}}"
+						},
+						{
+							"key": "InterOPYN",
+							"value": "{{Search_InterOPYN}}"
+						},
+						{
+							"key": "RegType",
+							"value": "{{Search_RegType}}"
+						},
+						{
+							"key": "CloseDownState",
+							"value": "{{Search_CloseDownState}}"
+						},
+						{
+							"key": "MgtKey",
+							"value": "{{Search_MgtKey}}"
+						}
+					]
+				},
+				"description": "ㆍ검색조건에 해당하는 세금계산서를 조회합니다. (조회기간 단위 : 최대 6개월)\n\nhttps://docs.popbill.com/taxinvoice/java/api#Search"
+			},
+			"response": []
+		},
+		{
+			"name": "GetLogs",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 확인할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-01-97'",
+							"pm.collectionVariables.set(\"GetLogs_invoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "5d0bfca4-f0ab-4086-9b91-5feac6f69801"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{GetLogs_invoicerMgtKey}}/Logs",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{GetLogs_invoicerMgtKey}}",
+						"Logs"
+					]
+				},
+				"description": "ㆍ세금계산서의 상태에 대한 변경이력을 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetLogs"
+			},
+			"response": []
+		},
+		{
+			"name": "GetURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 접근 메뉴 : \"TBOX\" / \"SBOX\" / \"PBOX\" / \"WRITE\" 중 택 1",
+							"// └ TBOX = 임시 문서함, SBOX = 매출 문서함, PBOX = 매입 문서함, WRITE = 매출 문서작성",
+							"var TOGO = 'TBOX'",
+							"pm.collectionVariables.set(\"GetURL_TOGO\", TOGO);"
+						],
+						"type": "text/javascript",
+						"id": "ba5ea36b-e87c-4faa-adda-23f30a775667"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/?TG={{GetURL_TOGO}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						""
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "{{GetURL_TOGO}}"
+						}
+					]
+				},
+				"description": "ㆍ로그인 상태로 팝빌 사이트의 전자세금계산서 문서함 메뉴에 접근할 수 있는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetPopUpURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 확인할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-01-97'",
+							"pm.collectionVariables.set(\"GetPopUpURL_invoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "14f141b6-ec8a-4c08-b0e1-9e78bb2a329e"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{GetPopUpURL_invoicerMgtKey}}?TG=POPUP",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{GetPopUpURL_invoicerMgtKey}}"
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "POPUP"
+						}
+					]
+				},
+				"description": "ㆍ팝빌 사이트와 동일한 세금계산서 1건의 상세 정보 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetPopUpURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetViewURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 확인할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-01-97'",
+							"pm.collectionVariables.set(\"GetViewURL_invoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "71013ab4-b155-4132-b627-86091e17ba61"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{GetViewURL_invoicerMgtKey}}?TG=VIEW",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{GetViewURL_invoicerMgtKey}}"
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "VIEW"
+						}
+					]
+				},
+				"description": "ㆍ팝빌 사이트와 동일한 세금계산서 1건의 상세정보 페이지(사이트 상단, 좌측 메뉴 및 버튼 제외)의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetViewURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetPrintURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 인쇄할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-01-97'",
+							"pm.collectionVariables.set(\"GetPrintURL_invoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "27b9191b-5144-4d77-9d84-6d05fc0f44f5"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{GetPrintURL_invoicerMgtKey}}?TG=PRINT",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{GetPrintURL_invoicerMgtKey}}"
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "PRINT"
+						}
+					]
+				},
+				"description": "ㆍ세금계산서 1건을 인쇄하기 위한 페이지의 팝업 URL을 반환하며, 페이지내에서 인쇄 설정값을 \"공급자\" / \"공급받는자\" / \"공급자+공급받는자\"용 중 하나로 지정할 수 있습니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetPrintURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetOldPrintURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**\r",
+							" * API 호출전 GetToken을 실행해야 합니다.\r",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.\r",
+							" */\r",
+							"\r",
+							"// 인쇄할 세금계산서 문서번호\r",
+							"var invoicerMgtKey = '20210930-01-97'\r",
+							"pm.collectionVariables.set(\"GetOldPrintURL_invoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "ccbba833-4fcc-4d3a-826b-1869b5855aea"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{API_Session_Token}}",
+						"type": "text"
+					},
+					{
+						"key": "x-pb-userid",
+						"value": "testkorea",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{GetOldPrintURL_invoicerMgtKey}}?TG=PRINTOLD",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{GetOldPrintURL_invoicerMgtKey}}"
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "PRINTOLD"
+						}
+					]
+				},
+				"description": "ㆍ세금계산서 1건을 구버전 양식으로 인쇄하기 위한 페이지의 팝업 URL을 반환하며, 페이지내에서 인쇄 설정값을 \"공급자\" / \"공급받는자\" / \"공급자+공급받는자\"용 중 하나로 지정할 수 있습니다.\r\n\r\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\r\n\r\nhttps://docs.popbill.com/taxinvoice/java/api#GetOldPrintURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetEPrintURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 인쇄할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-01-97'",
+							"pm.collectionVariables.set(\"GetEPrintURL_invoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "77c642da-8d92-4544-9a2a-29fac154c90c"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{GetEPrintURL_invoicerMgtKey}}?TG=EPRINT",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{GetEPrintURL_invoicerMgtKey}}"
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "EPRINT"
+						}
+					]
+				},
+				"description": "ㆍ\"공급받는자\" 용 세금계산서 1건을 인쇄하기 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetEPrintURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetMassPrintURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 인쇄할 세금계산서 문서번호 배열 (최대 : 1000 건)",
+							"var InovicerMgtKeyList = ['20210629-01','20210629-02', '20210629-03']",
+							"pm.collectionVariables.set(\"GetMassPrintURL_InovicerMgtKeyList\", stringify(InovicerMgtKeyList));",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "7d91b63d-e713-4296-bbd5-263b3d43c1a7"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{GetMassPrintURL_InovicerMgtKeyList}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL?Print",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL"
+					],
+					"query": [
+						{
+							"key": "Print",
+							"value": null
+						}
+					]
+				},
+				"description": "ㆍ다수건의 세금계산서를 인쇄하기 위한 페이지의 팝업 URL을 반환합니다. (최대 100건)\n\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetMassPrintURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetMailURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210629-02'",
+							"pm.collectionVariables.set(\"GetMailURL_invoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "42a9e537-eef6-476e-9f92-f572d464ded3"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{GetMailURL_invoicerMgtKey}}?TG=MAIL",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{GetMailURL_invoicerMgtKey}}"
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "MAIL"
+						}
+					]
+				},
+				"description": "ㆍ안내메일과 관련된 전자세금계산서를 확인 할 수 있는 상세 페이지의 팝업 URL을 반환하며, 해당 URL은 메일 하단의 \"전자세금계산서 보기\" 버튼의 링크와 같습니다.\n\nㆍ함수 호출로 반환 받은 URL에는 유효시간이 없습니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetMailURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetPDFURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210629-02'",
+							"pm.collectionVariables.set(\"GetPDFURL_invoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "32cee968-2f3e-4568-8682-f46fc8785aa4"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{GetPDFURL_invoicerMgtKey}}?TG=PDF",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{GetPDFURL_invoicerMgtKey}}"
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "PDF"
+						}
+					]
+				},
+				"description": "ㆍ전자세금계산서 PDF 파일을 다운 받을 수 있는 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안정책상 30초의 유효시간을 갖으며, 유효시간 이후 호출시 정상적으로 페이지가 호출되지 않습니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetPDFURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetAccessURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "97472d39-b0c7-445d-8dc0-3f8e3053943a"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/?TG=LOGIN",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "LOGIN"
+						}
+					]
+				},
+				"description": "ㆍ팝빌 사이트에 로그인 상태로 접근할 수 있는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetAccessURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetSealURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "ebe1263f-c39a-4549-a98a-0adacfde0174"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/?TG=SEAL",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "SEAL"
+						}
+					]
+				},
+				"description": "ㆍ세금계산서에 첨부할 인감, 사업자등록증, 통장사본을 등록하는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetSealURL"
+			},
+			"response": []
+		},
+		{
+			"name": "AttachFile",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 파일을 첨부할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20220328-REGISTER002';",
+							"pm.collectionVariables.set(\"AttachFile_invoicerMgtKey\", invoicerMgtKey);",
+							""
+						],
+						"type": "text/javascript",
+						"id": "a7b66698-b5f7-40f2-940e-94b2d58e1d73"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "Filedata",
+							"type": "file",
+							"src": "/C:/Users/wjkim/Documents/test.txt"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{AttachFile_invoicerMgtKey}}/Files",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{AttachFile_invoicerMgtKey}}",
+						"Files"
+					],
+					"query": [
+						{
+							"key": "P",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "ㆍ\"임시저장\" 상태의 세금계산서에 1개의 파일을 첨부합니다. (최대 5개)\n\nhttps://docs.popbill.com/taxinvoice/java/api#AttachFile"
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteFile",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 파일을 삭제할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20220328-REGISTER002';",
+							"pm.collectionVariables.set(\"DeleteFile_invoicerMgtKey\", invoicerMgtKey);",
+							"",
+							"// 삭제할 파일ID",
+							"var fileID = \"3A164E96-08B8-4A5A-B5C9-EA4A0B4ED024.PBF\";",
+							"pm.collectionVariables.set(\"DeleteFile_fileID\", fileID);"
+						],
+						"type": "text/javascript",
+						"id": "e624cfc7-74ff-42c8-9ceb-b786b652cbde"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "DELETE"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{DeleteFile_invoicerMgtKey}}/Files/{{DeleteFile_fileID}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{DeleteFile_invoicerMgtKey}}",
+						"Files",
+						"{{DeleteFile_fileID}}"
+					],
+					"query": [
+						{
+							"key": "P",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "ㆍ\"임시저장\" 상태의 세금계산서에 첨부된 1개의 파일을 삭제합니다.\n\nㆍ파일 식별을 위해 첨부시 부여되는 'FileID'는 함수 [GetFiles – 첨부파일 목록 확인] 를 호출하여 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#DeleteFile"
+			},
+			"response": []
+		},
+		{
+			"name": "GetFiles",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 첨부파일 목록을 확인할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20220328-REGISTER002';",
+							"pm.collectionVariables.set(\"GetFiles_invoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "258085a0-7a56-43d1-8f87-b292c10aaf11"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{GetFiles_invoicerMgtKey}}/Files",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{GetFiles_invoicerMgtKey}}",
+						"Files"
+					]
+				},
+				"description": "ㆍ세금계산서에 첨부할 인감, 사업자등록증, 통장사본을 등록하는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetSealURL"
+			},
+			"response": []
+		},
+		{
+			"name": "SendEmail",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 이메일 재전송할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-02';",
+							"pm.collectionVariables.set(\"SendEmail_invoicerMgtKey\", invoicerMgtKey);",
+							"",
+							"// 수신자 이메일주소",
+							"var reqBodyObj = {",
+							"  receiver : 'test@test.com'",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"SendEmail_RequestBody\", RequestBody);",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "deba1bba-863c-4cb0-979e-68f94baaa926"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "EMAIL"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{SendEmail_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{SendEmail_invoicerMgtKey}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{SendEmail_invoicerMgtKey}}"
+					]
+				},
+				"description": "ㆍ세금계산서와 관련된 안내 메일을 재전송 합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#SendEmail"
+			},
+			"response": []
+		},
+		{
+			"name": "SendSMS",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 세금계산서 문서번호 ",
+							"var invoicerMgtKey = '20210930-02';",
+							"pm.collectionVariables.set(\"SendSMS_invoicerMgtKey\", invoicerMgtKey);",
+							"",
+							"// SMS 정보",
+							"var reqBodyObj = {",
+							"  receiver : '010-000-0000', // 수신번호",
+							"  sender : '070-1234-1234', // 발신번호",
+							"  contents : 'test sms', // 메시지 내용, (*최대 90 byte까지 입력 가능, 초과한 내용은 자동으로 삭제되어 전송)",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"SendSMS_RequestBody\", RequestBody);",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "ba526eba-1d1e-438b-85d6-87c417ed80ce"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "SMS"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{SendSMS_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{SendSMS_invoicerMgtKey}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{SendSMS_invoicerMgtKey}}"
+					]
+				},
+				"description": "ㆍ세금계산서와 관련된 안내 SMS(단문) 문자를 재전송하는 함수로, 팝빌 사이트 [문자·팩스] > [문자] > [전송내역] 메뉴에서 전송결과를 확인 할 수 있습니다.\n\nㆍ메시지는 최대 90byte까지 입력 가능하고, 초과한 내용은 자동으로 삭제되어 전송합니다. (한글 최대 45자)\n\nhttps://docs.popbill.com/taxinvoice/java/api#SendSMS"
+			},
+			"response": []
+		},
+		{
+			"name": "SendFAX",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 세금계산서 문서번호 ",
+							"var invoicerMgtKey = '20210930-02';",
+							"pm.collectionVariables.set(\"SendFAX_invoicerMgtKey\", invoicerMgtKey);",
+							"",
+							"// FAX 정보.",
+							"var reqBodyObj = {",
+							"  receiver : '010-000-0000', // 수신번호",
+							"  sender : '070-1234-1234', // 발신번호",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"SendFAX_RequestBody\", RequestBody);",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "7c3bdbb6-0fb2-4ceb-b6c6-648ac81b4d59"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "FAX"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{SendFAX_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{SendFAX_invoicerMgtKey}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{SendFAX_invoicerMgtKey}}"
+					]
+				},
+				"description": "ㆍ세금계산서를 팩스로 전송하는 함수로, 팝빌 사이트 [문자·팩스] > [팩스] > [전송내역] 메뉴에서 전송결과를 확인 할 수 있습니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#SendFAX"
+			},
+			"response": []
+		},
+		{
+			"name": "AttachStatement",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 전자명세서를 첨부할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-02';",
+							"pm.collectionVariables.set(\"AttachStatement_invoicerMgtKey\", invoicerMgtKey);",
+							"",
+							"// 전자명세서 정보",
+							"var reqBodyObj = {",
+							"  //첨부할 전자명세서의 명세서 코드 : 121 / 122 / 123 / 124 / 125 / 126 중 택 1",
+							"  //└ 121 = 거래명세서, 122 = 청구서, 123 = 견적서, 124 = 발주서, 125 = 입금표, 126 = 영수증",
+							"  ItemCode : '121',",
+							"",
+							"  // 첨부할 전자명세서 문서번호",
+							"  MgtKey : '20210930-PTEST101', ",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"AttachStatement_RequestBody\", RequestBody);",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "68df31a5-c42e-40f6-80ee-9b2450d39c3f"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "SMS"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{AttachStatement_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{AttachStatement_invoicerMgtKey}}/AttachStmt",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{AttachStatement_invoicerMgtKey}}",
+						"AttachStmt"
+					]
+				},
+				"description": "ㆍ팝빌 전자명세서 API를 통해 발행한 전자명세서를 세금계산서에 첨부합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#AttachStatement"
+			},
+			"response": []
+		},
+		{
+			"name": "DetachStatement",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 전자명세서를 첨부해제할 세금계산서 문서번호 ",
+							"var invoicerMgtKey = '20210930-02';",
+							"pm.collectionVariables.set(\"DetachStatement_invoicerMgtKey\", invoicerMgtKey);",
+							"",
+							"// Statement Info",
+							"var reqBodyObj = {",
+							"  // 첨부해제할 전자명세서의 명세서 코드 : 121 / 122 / 123 / 124 / 125 / 126 중 택 1",
+							"  // └ 121 = 거래명세서, 122 = 청구서, 123 = 견적서, 124 = 발주서, 125 = 입금표, 126 = 영수증",
+							"  ItemCode : '121',",
+							"",
+							"  // 전자명세서 문서번호",
+							"  MgtKey : '20210629-PTEST101', ",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"DetachStatement_RequestBody\", RequestBody);",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "e55fef67-f25e-422c-815e-b6631368e7dd"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{DetachStatement_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SELL/{{DetachStatement_invoicerMgtKey}}/DetachStmt",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SELL",
+						"{{DetachStatement_invoicerMgtKey}}",
+						"DetachStmt"
+					]
+				},
+				"description": "ㆍ세금계산서에 첨부된 전자명세서를 해제합니다.\n\n\nhttps://docs.popbill.com/taxinvoice/java/api#DetachStatement"
+			},
+			"response": []
+		},
+		{
+			"name": "GetEmailPublicKeys",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "09a56e2d-e580-46b4-aebf-8467de287be9"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/EmailPublicKeys",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"EmailPublicKeys"
+					]
+				},
+				"description": "ㆍ전자세금계산서 유통사업자의 메일 목록을 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetEmailPublicKeys"
+			},
+			"response": []
+		},
+		{
+			"name": "AssignMgtKey",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 팝빌에서 세금계산서 관리 목적으로 할당한 식별번호",
+							"// └ 함수 [Search – 목록 조회]를 통하여 TaxinvoiceInfo의 'itemKey'를 확인",
+							"var popbillItemKey = '021062915412000001'",
+							"pm.collectionVariables.set(\"AssignMgtKey_ItemKey\", popbillItemKey);",
+							"",
+							"// 할당할 세금계산서 문서번호",
+							"var invoicerMgtKey = '20210930-21';",
+							"pm.collectionVariables.set(\"AssignMgtKey_InvoicerMgtKey\", invoicerMgtKey);"
+						],
+						"type": "text/javascript",
+						"id": "153cf7f8-a145-4768-8866-25f3d0184513"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "MgtKey",
+							"value": "{{AssignMgtKey_InvoicerMgtKey}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/{{AssignMgtKey_ItemKey}}/SELL",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"{{AssignMgtKey_ItemKey}}",
+						"SELL"
+					]
+				},
+				"description": "ㆍ팝빌 사이트를 통해 발행하여 문서번호가 부여되지 않은 세금계산서에 문서번호를 할당합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#AssignMgtKey"
+			},
+			"response": []
+		},
+		{
+			"name": "ListEmailConfig",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "b86f0081-c297-4583-bf7b-aa7a758b0c55"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/EmailSendConfig",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"EmailSendConfig"
+					]
+				},
+				"description": "ㆍ세금계산서 관련 메일 항목에 대한 발송설정을 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#ListEmailConfig"
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateEmailConfig",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "0b94a389-7bc7-4082-ae66-3ebd52c148f7"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/EmailSendConfig?EmailType=TAX_SEND&SendYN=true",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"EmailSendConfig"
+					],
+					"query": [
+						{
+							"key": "EmailType",
+							"value": "TAX_SEND"
+						},
+						{
+							"key": "SendYN",
+							"value": "true"
+						}
+					]
+				},
+				"description": "ㆍ세금계산서 관련 메일 항목에 대한 발송설정을 수정합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#UpdateEmailConfig"
+			},
+			"response": []
+		},
+		{
+			"name": "GetSendToNTSConfig",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**\r",
+							" * API 호출전 GetToken을 실행해야 합니다.\r",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.\r",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "028e644e-cac2-441f-a461-a6b31a5c349a"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{API_Session_Token}}",
+						"type": "text"
+					},
+					{
+						"key": "x-pb-userid",
+						"value": "testkorea",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/SendToNTSConfig",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"SendToNTSConfig"
+					]
+				},
+				"description": "ㆍ연동회원의 국세청 전송 옵션 설정 상태를 확인합니다.\r\n\r\nhttps://docs.popbill.com/taxinvoice/java/api#GetSendToNTSConfig"
+			},
+			"response": []
+		},
+		{
+			"name": "GetTaxCertURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "29d7c4ea-1e31-4ce3-8f4d-6c81bfe3ce5b"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/?TG=CERT",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "CERT"
+						}
+					]
+				},
+				"description": "ㆍ전자세금계산서 발행에 필요한 인증서를 팝빌 인증서버에 등록하기 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetTaxCertURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetCertificateExpireDate",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "44c10cfe-743a-4992-9f23-f03c41eb880b"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/?TG=CERT",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "CERT"
+						}
+					]
+				},
+				"description": "ㆍ팝빌 인증서버에 등록된 인증서의 만료일을 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetCertificateExpireDate"
+			},
+			"response": []
+		},
+		{
+			"name": "CheckCertValidation",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "9d5f47cc-6096-4949-82a9-e49403f1ee41"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/CertCheck",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"CertCheck"
+					]
+				},
+				"description": "ㆍ팝빌 인증서버에 등록된 인증서의 유효성을 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#CheckCertValidation"
+			},
+			"response": []
+		},
+		{
+			"name": "GetTaxCertInfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"id": "4e1ba309-0bea-4d00-a9b6-3ddeaf608000"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/Certificate",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"Certificate"
+					]
+				},
+				"description": "ㆍ팝빌 인증서버에 등록된 공동인증서의 정보를 확인합니다.\r\n\r\nhttps://docs.popbill.com/taxinvoice/java/api#GetTaxCertInfo"
+			},
+			"response": []
+		},
+		{
+			"name": "GetUnitCost",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "c6bcd749-0545-4b5a-af80-b77aceab1e01"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice?cfg=UNITCOST",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice"
+					],
+					"query": [
+						{
+							"key": "cfg",
+							"value": "UNITCOST"
+						}
+					]
+				},
+				"description": "ㆍ세금계산서 발행시 과금되는 포인트 단가를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetUnitCost"
+			},
+			"response": []
+		},
+		{
+			"name": "GetChargeInfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "54796300-a3b4-4bc4-80a3-e13139a03c9e"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/ChargeInfo",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Taxinvoice",
+						"ChargeInfo"
+					]
+				},
+				"description": "ㆍ팝빌 전자세금계산서 API 서비스 과금정보를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetChargeInfo"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "d981d123-b5dd-4b99-ba79-8ccd7a59d695",
+			"key": "API_Session_Token",
+			"value": ""
+		},
+		{
+			"id": "6e220db0-9610-42ee-b172-48dbcc9aa3dd",
+			"key": "AttachFile_invoicerMgtKey",
+			"value": ""
+		},
+		{
+			"id": "acc09c5b-d586-4362-be22-361769ce870e",
+			"key": "GetFiles_invoicerMgtKey",
+			"value": ""
+		},
+		{
+			"id": "5f1b4d94-714b-4e9a-9f8a-4c077a1f83f5",
+			"key": "DeleteFile_fileID",
+			"value": ""
+		},
+		{
+			"id": "e2c054fb-09bc-4055-b618-0097134a8197",
+			"key": "DeleteFile_invoicerMgtKey",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}

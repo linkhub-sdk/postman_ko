@@ -1,0 +1,1874 @@
+{
+	"info": {
+		"_postman_id": "095de720-1239-452f-af9f-ce6d950c33f8",
+		"name": "Common KO_Popbill 카카오톡 API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetToken",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/*********************************************************************************",
+							" *",
+							" * GetToken은 POPBiLL API를 호출할 때 인증 헤더에 입력할 Bearer token을",
+							" * 발급하는 샘플 코드입니다.",
+							" * ",
+							" **********************************************************************************/",
+							"",
+							"// LinkID와 SecretKey는 자격증명으로 POPBiLL에서 제공된 값으로 변경하시기 바랍니다.",
+							"var LinkID = 'TESTER';  // ex. 'LINKHUB'",
+							"var SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I='; //ex. 'CAuU7dpL4viqfoT6G+HJjqWzHhg3hRDD5sKIkp7Yqwc='",
+							"",
+							"/*",
+							" * 아래는 HMAC Message Digest 를 구성하는 코드입니다.",
+							" */",
+							"",
+							"// access_id 는 사용자의 사업자번호 입니다. (10자리 숫자('-' 제외))",
+							"// Scopes 배열은 발급된 토큰으로 사용할 수 있는 서비스 코드 목록입니다.",
+							"// 153 - ATS, 154 - FTS, 155 - FMS",
+							"var Access_id = '1234567890'; // 사업자번호.",
+							"var Scopes = ['member', '153', '154', '155'];",
+							"var TokenRequest = stringify({access_id : Access_id, scope : Scopes});",
+							"var Body = CryptoJS.SHA256(TokenRequest).toString(CryptoJS.enc.Base64);",
+							"",
+							"var RequestDT = new Date().toISOString();",
+							"",
+							"var digestTarget =",
+							"      'POST\\n' +",
+							"      Body + '\\n' +",
+							"      RequestDT +'\\n' +",
+							"      '*\\n' +",
+							"      '2.0\\n' +",
+							"      '/POPBILL_TEST/Token';",
+							"",
+							"var HMACDigest = generateSignature(digestTarget, SecretKey);",
+							"var Authorization = 'LINKHUB '+LinkID + ' '+HMACDigest;",
+							"",
+							"// HMAC 인증을 위한 요청 헤더.",
+							"pm.collectionVariables.set(\"DateTime\", RequestDT);",
+							"pm.collectionVariables.set(\"TokenRequest\", TokenRequest);",
+							"pm.collectionVariables.set(\"Authorization\", Authorization);",
+							"",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function generateSignature(message, key) {",
+							"    var keyDec = CryptoJS.enc.Base64.parse(key)",
+							"    var enc = CryptoJS.HmacSHA256(message, keyDec).toString(CryptoJS.enc.Base64);",
+							"    return enc;",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "c082fd2f-1ec4-451b-9bef-24b40fee3816"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.clear();",
+							"",
+							"if(pm.response.code == 200 ) {",
+							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "1f28c4fe-7e87-43ac-b5fd-0e1d8934f704"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-lh-date",
+						"value": "{{DateTime}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-version",
+						"value": "2.0",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "close",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{Authorization}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-forwarded",
+						"value": "*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{TokenRequest}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://auth.linkhub.co.kr/POPBILL_TEST/Token",
+					"protocol": "https",
+					"host": [
+						"auth",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"POPBILL_TEST",
+						"Token"
+					]
+				},
+				"description": "ㆍPOPBill API 사용에 필요한 Token Request."
+			},
+			"response": []
+		},
+		{
+			"name": "GetPlusFriendMgtURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "64386cbc-64d1-4922-bd16-cef37fcf6808"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/?TG=PLUSFRIEND",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						""
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "PLUSFRIEND"
+						}
+					]
+				},
+				"description": "ㆍ카카오톡 채널을 등록하고 내역을 확인하는 카카오톡 채널 관리 페이지 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetPlusFriendMgtURL"
+			},
+			"response": []
+		},
+		{
+			"name": "ListPlusFriendID",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "65ad259c-0b25-4c0c-8763-6ee223d3abfc"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/ListPlusFriendID",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						"ListPlusFriendID"
+					]
+				},
+				"description": "ㆍ팝빌에 등록한 연동회원의 카카오톡 채널 목록을 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#ListPlusFriendID"
+			},
+			"response": []
+		},
+		{
+			"name": "GetSenderNumberMgtURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "eeac533c-a343-4d54-8ebc-2105c4588a65"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/?TG=SENDER",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						""
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "SENDER"
+						}
+					]
+				},
+				"description": "ㆍ발신번호를 등록하고 내역을 확인하는 카카오톡 발신번호 관리 페이지 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetSenderNumberMgtURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetSenderNumberList",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "ec51b44c-6956-431c-87d2-f0e4a53c3a87"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/SenderNumber",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						"SenderNumber"
+					]
+				},
+				"description": "ㆍ팝빌에 등록한 연동회원의 카카오톡 발신번호 목록을 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetSenderNumberList"
+			},
+			"response": []
+		},
+		{
+			"name": "GetATSTemplateMgtURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "392b5439-a86d-4bce-8a63-4f61dee328f3"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/?TG=TEMPLATE",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						""
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "TEMPLATE"
+						}
+					]
+				},
+				"description": "ㆍ알림톡 템플릿을 신청하고 승인심사 결과를 확인하며 등록 내역을 확인하는 알림톡 템플릿 관리 페이지 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetATSTemplateMgtURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetATSTemplate",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 확인할 템플릿 코드",
+							"var templateCode = '021110000417'",
+							"pm.collectionVariables.set(\"templateCode\", templateCode);"
+						],
+						"type": "text/javascript",
+						"id": "eeb8d936-d23c-4afc-9435-51cac9c6957a"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/GetATSTemplate/{{templateCode}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						"GetATSTemplate",
+						"{{templateCode}}"
+					]
+				},
+				"description": "ㆍ승인된 알림톡 템플릿 정보를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetATSTemplate"
+			},
+			"response": []
+		},
+		{
+			"name": "ListATSTemplate",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "940a96e2-b1d1-4c68-a7b7-a013ee44a0ea"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/ListATSTemplate",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						"ListATSTemplate"
+					]
+				},
+				"description": "ㆍ승인된 알림톡 템플릿 목록을 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#ListATSTemplate"
+			},
+			"response": []
+		},
+		{
+			"name": "SendATS_one",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "a3afb56a-e5d8-46fc-8f8d-b4fce0d85d02"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"021080000365\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"테스트 내용\",\r\n    \"altContent\" : \"대체문자 내용\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n     \"btns\" : [\r\n        {\r\n            \"n\" : \"앱버튼\",\r\n            \"t\" : \"AL\",\r\n            \"u1\" : \"fb://test\",\r\n            \"u2\" : \"fb://test\"\r\n        }\r\n    ],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }  \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/ATS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"ATS"
+					]
+				},
+				"description": "ㆍ승인된 템플릿의 내용을 작성하여 1건의 알림톡 전송을 팝빌에 접수합니다.\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendATS_one"
+			},
+			"response": []
+		},
+		{
+			"name": "SendATS_multi",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "3efc3707-55d2-402f-a919-197d4437dc81"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"021030000716\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"\",\r\n    \"altContent\" : \"\",\r\n    \"altSendType\" : \"\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량메시지\",\r\n            \"altmsg\" : \"\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량 메시지\",\r\n            \"altmsg\" : \"대체문자\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        }  \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/ATS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"ATS"
+					]
+				},
+				"description": "ㆍ승인된 템플릿의 내용을 작성하여 다수건의 알림톡 전송을 팝빌에 접수하며, 수신자 별로 개별 내용을 전송합니다. (최대 1,000건)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendATS_multi"
+			},
+			"response": []
+		},
+		{
+			"name": "SendATS_same",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "e7b4cb48-a9cb-418e-a462-cfa6a7ad3841"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"021100000290\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"테스트\\n 회원명 : #{회원명}\\n 가입일자 : #{가입일자}\",\r\n    \"altContent\" : \"TEST\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"동보1\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"동보2\"\r\n        }  \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/ATS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"ATS"
+					]
+				},
+				"description": "ㆍ승인된 템플릿 내용을 작성하여 다수건의 알림톡 전송을 팝빌에 접수하며, 모든 수신자에게 동일 내용을 전송합니다. (최대 1,000건)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendATS_same"
+			},
+			"response": []
+		},
+		{
+			"name": "SendFTS",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "22583ec5-bba6-4fa6-a991-3bab558e8c7a"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"plusFriendID\" : \"@링크허브\",\r\n    \"snd\" : \"010-111-111\",\r\n    \"content\" : \"친구톡내용\",\r\n    \"altContent\" : \"대체문자 내용\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"20211118210000\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [\r\n        {\r\n            \"n\" : \"앱버튼\",\r\n            \"t\" : \"AL\",\r\n            \"u1\" : \"fb://test\",\r\n            \"u2\" : \"fb://test\"\r\n        }\r\n    ],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"01011122\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FTS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FTS"
+					],
+					"query": [
+						{
+							"key": "P",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "ㆍ텍스트로 구성된 1건의 친구톡 전송을 팝빌에 접수합니다.\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendFTS_one"
+			},
+			"response": []
+		},
+		{
+			"name": "SendFTS_multi",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "b3f0865f-32ad-459e-8aea-ce854c805c5d"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"plusFriendID\" : \"@팝빌\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"\",\r\n    \"altContent\" : \"TEST\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량 내용\",\r\n            \"altmsg\" : \"123\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        },\r\n         {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량내용\",\r\n            \"altmsg\" : \"123\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        }  \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FTS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FTS"
+					]
+				},
+				"description": "ㆍ텍스트로 구성된 다수건의 친구톡 전송을 팝빌에 접수하며, 수신자 별로 개별 내용을 전송합니다. (최대 1,000건)\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendFTS_multi"
+			},
+			"response": []
+		},
+		{
+			"name": "SendFTS_same",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "c0c2622b-2d93-4762-a905-676e2bfe9a1e"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"021100000290\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"친구톡 동보내용\",\r\n    \"altContent\" : \"TEST\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }  \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/ATS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"ATS"
+					]
+				},
+				"description": "ㆍ텍스트로 구성된 다수건의 친구톡 전송을 팝빌에 접수하며, 모든 수신자에게 동일 내용을 전송합니다. (최대 1,000건)\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendFTS_same"
+			},
+			"response": []
+		},
+		{
+			"name": "SendFMS",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 수신자 정보 리스트(최대 1,000건)",
+							"var msgs = [];",
+							"",
+							"// 수신자 정보",
+							"var KakaoReceiver = {",
+							"    \"rcv\" : \"010111222\",    // 수신번호",
+							"    \"rcvnm\" : \"테스트\",      // 수신자명",
+							"}",
+							"",
+							"msgs.push(KakaoReceiver);",
+							"",
+							"var RequestBody = {",
+							"    plusFriendID : \"@링크허브\",         // 팝빌에 등록한 카카오톡 검색용 아이디",
+							"    snd : \"070-4304-2991\",             // 발신번호",
+							"    content : \"친구톡내용\",             // 친구톡 내용",
+							"    altContent : \"대체문자 내용\",       // 대체문자 내용",
+							"    altSendType : \"A\",                 // 대체문자 유형 : null / \"C\" / \"A\" 중 택 1",
+							"    adsYN : false,                     // 광고성 메시지 여부 true - 광고, false - 일반",
+							"    sndDT : \"\",                        // 전송 예약 일시 (형식 : yyyyMMddHHmmss)",
+							"    requestNum : \"\",                   // 전송요청 번호 : 팝빌이 접수 단위를 식별할 수 있도록 파트너가 할당한 식별번호",
+							"    msgs : msgs,                        // 수신자 전송 정보 (최대 1,000건)",
+							"    btns : [                            //친구톡 버튼 내용",
+							"        {",
+							"            \"n\" : \"앱버튼\",             // 버튼명",
+							"            \"t\" : \"AL\",                 // 버튼유형",
+							"            \"u1\" : \"fb://test\",         // 버튼링크1",
+							"            \"u2\" : \"fb://test\"          // 버튼링크2",
+							"        }   ",
+							"    ]                           ",
+							"};",
+							"",
+							"function stringify(obj) {",
+							"    return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function getSHA1Base64(input){",
+							"    return CryptoJS.SHA1(input).toString(CryptoJS.enc.Base64);",
+							"}",
+							"",
+							"pm.collectionVariables.set(\"jsonData\", stringify(RequestBody));",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"id": "1363e7a7-42da-4ae1-8b56-5d005d01a742"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/wjkim/Documents/dotnet-test.jpg"
+						},
+						{
+							"key": "form",
+							"value": "{{jsonData}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FMS"
+					],
+					"query": [
+						{
+							"key": "P",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "ㆍ이미지가 첨부된 1건의 친구톡 전송을 팝빌에 접수합니다.\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\n※ 대체문자의 경우, 포토문자(MMS) 형식은 지원하고 있지 않습니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendFMS_one"
+			},
+			"response": []
+		},
+		{
+			"name": "SendFMS_multi",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 수신자 정보 리스트(최대 1,000건)",
+							"var msgs = [];",
+							"",
+							"// 수신자 정보",
+							"for(var i=1; i<=2; i++){",
+							"    var KakaoReceiver = {",
+							"        \"rcv\" : \"010111222\",                //수신번호",
+							"        \"rcvnm\" : \"테스트\" + i,             // 수신자명",
+							"        \"msg\" : \"대량 전송 내용\" + i,        // 친구톡 내용",
+							"        \"altmsg\" : \"\",                      // 대체문자 내용 ",
+							"        \"interOPRefKey\" : \"\",               // 파트너 지정키",
+							"        \"btns\" : [                          // 친구톡 버튼",
+							"            {",
+							"                \"n\" : \"앱버튼\",             // 버튼명",
+							"                \"t\" : \"AL\",                 // 버튼유형",
+							"                \"u1\" : \"fb://test\",         // 버튼링크1",
+							"                \"u2\" : \"fb://test\"          // 버튼링크2",
+							"            }   ",
+							"        ]",
+							"    }",
+							"    msgs.push(KakaoReceiver);",
+							"}",
+							"",
+							"var RequestBody = {",
+							"    plusFriendID : \"@링크허브\",         // 팝빌에 등록한 카카오톡 검색용 아이디",
+							"    snd : \"070-4304-2991\",             // 발신번호",
+							"    altSendType : \"A\",                 // 대체문자 유형 : null / \"C\" / \"A\" 중 택 1",
+							"    adsYN : false,                     // 광고성 메시지 여부 true - 광고, false - 일반",
+							"    sndDT : \"\",                        // 전송 예약 일시 (형식 : yyyyMMddHHmmss)",
+							"    requestNum : \"\",                   // 전송요청 번호 : 팝빌이 접수 단위를 식별할 수 있도록 파트너가 할당한 식별번호",
+							"    msgs : msgs                        // 수신자 전송 정보 (최대 1,000건)",
+							"};",
+							"",
+							"function stringify(obj) {",
+							"    return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function getSHA1Base64(input){",
+							"    return CryptoJS.SHA1(input).toString(CryptoJS.enc.Base64);",
+							"}",
+							"",
+							"pm.collectionVariables.set(\"jsonData\", stringify(RequestBody));",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"id": "bdc45fcb-4c38-489c-bc6a-1b9bd5d1bc51"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/wjkim/Documents/dotnet-test.jpg"
+						},
+						{
+							"key": "form",
+							"value": "{{jsonData}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FMS"
+					],
+					"query": [
+						{
+							"key": "P",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "ㆍ이미지가 첨부된 다수건의 친구톡 전송을 팝빌에 접수하며, 수신자 별로 개별 내용을 전송합니다. (최대 1,000건)\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\n※ 대체문자의 경우, 포토문자(MMS) 형식은 지원하고 있지 않습니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendFMS_multi"
+			},
+			"response": []
+		},
+		{
+			"name": "SendFMS_same",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 수신자 정보 리스트(최대 1,000건)",
+							"var msgs = [];",
+							"",
+							"// 수신자 정보",
+							"for(var i=1; i<=2; i++){",
+							"    var KakaoReceiver = {",
+							"        \"rcv\" : \"010111222\",",
+							"        \"rcvnm\" : \"테스트\",",
+							"        \"interOPRefKey\" : \"\"           // 파트너 지정키",
+							"    }   ",
+							"    msgs.push(KakaoReceiver);",
+							"}",
+							"",
+							"var RequestBody = {",
+							"    plusFriendID : \"@링크허브\",         // 팝빌에 등록한 카카오톡 검색용 아이디",
+							"    snd : \"070-4304-2991\",             // 발신번호",
+							"    content : \"동보전송 친구톡내용\",     // 친구톡 내용",
+							"    altContent : \"대체문자 내용\",       // 대체문자 내용",
+							"    altSendType : \"A\",                 // 대체문자 유형 : null / \"C\" / \"A\" 중 택 1",
+							"    adsYN : false,                     // 광고성 메시지 여부 true - 광고, false - 일반",
+							"    sndDT : \"\",                        // 전송 예약 일시 (형식 : yyyyMMddHHmmss)",
+							"    requestNum : \"\",                   // 전송요청 번호 : 팝빌이 접수 단위를 식별할 수 있도록 파트너가 할당한 식별번호",
+							"    msgs : msgs,                        // 수신자 전송 정보 (최대 1,000건)",
+							"    btns : [                            // 친구톡 버튼 내용",
+							"        {",
+							"            \"n\" : \"앱버튼\",             // 버튼명",
+							"            \"t\" : \"AL\",                 // 버튼유형",
+							"            \"u1\" : \"fb://test\",         // 버튼링크1",
+							"            \"u2\" : \"fb://test\"          // 버튼링크2",
+							"        }   ",
+							"    ]   ",
+							"};",
+							"",
+							"function stringify(obj) {",
+							"    return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function getSHA1Base64(input){",
+							"    return CryptoJS.SHA1(input).toString(CryptoJS.enc.Base64);",
+							"}",
+							"",
+							"pm.collectionVariables.set(\"jsonData\", stringify(RequestBody));",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"id": "5a25db62-76d6-4a4b-946d-c9efd2312d9b"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/wjkim/Documents/dotnet-test.jpg"
+						},
+						{
+							"key": "form",
+							"value": "{{jsonData}}",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FMS",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FMS"
+					],
+					"query": [
+						{
+							"key": "P",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "ㆍ이미지가 첨부된 다수건의 친구톡 전송을 팝빌에 접수하며, 모든 수신자에게 동일 내용을 전송합니다. (최대 1,000건)\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\n※ 대체문자의 경우, 포토문자(MMS) 형식은 지원하고 있지 않습니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendFMS_same"
+			},
+			"response": []
+		},
+		{
+			"name": "CancelReserve",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 카카오톡 전송 접수시 팝빌로부터 반환받은 접수번호",
+							"var receiptNum = '021111721565100001'",
+							"pm.collectionVariables.set(\"receiptNum\", receiptNum);"
+						],
+						"type": "text/javascript",
+						"id": "07a7a032-6982-4900-931e-08a4fe186309"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/{{receiptNum}}/Cancel",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						"{{receiptNum}}",
+						"Cancel"
+					]
+				},
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 예약접수된 카카오톡을 전송 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://docs.popbill.com/kakao/java/api#CancelReserve"
+			},
+			"response": []
+		},
+		{
+			"name": "CancelReserveRN",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 카카오톡 전송 접수시 팝빌로부터 반환받은 접수번호",
+							"var requestNum = '20211117_TEST001'",
+							"pm.collectionVariables.set(\"requestNum\", requestNum);"
+						],
+						"type": "text/javascript",
+						"id": "7500a6ef-6040-404f-850a-8bd9b91055f0"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/Cancel/{{requestNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						"Cancel",
+						"{{requestNum}}"
+					]
+				},
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 예약접수된 카카오톡을 전송 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://docs.popbill.com/kakao/java/api#CancelReserveRN"
+			},
+			"response": []
+		},
+		{
+			"name": "GetMessages",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 카카오톡 전송 접수시 팝빌로부터 반환받은 접수번호",
+							"var receiptNum = '021102612144100001'",
+							"pm.collectionVariables.set(\"receiptNum\", receiptNum);"
+						],
+						"type": "text/javascript",
+						"id": "4823c28a-169b-4273-997f-c52a769402bf"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/{{receiptNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						"{{receiptNum}}"
+					]
+				},
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetMessages"
+			},
+			"response": []
+		},
+		{
+			"name": "CheckSenderNumber",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f739db14-0126-4501-ade6-e9e8bd2f1657",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 확인할 발신번호",
+							"var senderNumber = '07043042991'",
+							"pm.collectionVariables.set(\"senderNumber\", senderNumber);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/CheckSenderNumber/{{senderNumber}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						"CheckSenderNumber",
+						"{{senderNumber}}"
+					]
+				},
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetMessages"
+			},
+			"response": []
+		},
+		{
+			"name": "GetMessagesRN",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 카카오톡 전송 접수시 파트너가 할당한 전송요청 번호",
+							"var requestNum = 'RequstNum-FTS001'",
+							"pm.collectionVariables.set(\"requestNum\", requestNum);"
+						],
+						"type": "text/javascript",
+						"id": "b1eb6424-828a-4c26-94e8-6abbc1f2af83"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/Get/{{requestNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						"Get",
+						"{{requestNum}}"
+					]
+				},
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetMessagesRN"
+			},
+			"response": []
+		},
+		{
+			"name": "Search",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "534327b6-82ac-4b0b-85d0-0c92bc077b81",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 조회 기간의 시작일자 (형식 : yyyyMMdd)",
+							"var SDate = '20220414'",
+							"pm.collectionVariables.set(\"Search_SDate\", SDate);",
+							"",
+							"// 조회 기간의 종료일자 (형식 : yyyyMMdd)",
+							"var EDate = '20220421'",
+							"pm.collectionVariables.set(\"Search_EDate\", EDate);",
+							"",
+							"// [배열] 전송상태 : \"0\" / \"1\" / \"2\" / \"3\" / \"4\" / \"5\" 중 선택 (다중 선택 가능)",
+							"// └  0 = 전송대기, 1 = 전송중, 2 = 전송성공, 3 = 대체문자 전송, 4 = 전송실패, 5 = 전송취소",
+							"var State = ['0,1,2,3,4,5'];",
+							"pm.collectionVariables.set(\"Search_State\", State.join(','));",
+							"",
+							"// [배열] 검색대상 : \"ATS\" / \"FTS\" / \"FMS\" 중 선택 (다중 선택 가능)",
+							"// └ ATS = 알림톡, FTS = 친구톡(텍스트), FMS = 친구톡(이미지)",
+							"var Item = ['FTS'];",
+							"pm.collectionVariables.set(\"Search_Item\", Item.join(','));",
+							"",
+							"// 전송유형별 조회 : null / \"0\" / \"1\" 중 택 1",
+							"// └ null = 전체, 0 = 즉시전송건, 1 = 예약전송건",
+							"var ReserveYN = [];",
+							"pm.collectionVariables.set(\"Search_ReserveYN\", ReserveYN);",
+							"",
+							"// 사용자권한별 조회 : true / false 중 택 1",
+							"// └ true = 해당 담당자 계정으로 접수한 카카오톡만 조회 (개인권한), false = 접수한 카카오톡 전체 조회 (관리자권한)",
+							"var SenderYN = true;",
+							"pm.collectionVariables.set(\"Search_SenderYN\", SenderYN);",
+							"",
+							"// 목록 페이지번호",
+							"var Page = 1;",
+							"pm.collectionVariables.set(\"Search_Page\", Page);",
+							"",
+							"// 페이지당 표시할 목록 개수 (최대 1,000)",
+							"var PerPage = 500;",
+							"pm.collectionVariables.set(\"Search_PerPage\", PerPage);",
+							"",
+							"// 알림톡/친구톡 접수일시를 기준으로 하는 목록 정렬 방향 : \"D\" / \"A\" 중 택 1",
+							"// └ D = 내림차순(기본값), A = 오름차순",
+							"var Order = '';",
+							"pm.collectionVariables.set(\"Search_Order\", Order);",
+							"",
+							"// \t조회하고자 하는 수신자명",
+							"var QString = '';",
+							"pm.collectionVariables.set(\"Search_QString\", encodeURIComponent(QString));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/Search?SDate={{Search_SDate}}&EDate={{Search_EDate}}&State={{Search_State}}&Item={{Search_Item}}&ReserveYN={{Search_ReserveYN}}&SenderYN={{Search_SenderYN}}&Page={{Search_Page}}&PerPage={{Search_PerPage}}&Order={{Search_Order}}&QString={{Search_QString}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						"Search"
+					],
+					"query": [
+						{
+							"key": "SDate",
+							"value": "{{Search_SDate}}"
+						},
+						{
+							"key": "EDate",
+							"value": "{{Search_EDate}}"
+						},
+						{
+							"key": "State",
+							"value": "{{Search_State}}"
+						},
+						{
+							"key": "Item",
+							"value": "{{Search_Item}}"
+						},
+						{
+							"key": "ReserveYN",
+							"value": "{{Search_ReserveYN}}"
+						},
+						{
+							"key": "SenderYN",
+							"value": "{{Search_SenderYN}}"
+						},
+						{
+							"key": "Page",
+							"value": "{{Search_Page}}"
+						},
+						{
+							"key": "PerPage",
+							"value": "{{Search_PerPage}}"
+						},
+						{
+							"key": "Order",
+							"value": "{{Search_Order}}"
+						},
+						{
+							"key": "QString",
+							"value": "{{Search_QString}}"
+						}
+					]
+				},
+				"description": "ㆍ검색조건에 해당하는 카카오톡 전송내역을 조회합니다. (조회기간 단위 : 최대 2개월)\n\n※ 카카오톡 접수일시로부터 6개월 이내 접수건만 조회할 수 있습니다.\n\nhttps://docs.popbill.com/kakao/java/api#Search"
+			},
+			"response": []
+		},
+		{
+			"name": "GetSentListURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "ef71b47b-064d-40aa-bc1b-8c1a7c57a5f2"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/?TG=BOX",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						""
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "BOX"
+						}
+					]
+				},
+				"description": "ㆍ팝빌 사이트와 동일한 카카오톡 전송내역을 확인하는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetSentListURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetUnitCost",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 카카오톡 전송유형 : ATS / FTS / FMS 중 택 1",
+							"// └ ATS = 알림톡, FTS = 친구톡(텍스트) , FMS = 친구톡(이미지)",
+							"var type = 'ATS'",
+							"pm.collectionVariables.set(\"GetUniCost_Type\", type);"
+						],
+						"type": "text/javascript",
+						"id": "6de4cd79-40d7-40d7-8c9d-d073c74d4fbd"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/UnitCost?Type={{GetUniCost_Type}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						"UnitCost"
+					],
+					"query": [
+						{
+							"key": "Type",
+							"value": "{{GetUniCost_Type}}"
+						}
+					]
+				},
+				"description": "ㆍ카카오톡 전송시 과금되는 포인트 단가를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetUnitCost"
+			},
+			"response": []
+		},
+		{
+			"name": "GetChargeInfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 카카오톡 전송유형 : ATS / FTS / FMS 중 택 1",
+							"// └ ATS = 알림톡, FTS = 친구톡(텍스트) , FMS = 친구톡(이미지)",
+							"var type = 'ATS'",
+							"pm.collectionVariables.set(\"GetChargeInfo_Type\", type);"
+						],
+						"type": "text/javascript",
+						"id": "abcc9ffa-a51d-439f-a147-245c7cea5107"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/ChargeInfo?Type={{GetChargeInfo_Type}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						"ChargeInfo"
+					],
+					"query": [
+						{
+							"key": "Type",
+							"value": "{{GetChargeInfo_Type}}"
+						}
+					]
+				},
+				"description": "ㆍ팝빌 카카오톡 API 서비스 과금정보를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetChargeInfo"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "235f71df-3864-4827-95b7-60516efe154a",
+			"key": "API_Session_Token",
+			"value": ""
+		},
+		{
+			"id": "aba7a3fe-d53e-499c-a3c4-108fe12e0f7e",
+			"key": "senderNumber",
+			"value": ""
+		},
+		{
+			"id": "43278cb0-a5d4-4b0c-b0ae-e406ec43fd30",
+			"key": "Search_EDate",
+			"value": ""
+		},
+		{
+			"id": "2282f185-efe3-4619-b133-62093cd101db",
+			"key": "Search_Item",
+			"value": ""
+		},
+		{
+			"id": "8fe6716a-fa90-4c46-8f87-65d5630e6b7a",
+			"key": "Search_Order",
+			"value": ""
+		},
+		{
+			"id": "f862d511-803a-43bd-a2ec-ecbc4c037894",
+			"key": "Search_Page",
+			"value": ""
+		},
+		{
+			"id": "f63961ce-518c-45de-bda5-7dd500e417e2",
+			"key": "Search_PerPage",
+			"value": ""
+		},
+		{
+			"id": "1597faef-7cff-4b5a-9915-70dc39f74640",
+			"key": "Search_QString",
+			"value": ""
+		},
+		{
+			"id": "beaacce4-3886-43e4-92e2-55ae5a506035",
+			"key": "Search_ReserveYN",
+			"value": ""
+		},
+		{
+			"id": "f02500ed-5e7e-4748-8ec4-5f6f23ce4c99",
+			"key": "Search_SDate",
+			"value": ""
+		},
+		{
+			"id": "a9d9b314-8d5c-4d13-b2d5-df8c6f36b382",
+			"key": "Search_SenderYN",
+			"value": ""
+		},
+		{
+			"id": "9667ea44-cebe-4318-a1fd-5e235a4d1659",
+			"key": "Search_State",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}

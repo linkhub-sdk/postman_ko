@@ -1,0 +1,1367 @@
+{
+	"info": {
+		"_postman_id": "37df13bd-99ba-4085-ad72-7fac2682a7ee",
+		"name": "Common KO_Popbill 계좌조회 API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetToken",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/*********************************************************************************",
+							" *",
+							" * GetToken은 POPBiLL API를 호출할 때 인증 헤더에 입력할 Bearer token을",
+							" * 발급하는 샘플 코드입니다.",
+							" * ",
+							" **********************************************************************************/",
+							"",
+							"// LinkID와 SecretKey는 자격증명으로 POPBiLL에서 제공된 값으로 변경하시기 바랍니다.",
+							"var LinkID = 'TESTER';  // ex. 'LINKHUB'",
+							"var SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I='; //ex. 'CAuU7dpL4viqfoT6G+HJjqWzHhg3hRDD5sKIkp7Yqwc='",
+							"",
+							"/*",
+							" * 아래는 HMAC Message Digest 를 구성하는 코드입니다.",
+							" */",
+							"",
+							"// access_id 는 사용자의 사업자번호 입니다. (10자리 숫자('-' 제외))",
+							"// Scopes 배열은 발급된 토큰으로 사용할 수 있는 서비스 코드 목록입니다.",
+							"// (180은 POPBiLL 계좌조회 API를 의미합니다.)",
+							"var Access_id = '1234567890'; // 사업자번호.",
+							"var Scopes = ['member', '180'];",
+							"var TokenRequest = stringify({access_id : Access_id, scope : Scopes});",
+							"var Body = CryptoJS.SHA256(TokenRequest).toString(CryptoJS.enc.Base64);",
+							"",
+							"var RequestDT = new Date().toISOString();",
+							"",
+							"var digestTarget =",
+							"      'POST\\n' +",
+							"      Body + '\\n' +",
+							"      RequestDT +'\\n' +",
+							"      '*\\n' +",
+							"      '2.0\\n' +",
+							"      '/POPBILL_TEST/Token';",
+							"",
+							"var HMACDigest = generateSignature(digestTarget, SecretKey);",
+							"var Authorization = 'LINKHUB '+LinkID + ' '+HMACDigest;",
+							"",
+							"// HMAC 인증을 위한 요청 헤더.",
+							"pm.collectionVariables.set(\"DateTime\", RequestDT);",
+							"pm.collectionVariables.set(\"TokenRequest\", TokenRequest);",
+							"pm.collectionVariables.set(\"Authorization\", Authorization);",
+							"",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function generateSignature(message, key) {",
+							"    var keyDec = CryptoJS.enc.Base64.parse(key)",
+							"    var enc = CryptoJS.HmacSHA256(message, keyDec).toString(CryptoJS.enc.Base64);",
+							"    return enc;",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "5e99e96f-53a6-4da9-a740-00b52008ecf8"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.clear();",
+							"",
+							"if(pm.response.code == 200 ) {",
+							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "a66547a5-f46a-4a61-9d73-3730de33eb3d"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-lh-date",
+						"value": "{{DateTime}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-version",
+						"value": "2.0",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "close",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{Authorization}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-forwarded",
+						"value": "*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{TokenRequest}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://auth.linkhub.co.kr/POPBILL_TEST/Token",
+					"protocol": "https",
+					"host": [
+						"auth",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"POPBILL_TEST",
+						"Token"
+					]
+				},
+				"description": "ㆍPOPBill API 사용에 필요한 Token Request."
+			},
+			"response": []
+		},
+		{
+			"name": "RegistBankAccount",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"",
+							"// 정액제 이용할 개월수, 1~12 입력 가능",
+							"var usePeriod = 1",
+							"pm.collectionVariables.set(\"RegistBankAccount_UsePeriod\", usePeriod);",
+							"",
+							"// BankAccount info",
+							"var reqBodyObj = {",
+							"  BankCode : '',        // 은행코드",
+							"  AccountNumber : '',   // 계좌번호",
+							"  AccountPWD : '',      // 계좌 비밀번호",
+							"  AccountType :'',      // 계좌 유형",
+							"  IdentityNumber : '',  // 예금주 식별정보",
+							"  AccountName : '',     // 계좌 별칭",
+							"  BankID : '',          // 인터넷뱅킹 아이디",
+							"  FastID : '',          // 조회전용 계정 아이디",
+							"  FastPWD : '',         // 조회전영 계정 비밀번호",
+							"  Memo : ''             // 메모",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"RegistBankAccount_RequestBody\", RequestBody);",
+							"",
+							"console.log(RequestBody);",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "85801860-eac5-40a5-a1c1-81d228c15e46"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "ISSUE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{RegistBankAccount_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://static-popbill-test.linkhub.co.kr/EasyFin/Bank/BankAccount/Regist?UsePeriod={{RegistBankAccount_UsePeriod}}",
+					"protocol": "https",
+					"host": [
+						"static-popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank",
+						"BankAccount",
+						"Regist"
+					],
+					"query": [
+						{
+							"key": "UsePeriod",
+							"value": "{{RegistBankAccount_UsePeriod}}"
+						}
+					]
+				},
+				"description": "ㆍ계좌조회 서비스를 이용할 계좌를 팝빌에 등록합니다..\n\nhttps://docs.popbill.com/easyfinbank/java/api#RegistBankAccount"
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateBankAccount",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"",
+							"// 은행코드",
+							"var bankCode = '0004'",
+							"pm.collectionVariables.set(\"UpdateBankAccount_BankCode\", bankCode);",
+							"",
+							"// 계좌번호",
+							"var accoutnNumber = '38098231098'",
+							"pm.collectionVariables.set(\"UpdateBankAccount_accoutnNumber\", accoutnNumber);",
+							"",
+							"// BankAccount info",
+							"var reqBodyObj = {",
+							"  AccountPWD : '',      // 계좌 비밀번호",
+							"  AccountType :'',      // 계좌 유형",
+							"  IdentityNumber : '',  // 예금주 식별정보",
+							"  AccountName : '',     // 계좌 별칭",
+							"  BankID : '',          // 인터넷뱅킹 아이디",
+							"  FastID : '',          // 조회전용 계정 아이디",
+							"  FastPWD : '',         // 조회전영 계정 비밀번호",
+							"  Memo : ''             // 메모",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"UpdateBankAccount_RequestBody\", RequestBody);",
+							"",
+							"console.log(RequestBody);",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "0ce6ef36-d072-4ef6-b010-1f1a02f404cc"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "ISSUE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{UpdateBankAccount_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://static-popbill-test.linkhub.co.kr/EasyFin/Bank/BankAccount/{{UpdateBankAccount_BankCode}}/{{UpdateBankAccount_AccountNumber}}/Update",
+					"protocol": "https",
+					"host": [
+						"static-popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank",
+						"BankAccount",
+						"{{UpdateBankAccount_BankCode}}",
+						"{{UpdateBankAccount_AccountNumber}}",
+						"Update"
+					]
+				},
+				"description": "ㆍ팝빌에 등록된 계좌정보를 수정합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#UpdateBankAccount"
+			},
+			"response": []
+		},
+		{
+			"name": "GetBankAccountInfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 은행코드",
+							"var bankCode = '0032'",
+							"pm.collectionVariables.set(\"GetBankAccountInfo_BankCode\", bankCode);",
+							"",
+							"// 계좌번호",
+							"var accountNumber = '1012051447401'",
+							"pm.collectionVariables.set(\"GetBankAccountInfo_AccountNumber\", accountNumber);"
+						],
+						"type": "text/javascript",
+						"id": "712e553e-8048-4cc4-87f7-9d687231bc05"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/Bank/BankAccount/{{GetBankAccountInfo_BankCode}}/{{GetBankAccountInfo_AccountNumber}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank",
+						"BankAccount",
+						"{{GetBankAccountInfo_BankCode}}",
+						"{{GetBankAccountInfo_AccountNumber}}"
+					]
+				},
+				"description": "ㆍ팝빌에 등록된 계좌 정보를 확인합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#GetBankAccountInfo"
+			},
+			"response": []
+		},
+		{
+			"name": "ListBankAccount",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "482e9935-cc05-4573-9ef4-2c806db82f3f"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/Bank/ListBankAccount",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank",
+						"ListBankAccount"
+					]
+				},
+				"description": "ㆍ팝빌에 등록된 계좌 정보를 확인합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#ListBankAccount"
+			},
+			"response": []
+		},
+		{
+			"name": "GetBankAccountMgtURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "be942066-a701-41de-9e7c-f38596102483"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/Bank?TG=BankAccount",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank"
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "BankAccount"
+						}
+					]
+				},
+				"description": "ㆍ계좌 등록, 수정 및 삭제할 수 있는 계좌 관리 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#GetBankAccountMgtURL"
+			},
+			"response": []
+		},
+		{
+			"name": "CloseBankAccount",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "ab602331-1504-486f-b503-fd219bbaa981"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/Bank/BankAccount/Close?BankCode=0004&AccountNumber=123423123123&CloseType=중도",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank",
+						"BankAccount",
+						"Close"
+					],
+					"query": [
+						{
+							"key": "BankCode",
+							"value": "0004"
+						},
+						{
+							"key": "AccountNumber",
+							"value": "123423123123"
+						},
+						{
+							"key": "CloseType",
+							"value": "중도"
+						}
+					]
+				},
+				"description": "ㆍ계좌의 정액제 해지를 요청합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#CloseBankAccount"
+			},
+			"response": []
+		},
+		{
+			"name": "RevokeCloseBankAccount",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "b2a07bcc-d1a5-45c0-8dbc-a73139bf6379"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/Bank/BankAccount/RevokeClose?BankCode=0004&AccountNumber=123423123123",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank",
+						"BankAccount",
+						"RevokeClose"
+					],
+					"query": [
+						{
+							"key": "BankCode",
+							"value": "0004"
+						},
+						{
+							"key": "AccountNumber",
+							"value": "123423123123"
+						}
+					]
+				},
+				"description": "ㆍ신청한 정액제 해지요청을 취소합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#RevokeCloseBankAccount"
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteBankAccount",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"",
+							"// BankAccount info",
+							"var reqBodyObj = {",
+							"  BankCode : '0003',        // 은행코드",
+							"  AccountNumber : '123123',   // 계좌번호",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"DeleteBankAccount_RequestBody\", RequestBody);",
+							"",
+							"console.log(RequestBody);",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "26512c36-d76d-4f04-a903-45bf4d4c326e"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{DeleteBankAccount_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/Bank/BankAccount/Delete",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank",
+						"BankAccount",
+						"Delete"
+					]
+				},
+				"description": "ㆍ등록된 계좌를 삭제합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#DeleteBankAccount"
+			},
+			"response": []
+		},
+		{
+			"name": "RequestJob",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "a6b2a93e-1fe3-4630-bc35-4af4484229e4",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 은행코드",
+							"var bankCode = '0034';",
+							"pm.collectionVariables.set(\"RequestJob_BankCode\", bankCode);",
+							"",
+							"// 계좌번호",
+							"var accountNumber = '1107020434717';",
+							"pm.collectionVariables.set(\"RequestJob_AccountNumber\", accountNumber);",
+							"",
+							"// 조회 기간의 시작일자",
+							"var SDate = '20220325';",
+							"pm.collectionVariables.set(\"RequestJob_SDate\", SDate);",
+							"",
+							"// 조회 기간의 종료일자",
+							"var EDate = '20220421';",
+							"pm.collectionVariables.set(\"RequestJob_EDate\", EDate);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/Bank/BankAccount?BankCode={{RequestJob_BankCode}}&AccountNumber={{RequestJob_AccountNumber}}&SDate={{RequestJob_SDate}}&EDate={{RequestJob_EDate}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank",
+						"BankAccount"
+					],
+					"query": [
+						{
+							"key": "BankCode",
+							"value": "{{RequestJob_BankCode}}"
+						},
+						{
+							"key": "AccountNumber",
+							"value": "{{RequestJob_AccountNumber}}"
+						},
+						{
+							"key": "SDate",
+							"value": "{{RequestJob_SDate}}"
+						},
+						{
+							"key": "EDate",
+							"value": "{{RequestJob_EDate}}"
+						}
+					]
+				},
+				"description": "ㆍ계좌 거래내역을 확인하기 위해 팝빌에 수집요청을 합니다. (조회기간 단위 : 최대 1개월)\n\n※ 조회일로부터 최대 3개월 이전 내역까지 조회할 수 있습니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#RequestJob"
+			},
+			"response": []
+		},
+		{
+			"name": "GetJobState",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "a8493918-809b-42b0-87f2-b6213c44ae63",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 작업 아이디(JobID)",
+							"var jobID = '022042116000000055';",
+							"pm.collectionVariables.set(\"GetJobState_JobID\", jobID);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/Bank/{{GetJobState_JobID}}/State",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank",
+						"{{GetJobState_JobID}}",
+						"State"
+					]
+				},
+				"description": "ㆍ[RequestJob - 수집 요청]를 통해 반환 받은 작업아이디의 상태를 확인합니다.\n\nㆍ[Search – 거래 내역 조회] 또는 [Summary – 거래 요약 정보 조회] 를 사용하기 전에 수집 작업의 진행 상태, 수집 작업의 성공 여부를 확인해야 합니다.\n\n※ 작업 상태(jobState) = 3(완료), 수집 결과 코드(errorCode) = 1(수집성공)이면 거래 내역 조회 또는 거래 요약 정보 조회를 해야합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#GetJobState"
+			},
+			"response": []
+		},
+		{
+			"name": "ListActiveJob",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "97c48d20-6a04-4988-9539-48823eac2a2c"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/Bank/JobList",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank",
+						"JobList"
+					]
+				},
+				"description": "ㆍ[RequestJob - 수집 요청]를 통해 반환 받은 작업아이디의 목록을 확인합니다.\n\nㆍ수집 요청 후 1시간이 경과한 수집 요청건은 상태정보가 반환되지 않습니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#ListActiveJob"
+			},
+			"response": []
+		},
+		{
+			"name": "Search",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0e64152c-1d51-4d61-b54a-4f79a603245e",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"\t",
+							"",
+							"// 작업 아이디(JobID)",
+							"var jobID = '022042116000000055';",
+							"pm.collectionVariables.set(\"Search_JobID\", jobID);",
+							"",
+							"// [배열] 거래유형: \"I\" / \"O\" 중 선택 (다중선택 가능)",
+							"// └ I = 입금, O = 출금",
+							"var TradeType = ['I', 'O'];",
+							"pm.collectionVariables.set(\"Search_TradeType\", TradeType.join(','));",
+							"",
+							"// \"입·출금액\" / \"메모\" / \"비고\" 중 검색하고자 하는 값 입력",
+							"// └ 메모 = [SaveMemo – 거래내역 메모저장]을 사용하여 저장한 값, 비고 = EasyFinBankSearchDetail의 remark1, remark2, remark3 값",
+							"var SearchString = '';",
+							"pm.collectionVariables.set(\"Search_SearchString\", encodeURIComponent(SearchString));",
+							"",
+							"// 목록 페이지번호",
+							"var Page = 1;",
+							"pm.collectionVariables.set(\"Search_Page\", Page);",
+							"",
+							"// 페이지당 표시할 목록 개수 (최대 1,000)",
+							"var PerPage = '50';",
+							"pm.collectionVariables.set(\"Search_PerPage\", PerPage);",
+							"",
+							"// [RequestJob - 수집 요청] 함수 사용시 사용한 DType 값을 기준으로 하는 목록 정렬 방향 : \"D\" / \"A\" 중 택 1",
+							"// └ D = 내림차순(기본값), A = 오름차순",
+							"var Order = 'D';",
+							"pm.collectionVariables.set(\"Search_Order\", Order);",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/Bank/{{Search_JobID}}?Page={{Search_Page}}&PerPage={{Search_PerPage}}&Order={{Search_Order}}&TradeType={{Search_TradeType}}&SearchString={{Search_SearchString}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank",
+						"{{Search_JobID}}"
+					],
+					"query": [
+						{
+							"key": "Page",
+							"value": "{{Search_Page}}"
+						},
+						{
+							"key": "PerPage",
+							"value": "{{Search_PerPage}}"
+						},
+						{
+							"key": "Order",
+							"value": "{{Search_Order}}"
+						},
+						{
+							"key": "TradeType",
+							"value": "{{Search_TradeType}}"
+						},
+						{
+							"key": "SearchString",
+							"value": "{{Search_SearchString}}"
+						}
+					]
+				},
+				"description": "ㆍ[GetJobState – 수집 상태 확인]를 통해 상태 정보가 확인된 작업아이디를 활용하여 계좌 거래 내역을 조회합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#EFBankSearch"
+			},
+			"response": []
+		},
+		{
+			"name": "Summary",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c72b127d-c1b7-4f7c-a114-9e3f0b37e05e",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"\t",
+							"",
+							"// 작업 아이디(JobID)",
+							"var jobID = '021120116000000010';",
+							"pm.collectionVariables.set(\"Summary_JobID\", jobID);",
+							"",
+							"// [배열] 거래유형: \"I\" / \"O\" 중 선택 (다중선택 가능)",
+							"// └ I = 입금, O = 출금",
+							"var TradeType = ['N', 'C'];",
+							"pm.collectionVariables.set(\"Summary_TradeType\", TradeType.join(','));",
+							"",
+							"// \"입·출금액\" / \"메모\" / \"비고\" 중 검색하고자 하는 값 입력",
+							"// └ 메모 = [SaveMemo – 거래내역 메모저장]을 사용하여 저장한 값, 비고 = EasyFinBankSearchDetail의 remark1, remark2, remark3 값",
+							"var SearchString = '메모';",
+							"pm.collectionVariables.set(\"Search_SearchString\", encodeURIComponent(SearchString));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/Bank/{{Summary_JobID}}/Summary?TradeType={{Summary_TradeType}}&SearchString={{Summary_SearchString}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank",
+						"{{Summary_JobID}}",
+						"Summary"
+					],
+					"query": [
+						{
+							"key": "TradeType",
+							"value": "{{Summary_TradeType}}"
+						},
+						{
+							"key": "SearchString",
+							"value": "{{Summary_SearchString}}"
+						}
+					]
+				},
+				"description": "ㆍ[GetJobState – 수집 상태 확인]를 통해 상태 정보가 확인된 작업아이디를 활용하여 계좌 거래내역의 요약 정보를 조회합니다.\n\n※ 요약 정보는 입·출 금액 합계, 입·출 거래 건수를 가리킵니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#Summary"
+			},
+			"response": []
+		},
+		{
+			"name": "SaveMemo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "04bf8f5d-3c50-45eb-adce-5cdce3ee4e28",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 거래내역 아이디",
+							"var TID = '3213121312312';",
+							"pm.collectionVariables.set(\"SaveMemo_TID\", TID);",
+							"",
+							"// 거래 내역에 저장할 메모",
+							"var memo = '메모';",
+							"pm.collectionVariables.set(\"SaveMemo_Memo\", encodeURIComponent(memo));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/Bank/SaveMemo?TID={{SaveMemo_TID}}&Memo={{SaveMemo_Memo}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank",
+						"SaveMemo"
+					],
+					"query": [
+						{
+							"key": "TID",
+							"value": "{{SaveMemo_TID}}"
+						},
+						{
+							"key": "Memo",
+							"value": "{{SaveMemo_Memo}}"
+						}
+					]
+				},
+				"description": "ㆍ한 건의 거래 내역에 메모를 저장합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#SaveMemo"
+			},
+			"response": []
+		},
+		{
+			"name": "GetFlatRatePopUpURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "96c31646-e40f-4bd5-a260-aed1a69afd6b"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/Bank?TG=CHRG",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank"
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "CHRG"
+						}
+					]
+				},
+				"description": "ㆍ계좌조회 정액제 서비스 신청 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#GetFlatRatePopUpURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetFlatRateState",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 은행 코드",
+							"var bankCode = '0003';",
+							"pm.collectionVariables.set(\"GetFlatRateState_BankCode\", bankCode);",
+							"",
+							"// 계좌 번호",
+							"var accountNumber = '47906631701015';",
+							"pm.collectionVariables.set(\"GetFlatRateState_AccountNumber\", accountNumber);"
+						],
+						"type": "text/javascript",
+						"id": "790dd97c-a23c-44a6-ba96-faaf3e6df8bb"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/EasyFin/Bank/Contract/{{GetFlatRateState_BankCode}}/{{GetFlatRateState_AccountNumber}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"EasyFin",
+						"Bank",
+						"Contract",
+						"{{GetFlatRateState_BankCode}}",
+						"{{GetFlatRateState_AccountNumber}}"
+					]
+				},
+				"description": "ㆍ홈택스연동 정액제 서비스 상태를 확인합니다.\n\nhttps://docs.popbill.com/httaxinvoice/java/api#GetFlatRatePopUpURL"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "173cbd69-b005-4ddf-a720-3d0eaef7a194",
+			"key": "API_Session_Token",
+			"value": ""
+		},
+		{
+			"id": "3ca02abe-6226-4e49-907a-06640b973611",
+			"key": "RequestJob_AccountNumber",
+			"value": ""
+		},
+		{
+			"id": "e5c79c8f-7f7d-426d-84c8-1dc1e3926969",
+			"key": "RequestJob_BankCode",
+			"value": ""
+		},
+		{
+			"id": "1fc428ad-4797-4c89-ba43-cbb9013f96ae",
+			"key": "RequestJob_EDate",
+			"value": ""
+		},
+		{
+			"id": "26e9d708-3dec-405f-ab12-aac7552d4e6f",
+			"key": "RequestJob_SDate",
+			"value": ""
+		},
+		{
+			"id": "1fdd0c86-0776-49ff-9088-0d2bdfed2a6a",
+			"key": "GetJobState_JobID",
+			"value": ""
+		},
+		{
+			"id": "2ed07530-e933-4dc0-b5d0-6de201643709",
+			"key": "Search_JobID",
+			"value": ""
+		},
+		{
+			"id": "8145d0a0-4993-4897-9a82-40a7af2771ed",
+			"key": "Search_Order",
+			"value": ""
+		},
+		{
+			"id": "9f100b19-f7ab-4190-940f-9c497f775b80",
+			"key": "Search_Page",
+			"value": ""
+		},
+		{
+			"id": "2bd49ba4-d853-42c7-9705-dfd95ab74a50",
+			"key": "Search_PerPage",
+			"value": ""
+		},
+		{
+			"id": "e18d9e45-84ab-4dfb-8b4d-6cbab84ee15e",
+			"key": "Search_TradeType",
+			"value": ""
+		},
+		{
+			"id": "25c400fa-5c8a-44d2-8c09-40ec1e9e4665",
+			"key": "Search_SearchString",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}

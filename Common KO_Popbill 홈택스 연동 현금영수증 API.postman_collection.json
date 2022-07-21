@@ -1,0 +1,1109 @@
+{
+	"info": {
+		"_postman_id": "41968c63-7b33-48a6-877a-5d4907ee207f",
+		"name": "Common KO_Popbill 홈택스 연동 현금영수증 API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetToken",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/*********************************************************************************",
+							" *",
+							" * GetToken은 POPBiLL API를 호출할 때 인증 헤더에 입력할 Bearer token을",
+							" * 발급하는 샘플 코드입니다.",
+							" * ",
+							" **********************************************************************************/",
+							"",
+							"// LinkID와 SecretKey는 자격증명으로 POPBiLL에서 제공된 값으로 변경하시기 바랍니다.",
+							"var LinkID = 'TESTER';  // ex. 'LINKHUB'",
+							"var SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I='; //ex. 'CAuU7dpL4viqfoT6G+HJjqWzHhg3hRDD5sKIkp7Yqwc='",
+							"",
+							"/*",
+							" * 아래는 HMAC Message Digest 를 구성하는 코드입니다.",
+							" */",
+							"",
+							"// access_id 는 사용자의 사업자번호 입니다. (10자리 숫자('-' 제외))",
+							"// Scopes 배열은 발급된 토큰으로 사용할 수 있는 서비스 코드 목록입니다.",
+							"// (141은 POPBiLL 홈택스연동 현금영수증 API를 의미합니다.)",
+							"var Access_id = '1234567890'; // 사업자번호.",
+							"var Scopes = ['member', '141'];",
+							"var TokenRequest = stringify({access_id : Access_id, scope : Scopes});",
+							"var Body = CryptoJS.SHA256(TokenRequest).toString(CryptoJS.enc.Base64);",
+							"",
+							"var RequestDT = new Date().toISOString();",
+							"",
+							"var digestTarget =",
+							"      'POST\\n' +",
+							"      Body + '\\n' +",
+							"      RequestDT +'\\n' +",
+							"      '*\\n' +",
+							"      '2.0\\n' +",
+							"      '/POPBILL_TEST/Token';",
+							"",
+							"var HMACDigest = generateSignature(digestTarget, SecretKey);",
+							"var Authorization = 'LINKHUB '+LinkID + ' '+HMACDigest;",
+							"",
+							"// HMAC 인증을 위한 요청 헤더.",
+							"pm.collectionVariables.set(\"DateTime\", RequestDT);",
+							"pm.collectionVariables.set(\"TokenRequest\", TokenRequest);",
+							"pm.collectionVariables.set(\"Authorization\", Authorization);",
+							"",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function generateSignature(message, key) {",
+							"    var keyDec = CryptoJS.enc.Base64.parse(key)",
+							"    var enc = CryptoJS.HmacSHA256(message, keyDec).toString(CryptoJS.enc.Base64);",
+							"    return enc;",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "a283042c-32ac-43a8-ae38-74a7a847ad22"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.clear();",
+							"",
+							"if(pm.response.code == 200 ) {",
+							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "c27dddf4-df98-406b-80bd-b64c3ec018a4"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-lh-date",
+						"value": "{{DateTime}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-version",
+						"value": "2.0",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "close",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{Authorization}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-forwarded",
+						"value": "*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{TokenRequest}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://auth.linkhub.co.kr/POPBILL_TEST/Token",
+					"protocol": "https",
+					"host": [
+						"auth",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"POPBILL_TEST",
+						"Token"
+					]
+				},
+				"description": "ㆍPOPBill API 사용에 필요한 Token Request."
+			},
+			"response": []
+		},
+		{
+			"name": "RequestJob",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 조회 기간의 시작일자",
+							"var SDate = '20211201';",
+							"pm.collectionVariables.set(\"RequestJob_SDate\", SDate);",
+							"",
+							"// 조회 기간의 종료일자",
+							"var EDate = '20211201';",
+							"pm.collectionVariables.set(\"RequestJob_EDate\", EDate);"
+						],
+						"type": "text/javascript",
+						"id": "c1cc0fef-0169-4033-96e4-290cea4ce1ed"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/HomeTax/Cashbill/SELL/?SDate={{RequestJob_SDate}}&EDate={{RequestJob_EDate}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"HomeTax",
+						"Cashbill",
+						"SELL",
+						""
+					],
+					"query": [
+						{
+							"key": "SDate",
+							"value": "{{RequestJob_SDate}}"
+						},
+						{
+							"key": "EDate",
+							"value": "{{RequestJob_EDate}}"
+						}
+					]
+				},
+				"description": "ㆍ홈택스에 신고된 현금영수증 매입/매출 내역 수집을 팝빌에 요청합니다. (조회기간 단위 : 최대 3개월)\n\nhttps://docs.popbill.com/htcashbill/java/api#RequestJob"
+			},
+			"response": []
+		},
+		{
+			"name": "GetJobState",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 작업 아이디(JobID)",
+							"var jobID = '021120111000000001';",
+							"pm.collectionVariables.set(\"GetJobState_JobID\", jobID);",
+							""
+						],
+						"type": "text/javascript",
+						"id": "a1e4dc4a-23fc-441e-86e9-33b5f8acf2f4"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/HomeTax/Cashbill/{{GetJobState_JobID}}/State",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"HomeTax",
+						"Cashbill",
+						"{{GetJobState_JobID}}",
+						"State"
+					]
+				},
+				"description": "ㆍ함수 [RequestJob – 수집 요청]를 통해 반환 받은 작업 아이디의 상태를 확인합니다.\n\nㆍ[Search – 수집 결과 조회] 또는 [Summary – 수집결과 요약정보 조회]를 사용하기 전에 수집 작업의 진행 상태, 수집 작업의 성공 여부를 확인해야 합니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#GetJobState"
+			},
+			"response": []
+		},
+		{
+			"name": "ListActiveJob",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "d945685a-28b3-4fa1-8d27-f5ee19f4db11"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/HomeTax/Cashbill/JobList",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"HomeTax",
+						"Cashbill",
+						"JobList"
+					]
+				},
+				"description": "ㆍ현금영수증 매입/매출 내역 수집요청에 대한 상태 목록을 확인합니다.\n\nㆍ수집 요청 후 1시간이 경과한 수집 요청건은 상태정보가 반환되지 않습니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#ListActiveJob"
+			},
+			"response": []
+		},
+		{
+			"name": "Search",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"\t",
+							"",
+							"// 작업 아이디(JobID)",
+							"var jobID = '021120112000000003';",
+							"pm.collectionVariables.set(\"Search_JobID\", jobID);",
+							"",
+							"// [배열] 현금영수증 거래구분 : \"P\" / \"C\" 중 선택 (다중 선택 가능)",
+							"// └ P = 소득공제용, C = 지출증빙용",
+							"var TradeUsage = ['P', 'C'];",
+							"pm.collectionVariables.set(\"Search_TradeUsage\", TradeUsage.join(','));",
+							"",
+							"// [배열] 현금영수증 문서형태 : \"N\" / \"C\" 중 선택 (다중 선택 가능)",
+							"// └ N = 일반 현금영수증 / C = 취소 현금영수증",
+							"var TradeType = ['N', 'C'];",
+							"pm.collectionVariables.set(\"Search_TradeType\", TradeType.join(','));",
+							"",
+							"// 목록 페이지번호",
+							"var Page = 1;",
+							"pm.collectionVariables.set(\"Search_Page\", Page);",
+							"",
+							"// 페이지당 표시할 목록 개수 (최대 1,000)",
+							"var PerPage = '50';",
+							"pm.collectionVariables.set(\"Search_PerPage\", PerPage);",
+							"",
+							"// [RequestJob - 수집 요청] 함수 사용시 사용한 DType 값을 기준으로 하는 목록 정렬 방향 : \"D\" / \"A\" 중 택 1",
+							"// └ D = 내림차순(기본값), A = 오름차순",
+							"var Order = 'D';",
+							"pm.collectionVariables.set(\"Search_Order\", Order);",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"id": "ce51914a-aec3-482e-8b69-0288ba117730"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/HomeTax/Cashbill/{{Search_JobID}}?Page={{Search_Page}}&PerPage={{Search_PerPage}}&Order={{Search_Order}}&TradeUsage={{Search_TradeUsage}}&TradeType={{Search_TradeType}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"HomeTax",
+						"Cashbill",
+						"{{Search_JobID}}"
+					],
+					"query": [
+						{
+							"key": "Page",
+							"value": "{{Search_Page}}"
+						},
+						{
+							"key": "PerPage",
+							"value": "{{Search_PerPage}}"
+						},
+						{
+							"key": "Order",
+							"value": "{{Search_Order}}"
+						},
+						{
+							"key": "TradeUsage",
+							"value": "{{Search_TradeUsage}}"
+						},
+						{
+							"key": "TradeType",
+							"value": "{{Search_TradeType}}"
+						}
+					]
+				},
+				"description": "ㆍ[GetJobState – 수집 상태 확인]를 통해 상태 정보 확인된 작업아이디를 활용하여 현금영수증 매입/매출 내역을 조회합니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#Search"
+			},
+			"response": []
+		},
+		{
+			"name": "Summary",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"\t",
+							"",
+							"// 작업 아이디(JobID)",
+							"var jobID = '021120113000000001';",
+							"pm.collectionVariables.set(\"Summary_JobID\", jobID);",
+							"",
+							"// [배열] 현금영수증 거래구분 : \"P\" / \"C\" 중 선택 (다중 선택 가능)",
+							"// └ P = 소득공제용, C = 지출증빙용",
+							"var TradeUsage = ['P', 'C'];",
+							"pm.collectionVariables.set(\"Summary_TradeUsage\", TradeUsage.join(','));",
+							"",
+							"// [배열] 현금영수증 문서형태 : \"N\" / \"C\" 중 선택 (다중 선택 가능)",
+							"// └ N = 일반 현금영수증 / C = 취소 현금영수증",
+							"var TradeType = ['N', 'C'];",
+							"pm.collectionVariables.set(\"Summary_TradeType\", TradeType.join(','));"
+						],
+						"type": "text/javascript",
+						"id": "c8127e88-2b74-42bd-8fe6-7335d3ac041b"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/HomeTax/Cashbill/{{Summary_JobID}}/Summary?TradeUsage={{Summary_TradeUsage}}&TradeType={{Summary_TradeType}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"HomeTax",
+						"Cashbill",
+						"{{Summary_JobID}}",
+						"Summary"
+					],
+					"query": [
+						{
+							"key": "TradeUsage",
+							"value": "{{Summary_TradeUsage}}"
+						},
+						{
+							"key": "TradeType",
+							"value": "{{Summary_TradeType}}"
+						}
+					]
+				},
+				"description": "ㆍ함수 [GetJobState – 수집 상태 확인]를 통해 상태 정보가 확인된 작업아이디를 활용하여 수집된 현금영수증 매입/매출 내역의 요약 정보를 조회합니다.\n\n※ 요약정보: 현금영수증 수집 건수, 공급가액 합계, 세액 합계, 봉사료 합계, 합계 금액\n\nhttps://docs.popbill.com/htcashbill/java/api#Summary"
+			},
+			"response": []
+		},
+		{
+			"name": "GetCertificatePopUpURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "8856c95f-6698-434a-b6df-1031914ff05a"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/HomeTax/Cashbill?TG=CERT",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"HomeTax",
+						"Cashbill"
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "CERT"
+						}
+					]
+				},
+				"description": "ㆍ홈택스연동 인증정보를 관리하는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#GetCertificatePopUpURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetCertificateExpireDate",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "5a44d608-e2a1-4d29-8827-f677e6f4ac75"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/HomeTax/Cashbill/CertInfo",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"HomeTax",
+						"Cashbill",
+						"CertInfo"
+					]
+				},
+				"description": "ㆍ홈택스연동 인증정보를 관리하는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#GetCertificateExpireDate"
+			},
+			"response": []
+		},
+		{
+			"name": "CheckCertValidation",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "fcf102ce-8873-437d-bdad-3ca85b4fac94"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/HomeTax/Cashbill/CertCheck",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"HomeTax",
+						"Cashbill",
+						"CertCheck"
+					]
+				},
+				"description": "ㆍ팝빌에 등록된 인증서로 홈택스 로그인 가능 여부를 확인합니다.\n\nhttps://docs.popbill.com/httaxinvoice/java/api#CheckCertValidation"
+			},
+			"response": []
+		},
+		{
+			"name": "RegistDeptUser",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"",
+							"// 부서사용자 계정 정보",
+							"var reqBodyObj = {",
+							"  id : 'test001',",
+							"  pwd : '123456789'",
+							"};",
+							"",
+							"var RequestBody = stringify(reqBodyObj);",
+							"pm.collectionVariables.set(\"RegistDeptUser_RequestBody\", RequestBody);",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "34908f3e-100c-4913-bcf9-b9ceaa17518a"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{RegistDeptUser_RequestBody}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/HomeTax/Cashbill/DeptUser",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"HomeTax",
+						"Cashbill",
+						"DeptUser"
+					]
+				},
+				"description": "ㆍ홈택스연동 인증을 위해 팝빌에 현금영수증 자료조회 부서사용자 계정을 등록합니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#RegistDeptUser"
+			},
+			"response": []
+		},
+		{
+			"name": "CheckDeptUser",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "efe2809a-4197-441a-b33a-c79b3c253525"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/HomeTax/Cashbill/DeptUser",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"HomeTax",
+						"Cashbill",
+						"DeptUser"
+					]
+				},
+				"description": "ㆍ팝빌에 등록된 인증서로 홈택스 로그인 가능 여부를 확인합니다.\n\nhttps://docs.popbill.com/httaxinvoice/java/api#CheckCertValidation"
+			},
+			"response": []
+		},
+		{
+			"name": "CheckLoginDeptUser",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "8516735a-5a09-44ca-9769-2c4659c8dace"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/HomeTax/Cashbill/DeptUser/Check",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"HomeTax",
+						"Cashbill",
+						"DeptUser",
+						"Check"
+					]
+				},
+				"description": "ㆍ팝빌에 등록된 현금영수증 자료조회 부서사용자 계정 정보로 홈택스 로그인 가능 여부를 확인합니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#CheckLoginDeptUser"
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteDeptUser",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "ddfb87c6-dad3-4db3-b9fd-1f4fa7441986"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"type": "text",
+						"value": "DELETE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/HomeTax/Cashbill/DeptUser",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"HomeTax",
+						"Cashbill",
+						"DeptUser"
+					]
+				},
+				"description": "ㆍ팝빌에 등록된 홈택스 현금영수증 자료조회 부서사용자 계정을 삭제합니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#DeleteDeptUser"
+			},
+			"response": []
+		},
+		{
+			"name": "GetFlatRatePopUpURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "adcbfd66-f6dc-417b-8283-58617c4c4bb4"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/HomeTax/Cashbill?TG=CHRG",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"HomeTax",
+						"Cashbill"
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "CHRG"
+						}
+					]
+				},
+				"description": "ㆍ홈택스연동 정액제 서비스 신청 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/httaxinvoice/java/api#GetFlatRatePopUpURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetFlatRateState",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "b223d48b-74be-481a-9ed8-3ebef51d733c"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/HomeTax/Cashbill/Contract",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"HomeTax",
+						"Cashbill",
+						"Contract"
+					]
+				},
+				"description": "ㆍ홈택스연동 정액제 서비스 상태를 확인합니다.\n\nhttps://docs.popbill.com/httaxinvoice/java/api#GetFlatRatePopUpURL"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "0c39156f-23b9-42e0-b085-b36e1c384cb4",
+			"key": "API_Session_Token",
+			"value": ""
+		},
+		{
+			"id": "a1786ff6-2ff7-4b4b-b143-debaff4dc098",
+			"key": "RequestJob_EDate",
+			"value": ""
+		},
+		{
+			"id": "b56eea6a-0296-4d87-a16f-eda8f9cd7edf",
+			"key": "RequestJob_SDate",
+			"value": ""
+		},
+		{
+			"id": "4ed94154-e3fa-4f7a-9a9e-00d3c45cc787",
+			"key": "GetJobState_JobID",
+			"value": ""
+		},
+		{
+			"id": "36766a26-a2cd-47aa-b149-bff0c48080db",
+			"key": "Search_JobID",
+			"value": ""
+		},
+		{
+			"id": "fbd6fc67-e914-4cf7-9ddb-d7cef1276563",
+			"key": "Search_Order",
+			"value": ""
+		},
+		{
+			"id": "8700049a-8df8-40a0-b58f-50205670d428",
+			"key": "Search_Page",
+			"value": ""
+		},
+		{
+			"id": "2abf5315-3c50-40fe-bfda-774a96357aa3",
+			"key": "Search_PerPage",
+			"value": ""
+		},
+		{
+			"id": "4a86966c-7651-42f1-82ea-19aeac2c5796",
+			"key": "Search_TradeType",
+			"value": ""
+		},
+		{
+			"id": "f939b326-8f1c-4959-b84e-2fe1eb1d5065",
+			"key": "Search_TradeUsage",
+			"value": ""
+		},
+		{
+			"id": "0754c0c8-f417-4672-8ba0-596e0ecbcc89",
+			"key": "Summary_JobID",
+			"value": ""
+		},
+		{
+			"id": "845194e9-f674-403e-bfc1-1933df064a02",
+			"key": "Summary_TradeType",
+			"value": ""
+		},
+		{
+			"id": "d43b07ac-2b7b-4c4c-a7db-77879d27a698",
+			"key": "Summary_TradeUsage",
+			"value": ""
+		},
+		{
+			"id": "a9867128-dc7a-4bd5-bdeb-bc0badaf758a",
+			"key": "RegistDeptUser_RequestBody",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}

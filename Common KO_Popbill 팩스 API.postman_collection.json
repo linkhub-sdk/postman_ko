@@ -1,0 +1,1339 @@
+{
+	"info": {
+		"_postman_id": "e30a4d20-a8f3-4a47-b0a4-90d6a0c9f9aa",
+		"name": "Common KO_Popbill 팩스 API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetToken",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/*********************************************************************************",
+							" *",
+							" * GetToken은 POPBiLL API를 호출할 때 인증 헤더에 입력할 Bearer token을",
+							" * 발급하는 샘플 코드입니다.",
+							" * ",
+							" **********************************************************************************/",
+							"",
+							"// LinkID와 SecretKey는 자격증명으로 POPBiLL에서 제공된 값으로 변경하시기 바랍니다.",
+							"var LinkID = 'TESTER';  // ex. 'LINKHUB'",
+							"var SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I='; //ex. 'CAuU7dpL4viqfoT6G+HJjqWzHhg3hRDD5sKIkp7Yqwc='",
+							"",
+							"/*",
+							" * 아래는 HMAC Message Digest 를 구성하는 코드입니다.",
+							" */",
+							"",
+							"// access_id 는 사용자의 사업자번호 입니다. (10자리 숫자('-' 제외))",
+							"// Scopes 배열은 발급된 토큰으로 사용할 수 있는 서비스 코드 목록입니다.",
+							"// (160은 POPBiLL 팩스 API를 의미합니다.)",
+							"var Access_id = '1234567890'; // 사업자번호.",
+							"var Scopes = ['member', '160'];",
+							"var TokenRequest = stringify({access_id : Access_id, scope : Scopes});",
+							"var Body = CryptoJS.SHA256(TokenRequest).toString(CryptoJS.enc.Base64);",
+							"",
+							"var RequestDT = new Date().toISOString();",
+							"",
+							"var digestTarget =",
+							"      'POST\\n' +",
+							"      Body + '\\n' +",
+							"      RequestDT +'\\n' +",
+							"      '*\\n' +",
+							"      '2.0\\n' +",
+							"      '/POPBILL_TEST/Token';",
+							"",
+							"var HMACDigest = generateSignature(digestTarget, SecretKey);",
+							"var Authorization = 'LINKHUB '+LinkID + ' '+HMACDigest;",
+							"",
+							"// HMAC 인증을 위한 요청 헤더.",
+							"pm.collectionVariables.set(\"DateTime\", RequestDT);",
+							"pm.collectionVariables.set(\"TokenRequest\", TokenRequest);",
+							"pm.collectionVariables.set(\"Authorization\", Authorization);",
+							"",
+							"",
+							"function stringify(obj) {",
+							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function generateSignature(message, key) {",
+							"    var keyDec = CryptoJS.enc.Base64.parse(key)",
+							"    var enc = CryptoJS.HmacSHA256(message, keyDec).toString(CryptoJS.enc.Base64);",
+							"    return enc;",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "9246ff3d-1a19-4435-af04-de4c1ff14c7f"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.clear();",
+							"",
+							"if(pm.response.code == 200 ) {",
+							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
+							"}"
+						],
+						"type": "text/javascript",
+						"id": "4e6c581b-d016-4e35-8353-6a02ec8e28bd"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-lh-date",
+						"value": "{{DateTime}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-version",
+						"value": "2.0",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "close",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{Authorization}}",
+						"type": "text"
+					},
+					{
+						"key": "x-lh-forwarded",
+						"value": "*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{TokenRequest}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://auth.linkhub.co.kr/POPBILL_TEST/Token",
+					"protocol": "https",
+					"host": [
+						"auth",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"POPBILL_TEST",
+						"Token"
+					]
+				},
+				"description": "ㆍPOPBill API 사용에 필요한 Token Request."
+			},
+			"response": []
+		},
+		{
+			"name": "GetSenderNumberMgtURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "8df6b437-4ad7-4068-b79c-b4f2f4a9cf8d"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/?TG=SENDER",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						""
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "SENDER"
+						}
+					]
+				},
+				"description": "ㆍ발신번호를 등록하고 내역을 확인하는 팩스 발신번호 관리 페이지 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/fax/java/api#GetSenderNumberMgtURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetSenderNumberList",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */"
+						],
+						"type": "text/javascript",
+						"id": "c2338afe-a029-42fe-bf83-10b827b2b1cc"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/SenderNumber",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						"SenderNumber"
+					]
+				},
+				"description": "ㆍ팝빌에 등록한 연동회원의 팩스 발신번호 목록을 확인합니다.\n\nhttps://docs.popbill.com/fax/java/api#GetSenderNumberList"
+			},
+			"response": []
+		},
+		{
+			"name": "SendFAX",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 수신자 정보 리스트(최대 1,000건)",
+							"var rcvs = [];",
+							"",
+							"// 수신자 정보",
+							"var Receiver = {",
+							"    \"rcv\" : \"\",",
+							"    \"rcvnm\" : \"테스트\"",
+							"}",
+							"",
+							"rcvs.push(Receiver);",
+							"",
+							"var RequestBody = {",
+							"    snd : \"테스트\",       //발신번호",
+							"    sndnm : \"070111222\", // 발신자명",
+							"    title : \"제목\",       // 팩스제목",
+							"    sndDT : \"\",          // 전송 예약일시 (형식 : yyyyMMddHHmmss)",
+							"    adsYN : false,       // 광고여부 true - 광고, false - 일반",
+							"    fcnt : \"2\",          // 전송 파일 갯수",
+							"    requestNum : \"\",     // 전송요청 번호 : 팝빌이 접수 단위를 식별할 수 있도록 파트너가 부여하는 식별번호",
+							"    rcvs : rcvs         // 수신자 정보 (최대 1,000건)",
+							"};",
+							"",
+							"function stringify(obj) {",
+							"    return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function getSHA1Base64(input){",
+							"    return CryptoJS.SHA1(input).toString(CryptoJS.enc.Base64);",
+							"}",
+							"",
+							"pm.collectionVariables.set(\"jsonData\", stringify(RequestBody));",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"id": "e10530dd-5e38-4392-a203-429d647ca044"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "form",
+							"value": "{{jsonData}}",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/wjkim/Documents/test.docx"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/wjkim/Documents/test.txt"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX"
+					],
+					"query": [
+						{
+							"key": "asd",
+							"value": "as",
+							"disabled": true
+						}
+					]
+				},
+				"description": "ㆍ팩스 1건을 전송합니다. (최대 전송파일 개수: 20개)\n\nhttps://docs.popbill.com/fax/java/api#SendFAX"
+			},
+			"response": []
+		},
+		{
+			"name": "SendFAX_Multi",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 수신자 정보 리스트(최대 1,000건)",
+							"var rcvs = [];",
+							"",
+							"// 수신자 정보",
+							"for(var i=1; i<=2; i++){",
+							"    var Receiver = {",
+							"        \"rcv\" : \"070\",",
+							"        \"rcvnm\" : \"테스트\" + i",
+							"    }",
+							"    rcvs.push(Receiver);",
+							"}",
+							"",
+							"var RequestBody = {",
+							"    snd : \"테스트\",       //발신번호",
+							"    sndnm : \"070111222\", // 발신자명",
+							"    title : \"제목\",       // 팩스제목",
+							"    sndDT : \"\",          // 전송 예약일시 (형식 : yyyyMMddHHmmss)",
+							"    adsYN : false,       // 광고여부 true - 광고, false - 일반",
+							"    fcnt : \"2\",          // 전송 파일 갯수",
+							"    requestNum : \"\",     // 전송요청 번호 : 팝빌이 접수 단위를 식별할 수 있도록 파트너가 부여하는 식별번호",
+							"    rcvs : rcvs         // 수신자 정보 (최대 1,000건)",
+							"};",
+							"",
+							"function stringify(obj) {",
+							"    return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
+							"}",
+							"",
+							"function getSHA1Base64(input){",
+							"    return CryptoJS.SHA1(input).toString(CryptoJS.enc.Base64);",
+							"}",
+							"",
+							"pm.collectionVariables.set(\"jsonData\", stringify(RequestBody));",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"id": "9e4ab5c5-0861-47df-838a-d6ee0f2aefa4"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "form",
+							"value": "{{jsonData}}",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/wjkim/Documents/test.docx"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/wjkim/Documents/test.txt"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX"
+					]
+				},
+				"description": "ㆍ동일한 팩스파일을 다수의 수신자에게 전송하기 위해 팝빌에 접수합니다. (최대 전송파일 개수 : 20개) (최대 1,000건)\n\nhttps://docs.popbill.com/fax/java/api#SendFAX_Multi"
+			},
+			"response": []
+		},
+		{
+			"name": "ResendFAX",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 원본 팩스 접수번호",
+							"var receiptNum = '021120118201400001';",
+							"pm.collectionVariables.set(\"ResendFAX_ReceiptNum\", receiptNum);"
+						],
+						"type": "text/javascript",
+						"id": "5072bac7-c045-4eeb-a241-f96ceefe6f3c"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"snd\" : \"070-111-222\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"TEST_001\",\r\n    \"title\" : \"재전송 팩스 제목\",\r\n    \"rcvs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/{{ResendFAX_ReceiptNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						"{{ResendFAX_ReceiptNum}}"
+					]
+				},
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 팩스 1건을 재전송합니다.\n\nㆍ발신/수신 정보 미입력시 기존과 동일한 정보로 팩스가 전송되고, 접수일 기준 최대 60일이 경과되지 않는 건만 재전송이 가능합니다.\n\nhttps://docs.popbill.com/fax/java/api#ResendFAX"
+			},
+			"response": []
+		},
+		{
+			"name": "ResendFAX_Multi",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 원본 팩스 접수번호",
+							"var receiptNum = '021120118201400001';",
+							"pm.collectionVariables.set(\"ResendFAXMulti_ReceiptNum\", receiptNum);"
+						],
+						"type": "text/javascript",
+						"id": "4f6a0229-7e30-48c7-b097-e6f3f60d450c"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"snd\" : \"070-111-222\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"title\" : \"재전송 팩스 제목\",\r\n    \"rcvs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트1\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"테스트2\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/{{ResendFAXMulti_ReceiptNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						"{{ResendFAXMulti_ReceiptNum}}"
+					]
+				},
+				"description": "ㆍ동일한 팩스파일을 다수의 수신자에게 전송하기 위해 팝빌에 접수합니다. (최대 전송파일 개수: 20개) (최대 1,000건)\n\nㆍ발신/수신 정보 미입력시 기존과 동일한 정보로 팩스가 전송되고, 접수일 기준 최대 60일이 경과되지 않는 건만 재전송이 가능합니다.\n\nhttps://docs.popbill.com/fax/java/api#ResendFAX_Multi"
+			},
+			"response": []
+		},
+		{
+			"name": "ResendFAXRN",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 원본 팩스 접수번호",
+							"var orgRequestNum = 'TEST_001';",
+							"pm.collectionVariables.set(\"ResendFAXRN_ORGRequestNum\", orgRequestNum);"
+						],
+						"type": "text/javascript",
+						"id": "e72bd478-8b7b-480f-837b-04e46e55925f"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"snd\" : \"070-111-222\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"RNTEST_001\",\r\n    \"title\" : \"재전송 팩스 제목\",\r\n    \"rcvs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/Resend/{{ResendFAXRN_ORGRequestNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						"Resend",
+						"{{ResendFAXRN_ORGRequestNum}}"
+					]
+				},
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 팩스 1건을 재전송합니다.\n\nㆍ발신/수신 정보 미입력시 기존과 동일한 정보로 팩스가 전송되고, 접수일 기준 최대 60일이 경과되지 않는 건만 재전송이 가능합니다.\n\nhttps://docs.popbill.com/fax/java/api#ResendFAXRN"
+			},
+			"response": []
+		},
+		{
+			"name": "ResendFAXRN_Multi",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 원본 팩스 접수번호",
+							"var orgRequestNum = 'TEST_001';",
+							"pm.collectionVariables.set(\"ResendFAXRN_ORGRequestNum\", orgRequestNum);"
+						],
+						"type": "text/javascript",
+						"id": "98a2ccaa-f0a2-49dc-93fb-2a33e078e7e0"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"snd\" : \"070-111-222\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"title\" : \"재전송 팩스 제목\",\r\n    \"rcvs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트1\"\r\n        },\r\n        {\r\n            \"rcv\" : \"01022223333\",\r\n            \"rcvnm\" : \"테스트2\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/Resend/{{ResendFAXRN_ORGRequestNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						"Resend",
+						"{{ResendFAXRN_ORGRequestNum}}"
+					]
+				},
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 다수건의 팩스를 재전송합니다. (최대 전송파일 개수: 20개) (최대 1,000건)\n\nㆍ발신/수신 정보 미입력시 기존과 동일한 정보로 팩스가 전송되고, 접수일 기준 최대 60일이 경과되지 않는 건만 재전송이 가능합니다.\n\nhttps://docs.popbill.com/fax/java/api#ResendFAXRN_Multi"
+			},
+			"response": []
+		},
+		{
+			"name": "CancelReserve",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 팩스 전송 접수시 팝빌로부터 반환받은 접수번호",
+							"var receiptNum = '021111721565100001'",
+							"pm.collectionVariables.set(\"receiptNum\", receiptNum);"
+						],
+						"type": "text/javascript",
+						"id": "7dac1725-9940-40e4-86c7-1892175288ce"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/{{receiptNum}}/Cancel",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						"{{receiptNum}}",
+						"Cancel"
+					]
+				},
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 예약접수된 팩스 전송을 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://docs.popbill.com/fax/java/api#CancelReserve"
+			},
+			"response": []
+		},
+		{
+			"name": "CancelReserveRN",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 팩스 전송 접수시 팝빌로부터 반환받은 접수번호",
+							"var requestNum = '20211117_TEST001'",
+							"pm.collectionVariables.set(\"requestNum\", requestNum);"
+						],
+						"type": "text/javascript",
+						"id": "bbe4a515-6b69-4eae-81c3-03ae3be0b5fa"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": ""
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/Cancel/{{requestNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						"Cancel",
+						"{{requestNum}}"
+					]
+				},
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 예약접수된 팩스 전송을 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://docs.popbill.com/fax/java/api#CancelReserveRN"
+			},
+			"response": []
+		},
+		{
+			"name": "GetFaxResult",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 팩스 전송 접수시 팝빌로부터 반환받은 접수번호",
+							"var receiptNum = '021120118573400001'",
+							"pm.collectionVariables.set(\"receiptNum\", receiptNum);"
+						],
+						"type": "text/javascript",
+						"id": "ceeeacc5-034e-48df-bebe-09780fdc911a"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/{{receiptNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						"{{receiptNum}}"
+					]
+				},
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetMessages"
+			},
+			"response": []
+		},
+		{
+			"name": "CheckSenderNumber",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ef7d7196-d7ee-4b70-8b20-03feb977e5ea",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 확인할 발신번호",
+							"var senderNumber = '07043042999'",
+							"pm.collectionVariables.set(\"senderNumber\", senderNumber);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/CheckSenderNumber/{{senderNumber}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						"CheckSenderNumber",
+						"{{senderNumber}}"
+					]
+				},
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetMessages"
+			},
+			"response": []
+		},
+		{
+			"name": "GetFaxResultRN",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 팩스 전송 접수시 파트너가 할당한 전송요청 번호",
+							"var requestNum = 'RNTEST_001'",
+							"pm.collectionVariables.set(\"requestNum\", requestNum);"
+						],
+						"type": "text/javascript",
+						"id": "1a16f385-bf5e-4eda-8994-b80422ddde84"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/Get/{{requestNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						"Get",
+						"{{requestNum}}"
+					]
+				},
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 팩스 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/fax/java/api#GetMessagesRN"
+			},
+			"response": []
+		},
+		{
+			"name": "Search",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1134c6b6-cddd-4c8a-b733-5b2915120be4",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 조회 기간의 시작일자 (형식 : yyyyMMdd)",
+							"var SDate = '20211201'",
+							"pm.collectionVariables.set(\"Search_SDate\", SDate);",
+							"",
+							"// 조회 기간의 종료일자 (형식 : yyyyMMdd)",
+							"var EDate = '20211201'",
+							"pm.collectionVariables.set(\"Search_EDate\", EDate);",
+							"",
+							"// \t[배열] 전송상태 : \"1\" / \"2\" / \"3\" / \"4\" 중 선택 (다중 선택 가능)",
+							"// └ 1 = 대기, 2 = 성공, 3 = 실패, 4 = 취소",
+							"var State = ['1,2,3,4'];",
+							"pm.collectionVariables.set(\"Search_State\", State.join(','));",
+							"",
+							"// \t예약여부 : true (예약전송건) / false (전체조회) 중 택 1",
+							"var ReserveYN = '';",
+							"pm.collectionVariables.set(\"Search_ReserveYN\", ReserveYN);",
+							"",
+							"// 개인조회 여부 : true / false 중 택 1",
+							"// └ true = 해당 담당자 계정으로 접수한 팩스만 조회 (개인권한), false = 접수한 팩스 전체 조회 (관리자권한)",
+							"var senderOnly = false;",
+							"pm.collectionVariables.set(\"Search_SenderOnly\", senderOnly);",
+							"",
+							"// 목록 페이지번호",
+							"var Page = 1;",
+							"pm.collectionVariables.set(\"Search_Page\", Page);",
+							"",
+							"// 페이지당 표시할 목록 개수 (최대 1,000)",
+							"var PerPage = 500;",
+							"pm.collectionVariables.set(\"Search_PerPage\", PerPage);",
+							"",
+							"// 알림톡/친구톡 접수일시를 기준으로 하는 목록 정렬 방향 : \"D\" / \"A\" 중 택 1",
+							"// └ D = 내림차순(기본값), A = 오름차순",
+							"var Order = '';",
+							"pm.collectionVariables.set(\"Search_Order\", Order);",
+							"",
+							"// \t조회하고자 하는 발신자명 또는 수신자명",
+							"var QString = '';",
+							"pm.collectionVariables.set(\"Search_QString\", encodeURIComponent(QString));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/Search?SDate={{Search_SDate}}&EDate={{Search_EDate}}&State={{Search_State}}&reserveYN={{Search_ReserveYN}}&senderOnly={{Search_SenderOnly}}&Page={{Search_Page}}&PerPage={{Search_PerPage}}&Order={{Search_Order}}&QString={{Search_QString}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						"Search"
+					],
+					"query": [
+						{
+							"key": "SDate",
+							"value": "{{Search_SDate}}"
+						},
+						{
+							"key": "EDate",
+							"value": "{{Search_EDate}}"
+						},
+						{
+							"key": "State",
+							"value": "{{Search_State}}"
+						},
+						{
+							"key": "reserveYN",
+							"value": "{{Search_ReserveYN}}"
+						},
+						{
+							"key": "senderOnly",
+							"value": "{{Search_SenderOnly}}"
+						},
+						{
+							"key": "Page",
+							"value": "{{Search_Page}}"
+						},
+						{
+							"key": "PerPage",
+							"value": "{{Search_PerPage}}"
+						},
+						{
+							"key": "Order",
+							"value": "{{Search_Order}}"
+						},
+						{
+							"key": "QString",
+							"value": "{{Search_QString}}"
+						}
+					]
+				},
+				"description": "ㆍ검색조건에 해당하는 팩스 전송내역 목록을 조회합니다. (조회기간 단위 : 최대 2개월)\n\n※ 팩스 접수일시로부터 2개월 이내 접수건만 조회할 수 있습니다.\n\nhttps://docs.popbill.com/fax/java/api#Search"
+			},
+			"response": []
+		},
+		{
+			"name": "GetSentListURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "cb006e03-bfaf-4ef5-abb9-d7f904eb4afa"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/?TG=BOX",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						""
+					],
+					"query": [
+						{
+							"key": "TG",
+							"value": "BOX"
+						}
+					]
+				},
+				"description": "ㆍ팝빌 사이트와 동일한 팩스 전송내역 확인 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/fax/java/api#GetSentListURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetPreviewURL",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 팩스 전송 접수시 팝빌로부터 반환받은 접수번호",
+							"var receiptNum = '021120118573400001'",
+							"pm.collectionVariables.set(\"receiptNum\", receiptNum);"
+						],
+						"type": "text/javascript",
+						"id": "059bcf57-74c1-4f7c-ad77-6bbdcbc66c37"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/Preview/{{receiptNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						"Preview",
+						"{{receiptNum}}"
+					]
+				},
+				"description": "ㆍ팩스 미리보기 팝업 URL을 반환하며, 팩스전송을 위한 TIF 포맷 변환 완료 후 호출 할 수 있습니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/fax/java/api#GetPreviewURL"
+			},
+			"response": []
+		},
+		{
+			"name": "GetUnitCost",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "b001dfad-9d56-4ae2-8f1e-9fd65a07b203"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/UnitCost",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						"UnitCost"
+					]
+				},
+				"description": "ㆍ팩스 전송시 과금되는 포인트 단가를 확인합니다.\n\nhttps://docs.popbill.com/fax/java/api#GetUnitCost"
+			},
+			"response": []
+		},
+		{
+			"name": "GetChargeInfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"id": "0054c37c-c2b1-4a97-be12-e33f291b8886"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/FAX/ChargeInfo",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"FAX",
+						"ChargeInfo"
+					]
+				},
+				"description": "ㆍ팝빌 팩스 API 서비스 과금정보를 확인합니다.\n\nhttps://docs.popbill.com/fax/java/api#GetChargeInfo"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "a657fc32-99f5-44cd-ae30-98e771d6b273",
+			"key": "API_Session_Token",
+			"value": ""
+		},
+		{
+			"id": "128298e0-7be7-40ac-aeb5-6c39b8026f3d",
+			"key": "senderNumber",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}
