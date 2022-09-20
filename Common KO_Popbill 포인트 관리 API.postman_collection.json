@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "be93b55a-58cc-4114-b7aa-e88b8f3cd11c",
+		"_postman_id": "7060487c-a47e-4140-be95-a5e3aa73a8d3",
 		"name": "Common KO_Popbill 포인트 관리 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -65,7 +65,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "b125ca3e-5bf8-4a6b-9c6a-d19870a3c0b5"
+						"id": "d085480c-13bb-44bf-a7a5-73924edb312c"
 					}
 				},
 				{
@@ -79,7 +79,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "e9254241-e78c-4c29-88cf-ca0e15d4d78d"
+						"id": "805f60ec-494e-4667-9452-8d4a65785a84"
 					}
 				}
 			],
@@ -153,7 +153,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "0680f322-2496-48f8-8877-687a950c9573"
+						"id": "7974d68b-6b41-4227-b6f4-591dc787eec4"
 					}
 				}
 			],
@@ -215,7 +215,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "7d80aca6-6140-4632-b823-4902eb973c3d"
+						"id": "43c36ddc-a3ed-4497-87c6-aee2ff160654"
 					}
 				}
 			],
@@ -282,7 +282,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "649c8371-cb47-4581-bef6-56f442788c64"
+						"id": "cd8a663a-d1da-4df3-a56e-5a087ec65b1f"
 					}
 				}
 			],
@@ -349,7 +349,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "bee79040-0e8e-4204-8220-a0b5529cce20"
+						"id": "35bc6853-da4c-48f9-98fa-85b250f72de5"
 					}
 				}
 			],
@@ -416,7 +416,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "25c4be50-6805-4970-a458-c4f9be0da2c2"
+						"id": "ffb26ab3-ae7a-4e2a-a2a3-7fd6fc0ef685"
 					}
 				}
 			],
@@ -478,7 +478,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "85eb4da1-c6c9-40a7-8891-a6a5479370d2"
+						"id": "1bdd77aa-24e7-45e8-821a-ab3871cda324"
 					}
 				}
 			],
@@ -531,11 +531,402 @@
 				"description": "ㆍ파트너 포인트 충전을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetPartnerURL"
 			},
 			"response": []
+		},
+		{
+			"name": "GetUseHistory",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "330d801b-920f-4e90-9412-6d3f58a688b5",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/UseHistory?SDate=20220801&EDate=20220830&Page=1&PerPage=100&Order=D",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"UseHistory"
+					],
+					"query": [
+						{
+							"key": "SDate",
+							"value": "20220801",
+							"description": "조회 기간의 시작일자"
+						},
+						{
+							"key": "EDate",
+							"value": "20220830",
+							"description": "조회 기간의 종료일"
+						},
+						{
+							"key": "Page",
+							"value": "1",
+							"description": "목록 페이지번호 (기본값 1)"
+						},
+						{
+							"key": "PerPage",
+							"value": "100",
+							"description": "페이지당 표시할 목록 개수 (기본값 500, 최대 1,000)"
+						},
+						{
+							"key": "Order",
+							"value": "D",
+							"description": "거래일자를 기준으로 하는 목록 정렬 방향 : \"D\" / \"A\" 중 택 1\n└ D = 내림차순(기본값), A = 오름차순"
+						}
+					]
+				},
+				"description": "ㆍ포인트 사용내역을 확인합니다."
+			},
+			"response": []
+		},
+		{
+			"name": "GetPaymentHistory",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "35af56b8-534c-4060-9207-345e7c84c32b",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/PaymentHistory?SDate=20220801&EDate=20220830&Page=1&PerPage=100",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"PaymentHistory"
+					],
+					"query": [
+						{
+							"key": "SDate",
+							"value": "20220801",
+							"description": "조회기간의 시작일자"
+						},
+						{
+							"key": "EDate",
+							"value": "20220830",
+							"description": "조회기간의 종료일"
+						},
+						{
+							"key": "Page",
+							"value": "1",
+							"description": "목록 페이지번호 (기본값 1)"
+						},
+						{
+							"key": "PerPage",
+							"value": "100",
+							"description": "페이지당 표시할 목록 개수 (기본값 500, 최대 1,000)"
+						}
+					]
+				},
+				"description": "ㆍ포인트 결제내역을 확인합니다."
+			},
+			"response": []
+		},
+		{
+			"name": "GetRefundHistory",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "7a77f3ae-c672-4acd-a681-4d12e51407f7",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/RefundHistory?Page=1&PerPage=100",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"RefundHistory"
+					],
+					"query": [
+						{
+							"key": "Page",
+							"value": "1",
+							"description": "목록 페이지번호 (기본값 1)"
+						},
+						{
+							"key": "PerPage",
+							"value": "100",
+							"description": "페이지당 표시할 목록 개수 (기본값 500, 최대 1,000)"
+						}
+					]
+				},
+				"description": "ㆍ포인트 환불내역을 확인합니다."
+			},
+			"response": []
+		},
+		{
+			"name": "Refund",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8d210876-f5aa-463e-b695-21f2f0450849",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    // [필수] 담당자명.\r\n    \"contactname\" : \"담당자명\",\r\n\r\n    // [필수] 담당자 연락처.\r\n    \"tel\" : \"01077777777\",\r\n\r\n    // [필수] 환불 신청 포인트.\r\n    \"requestpoint\" : \"100\",\r\n\r\n    // [필수] 은행명.\r\n    \"accountbank\" : \"국민\",\r\n\r\n    // [필수] 계좌번호.\r\n    \"accountnum\" : \"123123123-123\",\r\n\r\n    // [필수] 예금주명.\r\n    \"accountname\" : \"예금주명\",\r\n\r\n    // 환불사유.\r\n    \"reason\" : \"환불사유\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Refund",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Refund"
+					]
+				},
+				"description": "ㆍ결제를 통해 충전한 포인트를 환불 신청합니다."
+			},
+			"response": []
+		},
+		{
+			"name": "PaymentRequest",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "6af6a261-3ca8-44c6-af28-4c402c1d01e7",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "d3f55128-2c4e-4c57-b8b1-4ca51a495cd2",
+						"exec": [
+							"// 정산코드 콜렉션 변수로 할당.\r",
+							"if(pm.response.code == 200 ) {\r",
+							"    pm.collectionVariables.set(\"settleCode\", pm.response.json().settleCode);\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    // 담당자명\r\n    // 미입력 시 기본값 적용 - 팝빌 회원 담당자명.\r\n    \"settlerName\" : \"담당자명\",\r\n\r\n    // 담당자 이메일\r\n    // 사이트에서 신청하면 자동으로 담당자 이메일.\r\n    // 미입력 시 공백 처리\r\n    \"settlerEmail\" : \"jhpark@linkhubcorp.com\",\r\n   \r\n    // 담당자 휴대폰\r\n    // 무통장 입금 승인 알림 번호\r\n    \"settlerHP\" : \"01011112222\",\r\n\r\n    // [필수] 입금자명\r\n    \"paymentName\" : \"입금자명\",\r\n\r\n    // [필수] 결제금액\r\n    \"settleCost\" : \"11000\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Payment",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Payment"
+					]
+				},
+				"description": "ㆍ포인트 충전을 위해 무통장입금을 신청합니다."
+			},
+			"response": []
+		},
+		{
+			"name": "GetSettleResult",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b56871fa-e048-443a-bcfc-2166ee26be66",
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "e822df09-77c3-434c-aa1d-290190802576",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Payment/{{settleCode}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Payment",
+						"{{settleCode}}"
+					],
+					"query": [
+						{
+							"key": null,
+							"value": "{{settleCode}}",
+							"description": "무통장입금 API 응답으로 반환된 정산코드\nPaymentRequest 의 반환값 중 settleCode 에 해당합니다.",
+							"disabled": true
+						}
+					]
+				},
+				"description": "ㆍ포인트 충전에 대한 결제내역 1건을 확인합니다."
+			},
+			"response": []
 		}
 	],
 	"variable": [
 		{
-			"id": "0896d5ba-c56e-4310-bd47-98a3c7fa1e6e",
+			"id": "c593962f-8413-4e2b-a966-a58975b9920c",
 			"key": "API_Session_Token",
 			"value": ""
 		}
