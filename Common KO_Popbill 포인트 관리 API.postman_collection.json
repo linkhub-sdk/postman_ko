@@ -11,6 +11,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
+						"id": "d085480c-13bb-44bf-a7a5-73924edb312c",
 						"exec": [
 							"/*********************************************************************************",
 							" *",
@@ -64,13 +65,13 @@
 							"    return enc;",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "d085480c-13bb-44bf-a7a5-73924edb312c"
+						"type": "text/javascript"
 					}
 				},
 				{
 					"listen": "test",
 					"script": {
+						"id": "805f60ec-494e-4667-9452-8d4a65785a84",
 						"exec": [
 							"pm.collectionVariables.clear();",
 							"",
@@ -78,8 +79,7 @@
 							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "805f60ec-494e-4667-9452-8d4a65785a84"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -765,6 +765,11 @@
 						"key": "Authorization",
 						"type": "text",
 						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"value": "testkorea",
+						"type": "text"
 					}
 				],
 				"body": {
@@ -831,11 +836,16 @@
 						"key": "Authorization",
 						"type": "text",
 						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"value": "testkorea",
+						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    // 담당자명\r\n    // 미입력 시 기본값 적용 - 팝빌 회원 담당자명.\r\n    \"settlerName\" : \"담당자명\",\r\n\r\n    // 담당자 이메일\r\n    // 사이트에서 신청하면 자동으로 담당자 이메일.\r\n    // 미입력 시 공백 처리\r\n    \"settlerEmail\" : \"jhpark@linkhubcorp.com\",\r\n   \r\n    // 담당자 휴대폰\r\n    // 무통장 입금 승인 알림 번호\r\n    \"settlerHP\" : \"01011112222\",\r\n\r\n    // [필수] 입금자명\r\n    \"paymentName\" : \"입금자명\",\r\n\r\n    // [필수] 결제금액\r\n    \"settleCost\" : \"11000\"\r\n}",
+					"raw": "{\r\n    // 담당자명\r\n    // 미입력 시 기본값 적용 - 팝빌 회원 담당자명.\r\n    \"settlerName\" : \"담당자명\",\r\n\r\n    // 담당자 이메일\r\n    // 사이트에서 신청하면 자동으로 담당자 이메일.\r\n    // 미입력 시 공백 처리\r\n    \"settlerEmail\" : \"test@test.com\",\r\n   \r\n    // 담당자 휴대폰\r\n    // 무통장 입금 승인 알림톡이 전송됩니다.\r\n    \"settlerHP\" : \"01012341234\",\r\n\r\n    // [필수] 입금자명\r\n    \"paymentName\" : \"입금자명\",\r\n\r\n    // [필수] 결제금액\r\n    \"settleCost\" : \"11000\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -895,6 +905,11 @@
 						"key": "Authorization",
 						"type": "text",
 						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"value": "testkorea",
+						"type": "text"
 					}
 				],
 				"url": {
@@ -926,8 +941,13 @@
 	],
 	"variable": [
 		{
-			"id": "c593962f-8413-4e2b-a966-a58975b9920c",
+			"id": "d0176b37-9dc0-4482-8dd4-c36b68132f85",
 			"key": "API_Session_Token",
+			"value": ""
+		},
+		{
+			"id": "7d6396b3-aa14-428d-b3ed-f25e8caa8307",
+			"key": "settleCode",
 			"value": ""
 		}
 	],
