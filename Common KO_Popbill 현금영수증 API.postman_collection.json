@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "75b13430-485f-411f-94ec-dc3390ad7214",
+		"_postman_id": "e217f6a3-0f39-4b4c-9a32-9583a9abf9dd",
 		"name": "Common KO_Popbill 현금영수증 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -65,7 +65,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "4c612c7a-a27b-4580-8558-f37d70650441"
+						"id": "50b925d5-f5bb-43be-9c2a-f5f7ac368b5d"
 					}
 				},
 				{
@@ -79,7 +79,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "9603d776-10a2-4539-9e2e-037f4d9b7030"
+						"id": "b2705dcb-e91f-40bc-81e1-10e016d6ffc0"
 					}
 				}
 			],
@@ -156,7 +156,7 @@
 							"pm.collectionVariables.set(\"CheckMgtKeyinUse_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "b040d161-e828-4eaa-9e7d-b06caec4142b"
+						"id": "e8643eb7-c798-4317-b6dc-d81cd3e87539"
 					}
 				}
 			],
@@ -198,7 +198,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "78df6d4e-5aee-4e3e-bd25-21a9d1dffb2e",
+						"id": "5ced1ac4-010e-4962-aa4b-40e4330e5316",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -260,7 +260,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "04c4acda-8e89-414e-8d48-766f848f30ed",
+						"id": "1235f2bb-79ff-4b3f-8723-e8dd5ff5a889",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -463,7 +463,7 @@
 							"pm.collectionVariables.set(\"GetBulkResult_submitID\", submitID);"
 						],
 						"type": "text/javascript",
-						"id": "5d8f1b70-c411-4522-a9e5-15e094ef328c"
+						"id": "73c28c5c-7c33-44d1-8406-1907b1071182"
 					}
 				}
 			],
@@ -534,7 +534,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "cf2c69be-b58f-43de-bb7d-603cfb30af9e"
+						"id": "41559339-7add-4839-98ff-7b80b8f6914a"
 					}
 				}
 			],
@@ -602,7 +602,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "6297b753-05ba-4e1d-b089-9cd4a33fe210"
+						"id": "813584ff-fd9a-4639-8ec3-d10aec229639"
 					}
 				}
 			],
@@ -658,7 +658,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "e4ec9415-6256-48cb-9a87-4b1a39262f9a",
+						"id": "d335d841-e456-4bfe-abf2-1ecd07dd2fa4",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -731,7 +731,7 @@
 							"pm.collectionVariables.set(\"GetInfo_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "31c55ade-90fa-4b9c-8068-53254614479d"
+						"id": "acc4bcb0-f364-4ae8-86ce-108679f2b838"
 					}
 				}
 			],
@@ -788,7 +788,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "fa2a2fda-85a5-4ecf-8c1a-0205bbfef7ac"
+						"id": "70ef7dd3-1d88-4587-859d-ce0fb284e848"
 					}
 				}
 			],
@@ -850,7 +850,7 @@
 							"pm.collectionVariables.set(\"GetDetailInfo_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "a28d85bb-ea0d-4cb4-bcfe-c328bfaa8afe"
+						"id": "03e05c49-71c0-4428-8dfd-01da63e44d4f"
 					}
 				}
 			],
@@ -898,7 +898,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "f5bed2d0-21be-495b-a71a-247d67b5d927",
+						"id": "4e70baf9-f855-4191-996a-c65c91f78548",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -970,7 +970,7 @@
 							"// └ 다수건 검색시 콤마(\",\")로 구분. 예) 1234,1000",
 							"// ※ 미입력시 전체조회",
 							"var FranchiseTaxRegID = '';",
-							"pm.collectionVariables.set(\"FranchiseTaxRegID\", FranchiseTaxRegID);"
+							"pm.collectionVariables.set(\"Search_FranchiseTaxRegID\", FranchiseTaxRegID);"
 						],
 						"type": "text/javascript"
 					}
@@ -1079,7 +1079,7 @@
 							"pm.collectionVariables.set(\"GetLogs_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "e4bd2e1b-422c-47a0-abb6-01b07bb7117a"
+						"id": "0382a288-b364-43ec-9c98-26eec2357d4f"
 					}
 				}
 			],
@@ -1134,7 +1134,7 @@
 							"pm.collectionVariables.set(\"GetURL_TOGO\", TOGO);"
 						],
 						"type": "text/javascript",
-						"id": "b737fc68-f2c2-4030-b38f-7a649611d6b5"
+						"id": "f44ae795-c5e4-402b-8324-2891fc178a4f"
 					}
 				}
 			],
@@ -1193,7 +1193,7 @@
 							"pm.collectionVariables.set(\"GetPopUpURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "08859fa1-f877-48a0-bafe-de16b37c6166"
+						"id": "1e667252-55d4-4668-9f48-ca45d3ff192d"
 					}
 				}
 			],
@@ -1252,7 +1252,7 @@
 							"pm.collectionVariables.set(\"GetViewURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "762acdc3-b191-4a69-9259-8b3622741940"
+						"id": "783f171f-8434-445f-8669-4402a990d900"
 					}
 				}
 			],
@@ -1311,7 +1311,7 @@
 							"pm.collectionVariables.set(\"GetPrintURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "5bbb3b51-2180-4b15-96fd-d899351750a3"
+						"id": "b6e9a6ff-cf76-4d8f-a5a3-08cf8342eac1"
 					}
 				}
 			],
@@ -1374,7 +1374,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "c6a5eed9-39fb-41a1-89ca-93ddba8a9fb4"
+						"id": "4b8cef73-235b-4d67-b5f4-3ae8bfd69ede"
 					}
 				}
 			],
@@ -1436,7 +1436,7 @@
 							"pm.collectionVariables.set(\"GetMailURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "90da20b0-8327-4783-8958-a15880521127"
+						"id": "9272c051-f1aa-493a-abcf-fa3227c94364"
 					}
 				}
 			],
@@ -1495,7 +1495,7 @@
 							"pm.collectionVariables.set(\"GetPDFURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "8270203e-1d7b-4f68-96c8-ebbf790191c7"
+						"id": "56ecf7e9-6fbc-4619-92eb-bf787bea35a4"
 					}
 				}
 			],
@@ -1551,7 +1551,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "e9376ec2-64f8-4634-8589-3179a163f25e"
+						"id": "418ccf49-aeb2-4833-a462-d770e3244f9e"
 					}
 				}
 			],
@@ -1621,7 +1621,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "19597807-7ede-4bb5-898f-4b2cf00e0bdf"
+						"id": "fedc4e14-2f1a-46f0-9b77-813056c6bc16"
 					}
 				}
 			],
@@ -1702,7 +1702,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "d56fe930-5c6c-4a73-9972-1f1281710c88"
+						"id": "38fe29e6-9d66-48c7-bb46-7fd24807e968"
 					}
 				}
 			],
@@ -1782,7 +1782,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "32d15928-682f-42af-bab2-d5c1ec9d780a"
+						"id": "09322856-21b6-4643-9521-89e51c7d60fe"
 					}
 				}
 			],
@@ -1854,7 +1854,7 @@
 							"pm.collectionVariables.set(\"AssignMgtKey_InvoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "81eaa95f-59f9-4c5c-8cc5-686f1c0e3010"
+						"id": "457038d7-0608-49d7-be4f-312bcba7cf51"
 					}
 				}
 			],
@@ -1914,7 +1914,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "1b39a1aa-0484-4d19-a806-fd0d6c38ccfc"
+						"id": "7e9ff6c9-e906-4177-a25f-ca72e9ce35cd"
 					}
 				}
 			],
@@ -1963,7 +1963,7 @@
 							" */"
 						],
 						"type": "text/javascript",
-						"id": "7c41fb22-b94a-4d62-a378-40481927de60"
+						"id": "5ba0f0e1-32e6-45f4-8cc3-e685b852ef25"
 					}
 				}
 			],
@@ -2023,7 +2023,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "cebe50d1-8dd4-4da2-8465-419ee9989454"
+						"id": "f3e283cb-8e7a-4260-8945-a0941e6cf844"
 					}
 				}
 			],
@@ -2078,7 +2078,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "fdd3ea94-f473-4b23-ae17-7d374c30b5d4"
+						"id": "83c0e08b-bfb8-4caf-a4eb-1b95293f7af6"
 					}
 				}
 			],
