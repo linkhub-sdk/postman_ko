@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e217f6a3-0f39-4b4c-9a32-9583a9abf9dd",
+		"_postman_id": "a13f77b1-d907-4b03-9f79-fd38fdf55d41",
 		"name": "Common KO_Popbill 현금영수증 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -65,7 +65,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "50b925d5-f5bb-43be-9c2a-f5f7ac368b5d"
+						"id": "a0f3d3a3-6c27-4e05-8ebd-58728f19c487"
 					}
 				},
 				{
@@ -79,7 +79,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "b2705dcb-e91f-40bc-81e1-10e016d6ffc0"
+						"id": "d4843338-e19b-479b-a62f-67ae8002cc94"
 					}
 				}
 			],
@@ -156,7 +156,7 @@
 							"pm.collectionVariables.set(\"CheckMgtKeyinUse_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "e8643eb7-c798-4317-b6dc-d81cd3e87539"
+						"id": "3b90de03-f77b-4dab-b021-f2f46edbd300"
 					}
 				}
 			],
@@ -198,7 +198,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "5ced1ac4-010e-4962-aa4b-40e4330e5316",
+						"id": "d4518161-982f-4fcf-beff-b6498d9bcbe7",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -260,7 +260,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "1235f2bb-79ff-4b3f-8723-e8dd5ff5a889",
+						"id": "b5d4dd3a-6403-4763-abb9-2debffdc0770",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -463,7 +463,7 @@
 							"pm.collectionVariables.set(\"GetBulkResult_submitID\", submitID);"
 						],
 						"type": "text/javascript",
-						"id": "73c28c5c-7c33-44d1-8406-1907b1071182"
+						"id": "d5b8f574-59d4-4c2f-ae61-edbafae241da"
 					}
 				}
 			],
@@ -502,89 +502,6 @@
 			"response": []
 		},
 		{
-			"name": "CancelIssue",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							"/**",
-							" * API 호출전 GetToken을 실행해야 합니다.",
-							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
-							" */",
-							"",
-							"// 발행 취소할 현금영수증 문서번호",
-							"var mgtKey = 'mgtKey';",
-							"pm.collectionVariables.set(\"CancelIssue_MgtgtKey\", mgtKey);",
-							"",
-							"// 현금영수증 상태 이력을 관리하기 위한 메모",
-							"var reqBodyObj = {",
-							"  memo : 'Memo'",
-							"};",
-							"",
-							"var RequestBody = stringify(reqBodyObj);",
-							"pm.collectionVariables.set(\"CancelIssue_RequestBody\", RequestBody);",
-							"",
-							"function stringify(obj) {",
-							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
-							"}",
-							"",
-							"",
-							"",
-							""
-						],
-						"type": "text/javascript",
-						"id": "41559339-7add-4839-98ff-7b80b8f6914a"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "{{API_Session_Token}}"
-					},
-					{
-						"key": "x-pb-userid",
-						"type": "text",
-						"value": "testkorea"
-					},
-					{
-						"key": "X-HTTP-Method-Override",
-						"type": "text",
-						"value": "CANCELISSUE"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{{CancelIssue_RequestBody}}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "https://popbill-test.linkhub.co.kr/Cashbill/{{CancelIssue_MgtgtKey}}",
-					"protocol": "https",
-					"host": [
-						"popbill-test",
-						"linkhub",
-						"co",
-						"kr"
-					],
-					"path": [
-						"Cashbill",
-						"{{CancelIssue_MgtgtKey}}"
-					]
-				},
-				"description": "ㆍ국세청 전송 이전 \"발행완료\" 상태의 전자세금계산서를 \"발행취소\"하고 국세청 신고대상에서 제외합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#CancelIssue"
-			},
-			"response": []
-		},
-		{
 			"name": "Delete",
 			"event": [
 				{
@@ -602,7 +519,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "813584ff-fd9a-4639-8ec3-d10aec229639"
+						"id": "4d59b642-182d-4175-978f-2f812bdc203c"
 					}
 				}
 			],
@@ -658,7 +575,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "d335d841-e456-4bfe-abf2-1ecd07dd2fa4",
+						"id": "c4a402bb-bc9b-4e77-8104-8f4708306934",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -731,7 +648,7 @@
 							"pm.collectionVariables.set(\"GetInfo_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "acc4bcb0-f364-4ae8-86ce-108679f2b838"
+						"id": "fb1913ad-56cc-4578-88d9-f46c2b3764a0"
 					}
 				}
 			],
@@ -788,7 +705,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "70ef7dd3-1d88-4587-859d-ce0fb284e848"
+						"id": "1b5cc067-cf70-4193-9390-608e89a92751"
 					}
 				}
 			],
@@ -850,7 +767,7 @@
 							"pm.collectionVariables.set(\"GetDetailInfo_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "03e05c49-71c0-4428-8dfd-01da63e44d4f"
+						"id": "cfa2fa46-2ac8-47de-a546-7920d876b9a9"
 					}
 				}
 			],
@@ -898,7 +815,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "4e70baf9-f855-4191-996a-c65c91f78548",
+						"id": "4a4ffc99-8fc6-4a6e-9833-dbe674c13260",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -919,7 +836,7 @@
 							"pm.collectionVariables.set(\"Search_EDate\", EDate);",
 							"",
 							"// [배열] 현금영수증 상태코드",
-							"// └  상태코드 2,3번째 자리에 와일드카드(*) 사용가능, 예) \"1**\", \"3**\" ",
+							"// └  상태코드 2,3번째 자리에 와일드카드(*) 사용가능, 예) \"3**\" ",
 							"// ※ 미입력시 전체조회",
 							"var State = ['1**','3**'];",
 							"pm.collectionVariables.set(\"Search_State\", State.join(','));",
@@ -1063,60 +980,6 @@
 			"response": []
 		},
 		{
-			"name": "GetLogs",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							"/**",
-							" * API 호출전 GetToken을 실행해야 합니다.",
-							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
-							" */",
-							"",
-							"// 확인할 현금영수증 문서번호",
-							"var mgtKey = '20211129_06'",
-							"pm.collectionVariables.set(\"GetLogs_MgtKey\", mgtKey);"
-						],
-						"type": "text/javascript",
-						"id": "0382a288-b364-43ec-9c98-26eec2357d4f"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "{{API_Session_Token}}"
-					},
-					{
-						"key": "x-pb-userid",
-						"type": "text",
-						"value": "testkorea"
-					}
-				],
-				"url": {
-					"raw": "https://popbill-test.linkhub.co.kr/Cashbill/{{GetLogs_MgtKey}}/Logs",
-					"protocol": "https",
-					"host": [
-						"popbill-test",
-						"linkhub",
-						"co",
-						"kr"
-					],
-					"path": [
-						"Cashbill",
-						"{{GetLogs_MgtKey}}",
-						"Logs"
-					]
-				},
-				"description": "ㆍ현금영수증의 상태에 대한 변경이력을 확인합니다.\n\nhttps://docs.popbill.com/cashbill/java/api#GetLogs"
-			},
-			"response": []
-		},
-		{
 			"name": "GetURL",
 			"event": [
 				{
@@ -1134,7 +997,7 @@
 							"pm.collectionVariables.set(\"GetURL_TOGO\", TOGO);"
 						],
 						"type": "text/javascript",
-						"id": "f44ae795-c5e4-402b-8324-2891fc178a4f"
+						"id": "da44a2b6-0f5e-410b-a95a-b76e2568964c"
 					}
 				}
 			],
@@ -1193,7 +1056,7 @@
 							"pm.collectionVariables.set(\"GetPopUpURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "1e667252-55d4-4668-9f48-ca45d3ff192d"
+						"id": "7e355cee-d503-48ec-a5ca-b34da4d9dc06"
 					}
 				}
 			],
@@ -1252,7 +1115,7 @@
 							"pm.collectionVariables.set(\"GetViewURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "783f171f-8434-445f-8669-4402a990d900"
+						"id": "adf77ebb-d211-4199-bb2d-57bf4bffc91c"
 					}
 				}
 			],
@@ -1311,7 +1174,7 @@
 							"pm.collectionVariables.set(\"GetPrintURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "b6e9a6ff-cf76-4d8f-a5a3-08cf8342eac1"
+						"id": "2c97fd81-79b4-452a-b5b0-a38f42ef6488"
 					}
 				}
 			],
@@ -1374,7 +1237,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "4b8cef73-235b-4d67-b5f4-3ae8bfd69ede"
+						"id": "10740069-b3ec-4268-919b-5a9435af56fd"
 					}
 				}
 			],
@@ -1436,7 +1299,7 @@
 							"pm.collectionVariables.set(\"GetMailURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "9272c051-f1aa-493a-abcf-fa3227c94364"
+						"id": "bfb35551-fbfc-4c86-965b-e08ea2392852"
 					}
 				}
 			],
@@ -1495,7 +1358,7 @@
 							"pm.collectionVariables.set(\"GetPDFURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "56ecf7e9-6fbc-4619-92eb-bf787bea35a4"
+						"id": "d02f841b-6185-4169-a295-b9340c68d5d1"
 					}
 				}
 			],
@@ -1551,7 +1414,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "418ccf49-aeb2-4833-a462-d770e3244f9e"
+						"id": "646ac197-a4a3-425c-ad4e-1d9d0f8f58a1"
 					}
 				}
 			],
@@ -1621,7 +1484,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "fedc4e14-2f1a-46f0-9b77-813056c6bc16"
+						"id": "5122e984-1e0a-4c26-8996-4dda0e1cf2df"
 					}
 				}
 			],
@@ -1702,7 +1565,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "38fe29e6-9d66-48c7-bb46-7fd24807e968"
+						"id": "54729673-18c6-4ee6-a33f-1f2adde97454"
 					}
 				}
 			],
@@ -1782,7 +1645,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "09322856-21b6-4643-9521-89e51c7d60fe"
+						"id": "bbf8ef7d-55a3-4947-ba20-8ace9be9b39f"
 					}
 				}
 			],
@@ -1854,7 +1717,7 @@
 							"pm.collectionVariables.set(\"AssignMgtKey_InvoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "457038d7-0608-49d7-be4f-312bcba7cf51"
+						"id": "3f859b80-1e64-44c9-9d22-2d81eca36200"
 					}
 				}
 			],
@@ -1914,7 +1777,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "7e9ff6c9-e906-4177-a25f-ca72e9ce35cd"
+						"id": "3384d164-928f-4da3-badb-18b0a8baf3db"
 					}
 				}
 			],
@@ -1963,7 +1826,7 @@
 							" */"
 						],
 						"type": "text/javascript",
-						"id": "5ba0f0e1-32e6-45f4-8cc3-e685b852ef25"
+						"id": "529620e3-1dd1-4c5c-8d98-d616b82373ae"
 					}
 				}
 			],
@@ -2023,7 +1886,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "f3e283cb-8e7a-4260-8945-a0941e6cf844"
+						"id": "bf86ba8f-17e8-4875-a06a-05ae035da11c"
 					}
 				}
 			],
@@ -2078,7 +1941,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "83c0e08b-bfb8-4caf-a4eb-1b95293f7af6"
+						"id": "49a4b553-992d-4048-b816-9f68e2c2e62c"
 					}
 				}
 			],
