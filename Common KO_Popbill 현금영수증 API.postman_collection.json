@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a13f77b1-d907-4b03-9f79-fd38fdf55d41",
+		"_postman_id": "f031d101-27f3-478b-93bb-cb319a89e146",
 		"name": "Common KO_Popbill 현금영수증 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -65,7 +65,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "a0f3d3a3-6c27-4e05-8ebd-58728f19c487"
+						"id": "88386c77-1fc9-45e5-acc6-1a149cf8cc7a"
 					}
 				},
 				{
@@ -79,7 +79,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "d4843338-e19b-479b-a62f-67ae8002cc94"
+						"id": "59cc3a02-2150-4ed3-b6dc-02152e139ba0"
 					}
 				}
 			],
@@ -145,6 +145,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
+						"id": "42688f88-fc7f-4720-98ce-6503104b16dc",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -155,8 +156,7 @@
 							"var mgtKey = '20210629-01'",
 							"pm.collectionVariables.set(\"CheckMgtKeyinUse_MgtKey\", mgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "3b90de03-f77b-4dab-b021-f2f46edbd300"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -188,7 +188,7 @@
 						"{{CheckMgtKeyinUse_MgtKey}}"
 					]
 				},
-				"description": "ㆍ파트너가 현금영수증 관리 목적으로 할당하는 문서번호 사용여부를 확인합니다.\nㆍ이미 사용 중인 문서번호는 중복 사용이 불가하고, 현금영수증이 삭제된 경우에만 문서번호의 재사용이 가능합니다.\n\nhttps://docs.popbill.com/cashbill/java/api#CheckMgtKeyInUse"
+				"description": "ㆍ파트너가 현금영수증 관리 목적으로 할당하는 문서번호 사용여부를 확인합니다.\n\nㆍ이미 사용 중인 문서번호는 중복 사용이 불가하고, 현금영수증이 삭제된 경우에만 문서번호의 재사용이 가능합니다.\n\nhttps://docs.popbill.com/cashbill/java/api#CheckMgtKeyInUse"
 			},
 			"response": []
 		},
@@ -198,7 +198,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "d4518161-982f-4fcf-beff-b6498d9bcbe7",
+						"id": "de5f55e2-8aee-4835-9338-490231a91e76",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -250,7 +250,7 @@
 						"Cashbill"
 					]
 				},
-				"description": "ㆍ작성된 세금계산서 데이터를 팝빌에 저장과 동시에 발행(전자서명)하여 \"발행완료\" 상태로 처리합니다.\n\nㆍ세금계산서 발행시 포인트가 과금되며, 공급받는자에게 발행 메일이 발송됩니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#RegistIssue"
+				"description": "ㆍ작성된 현금영수증 데이터를 팝빌에 저장과 동시에 발행(전자서명)하여 \"발행완료\" 상태로 처리합니다.\n\nㆍ현금영수증 발행시 포인트가 과금되며, 구매자에게 발행 메일이 발송됩니다.\n\nhttps://docs.popbill.com/cashbill/java/api#RegistIssue"
 			},
 			"response": []
 		},
@@ -260,7 +260,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "b5d4dd3a-6403-4763-abb9-2debffdc0770",
+						"id": "c9255620-f39e-4fcb-8b8b-05ab35d760c9",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -272,10 +272,10 @@
 							"var submitID = 'MgtTEST008';",
 							"pm.collectionVariables.set(\"SubmitID\", submitID);",
 							"",
-							"// [리스크] 세금계산서 객체 리스트",
+							"// [리스크] 현금영수증 객체 리스트",
 							"var CashbillList = [];",
 							"",
-							"// BulkSubmit API는 접수당 최대 100개의 세금계산서 발행을 요청 할 수 있습니다. ",
+							"// BulkSubmit API는 접수당 최대 100개의 현금영수증 발행을 요청 할 수 있습니다. ",
 							"// 100개의 현금영수증 생성 loop",
 							"for(var i=1; i<=100; i++){",
 							"",
@@ -442,7 +442,7 @@
 						"Cashbill"
 					]
 				},
-				"description": "ㆍ최대 100건의 세금계산서 발행을 한번의 요청으로 접수합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#BulkSubmit"
+				"description": "ㆍ최대 100건의 현금영수증 발행을 한번의 요청으로 접수합니다.\n\nhttps://docs.popbill.com/cashbill/java/api#BulkSubmit"
 			},
 			"response": []
 		},
@@ -463,7 +463,7 @@
 							"pm.collectionVariables.set(\"GetBulkResult_submitID\", submitID);"
 						],
 						"type": "text/javascript",
-						"id": "d5b8f574-59d4-4c2f-ae61-edbafae241da"
+						"id": "1ec15c29-589f-4d1e-971b-9cb2c69de313"
 					}
 				}
 			],
@@ -497,7 +497,7 @@
 						"State"
 					]
 				},
-				"description": "ㆍ접수시 기재한 SubmitID를 사용하여 세금계산서 접수결과를 확인합니다.\n\nㆍ개별 세금계산서 처리상태는 접수상태(txState)가 완료(2) 시 반환됩니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetBulkResult"
+				"description": "ㆍ접수시 기재한 SubmitID를 사용하여 현금영수증 접수결과를 확인합니다.\n\nㆍ개별 현금영수증 처리상태는 접수상태(txState)가 완료(2) 시 반환됩니다.\n\nhttps://docs.popbill.com/cashbill/java/api#GetBulkResult"
 			},
 			"response": []
 		},
@@ -519,7 +519,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "4d59b642-182d-4175-978f-2f812bdc203c"
+						"id": "fbd8d06e-2097-4ebe-9bb2-8ca5ba99e3c7"
 					}
 				}
 			],
@@ -565,7 +565,7 @@
 						"{{Delete_mgtKey}}"
 					]
 				},
-				"description": "ㆍ삭제 가능한 상태의 세금계산서를 삭제합니다.\n\nㆍ삭제 가능한 상태: \"임시저장\", \"발행취소\", \"역발행거부\", \"역발행취소\", \"전송실패\"\n\nhttps://docs.popbill.com/taxinvoice/java/api#Delete"
+				"description": "ㆍ삭제 가능한 상태의 현금영수증를 삭제합니다.\n\nㆍ삭제 가능한 상태: \"전송실패\"\n\nhttps://docs.popbill.com/cashbill/java/api#Delete"
 			},
 			"response": []
 		},
@@ -575,7 +575,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "c4a402bb-bc9b-4e77-8104-8f4708306934",
+						"id": "88eb385b-faa5-4305-9ce2-d2c3c0ee55ea",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -627,7 +627,7 @@
 						"Cashbill"
 					]
 				},
-				"description": "ㆍ작성된 세금계산서 데이터를 팝빌에 저장과 동시에 발행(전자서명)하여 \"발행완료\" 상태로 처리합니다.\n\nㆍ세금계산서 발행시 포인트가 과금되며, 공급받는자에게 발행 메일이 발송됩니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#RegistIssue"
+				"description": "ㆍ작성된 현금영수증 데이터를 팝빌에 저장과 동시에 발행(전자서명)하여 \"발행완료\" 상태로 처리합니다.\n\nㆍ현금영수증 발행시 포인트가 과금되며, 구매자에게 발행 메일이 발송됩니다.\n\nhttps://docs.popbill.com/cashbill/java/api#RegistIssue"
 			},
 			"response": []
 		},
@@ -648,7 +648,7 @@
 							"pm.collectionVariables.set(\"GetInfo_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "fb1913ad-56cc-4578-88d9-f46c2b3764a0"
+						"id": "a3c25965-85b6-43d5-b80f-b077e169c67e"
 					}
 				}
 			],
@@ -705,7 +705,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "1b5cc067-cf70-4193-9390-608e89a92751"
+						"id": "6751c22f-bb47-4890-86d3-51c48e7b5bfc"
 					}
 				}
 			],
@@ -767,7 +767,7 @@
 							"pm.collectionVariables.set(\"GetDetailInfo_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "cfa2fa46-2ac8-47de-a546-7920d876b9a9"
+						"id": "dcc0a4cb-9325-4446-a6cb-0f68fb4f11e5"
 					}
 				}
 			],
@@ -805,7 +805,7 @@
 						}
 					]
 				},
-				"description": "ㆍ세금계산서 1건의 상세정보를 확인합니다.\n\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetDetailInfo"
+				"description": "ㆍ현금영수증 1건의 상세정보를 확인합니다.\n\n\nhttps://docs.popbill.com/cashbill/java/api#GetDetailInfo"
 			},
 			"response": []
 		},
@@ -815,7 +815,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "4a4ffc99-8fc6-4a6e-9833-dbe674c13260",
+						"id": "6b03205c-8b8c-4c90-9f05-1e8cf55f5320",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -997,7 +997,7 @@
 							"pm.collectionVariables.set(\"GetURL_TOGO\", TOGO);"
 						],
 						"type": "text/javascript",
-						"id": "da44a2b6-0f5e-410b-a95a-b76e2568964c"
+						"id": "6b5378d1-1bde-4f23-a2dc-96a613cd748b"
 					}
 				}
 			],
@@ -1056,7 +1056,7 @@
 							"pm.collectionVariables.set(\"GetPopUpURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "7e355cee-d503-48ec-a5ca-b34da4d9dc06"
+						"id": "35dd3b9e-bfe5-4e97-8caf-3e124f85810e"
 					}
 				}
 			],
@@ -1115,7 +1115,7 @@
 							"pm.collectionVariables.set(\"GetViewURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "adf77ebb-d211-4199-bb2d-57bf4bffc91c"
+						"id": "814502ec-7ce0-4ff0-8a7d-48d3df5f543c"
 					}
 				}
 			],
@@ -1174,7 +1174,7 @@
 							"pm.collectionVariables.set(\"GetPrintURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "2c97fd81-79b4-452a-b5b0-a38f42ef6488"
+						"id": "c2456980-dffa-4913-961b-bf58317eda63"
 					}
 				}
 			],
@@ -1237,7 +1237,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "10740069-b3ec-4268-919b-5a9435af56fd"
+						"id": "28914524-11d6-4bf5-8d3e-87aafd815019"
 					}
 				}
 			],
@@ -1299,7 +1299,7 @@
 							"pm.collectionVariables.set(\"GetMailURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "bfb35551-fbfc-4c86-965b-e08ea2392852"
+						"id": "dd299863-2aae-4b39-9b08-4d573b6fcb25"
 					}
 				}
 			],
@@ -1358,7 +1358,7 @@
 							"pm.collectionVariables.set(\"GetPDFURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "d02f841b-6185-4169-a295-b9340c68d5d1"
+						"id": "7db5b16c-8838-49de-b090-df1d075c74a6"
 					}
 				}
 			],
@@ -1396,7 +1396,7 @@
 						}
 					]
 				},
-				"description": "ㆍ전자세금계산서 PDF 파일을 다운 받을 수 있는 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안정책상 30초의 유효시간을 갖으며, 유효시간 이후 호출시 정상적으로 페이지가 호출되지 않습니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetPDFURL"
+				"description": "ㆍ현금영수증 PDF 파일을 다운 받을 수 있는 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안정책상 30초의 유효시간을 갖으며, 유효시간 이후 호출시 정상적으로 페이지가 호출되지 않습니다.\n\nhttps://docs.popbill.com/cashbill/java/api#GetPDFURL"
 			},
 			"response": []
 		},
@@ -1414,7 +1414,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "646ac197-a4a3-425c-ad4e-1d9d0f8f58a1"
+						"id": "2baf6823-2c8e-4a38-8100-4901e1c79145"
 					}
 				}
 			],
@@ -1484,7 +1484,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "5122e984-1e0a-4c26-8996-4dda0e1cf2df"
+						"id": "a13e6062-ebef-487c-a67e-ee8c414f2bde"
 					}
 				}
 			],
@@ -1565,7 +1565,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "54729673-18c6-4ee6-a33f-1f2adde97454"
+						"id": "f7bb40e5-7ebd-4384-9936-4bdb353de844"
 					}
 				}
 			],
@@ -1645,7 +1645,7 @@
 							"}"
 						],
 						"type": "text/javascript",
-						"id": "bbf8ef7d-55a3-4947-ba20-8ace9be9b39f"
+						"id": "d60879ae-3648-4e57-a0ad-ae0c7ebf9f2e"
 					}
 				}
 			],
@@ -1712,12 +1712,12 @@
 							"var popbillItemKey = '021112917311500001'",
 							"pm.collectionVariables.set(\"AssignMgtKey_ItemKey\", popbillItemKey);",
 							"",
-							"// 할당할 세금계산서 문서번호",
+							"// 할당할 현금영수증 문서번호",
 							"var invoicerMgtKey = '20211130-001';",
 							"pm.collectionVariables.set(\"AssignMgtKey_InvoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript",
-						"id": "3f859b80-1e64-44c9-9d22-2d81eca36200"
+						"id": "304bc416-9f35-4747-b5e7-c572d47b530f"
 					}
 				}
 			],
@@ -1777,7 +1777,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "3384d164-928f-4da3-badb-18b0a8baf3db"
+						"id": "de2a7a27-83b9-44a8-b055-d14d2f927f93"
 					}
 				}
 			],
@@ -1826,7 +1826,7 @@
 							" */"
 						],
 						"type": "text/javascript",
-						"id": "529620e3-1dd1-4c5c-8d98-d616b82373ae"
+						"id": "496683a8-4a31-4fcb-8d8d-1570085fffff"
 					}
 				}
 			],
@@ -1886,7 +1886,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "bf86ba8f-17e8-4875-a06a-05ae035da11c"
+						"id": "437cafb1-9d68-4bf9-951c-2f77149e0675"
 					}
 				}
 			],
@@ -1941,7 +1941,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "49a4b553-992d-4048-b816-9f68e2c2e62c"
+						"id": "bb6a4dfa-64e0-4e63-8937-17ee5d3ae5f1"
 					}
 				}
 			],
