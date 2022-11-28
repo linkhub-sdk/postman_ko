@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "7060487c-a47e-4140-be95-a5e3aa73a8d3",
+		"_postman_id": "497d5fe2-912f-43ca-9ea0-4ce0980b54a0",
 		"name": "Common KO_Popbill 포인트 관리 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,7 +11,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "d085480c-13bb-44bf-a7a5-73924edb312c",
+						"id": "adbf5719-c847-4a20-980b-3340a521885d",
 						"exec": [
 							"/*********************************************************************************",
 							" *",
@@ -71,7 +71,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "805f60ec-494e-4667-9452-8d4a65785a84",
+						"id": "63f3dd62-c0fa-4ee8-ad32-3fe087652666",
 						"exec": [
 							"pm.collectionVariables.clear();",
 							"",
@@ -153,7 +153,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "7974d68b-6b41-4227-b6f4-591dc787eec4"
+						"id": "d5dfd8f7-07f0-4124-9638-8308282b377c"
 					}
 				}
 			],
@@ -215,7 +215,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "43c36ddc-a3ed-4497-87c6-aee2ff160654"
+						"id": "05e0b886-6b4b-4ba4-9ae7-afc054dec1af"
 					}
 				}
 			],
@@ -282,7 +282,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "cd8a663a-d1da-4df3-a56e-5a087ec65b1f"
+						"id": "63c7b35c-ed28-4d9d-8b11-132f311f2dfa"
 					}
 				}
 			],
@@ -349,7 +349,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "35bc6853-da4c-48f9-98fa-85b250f72de5"
+						"id": "3c374561-b0c5-4f23-9187-d699670a3f46"
 					}
 				}
 			],
@@ -416,7 +416,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "ffb26ab3-ae7a-4e2a-a2a3-7fd6fc0ef685"
+						"id": "18a7a3e5-790b-4733-8046-8e435794e5c7"
 					}
 				}
 			],
@@ -478,7 +478,7 @@
 							""
 						],
 						"type": "text/javascript",
-						"id": "1bdd77aa-24e7-45e8-821a-ab3871cda324"
+						"id": "ec597c0c-2e34-4951-aca3-f0f6bad63e5b"
 					}
 				}
 			],
@@ -538,7 +538,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "330d801b-920f-4e90-9412-6d3f58a688b5",
+						"id": "6b557afa-f50e-4b78-9c57-aa78be7a2c1d",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -614,7 +614,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "35af56b8-534c-4060-9207-345e7c84c32b",
+						"id": "e265759c-28d1-4595-bc27-ddb878d72c1d",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -685,7 +685,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "7a77f3ae-c672-4acd-a681-4d12e51407f7",
+						"id": "1ca14e44-5d21-4dcd-9599-2a33a6c0543a",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -746,7 +746,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "8d210876-f5aa-463e-b695-21f2f0450849",
+						"id": "43504a79-da35-452e-b93d-ab21a2755046",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -804,7 +804,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "6af6a261-3ca8-44c6-af28-4c402c1d01e7",
+						"id": "4436b4ab-57d2-44f6-b8ba-b6aab838b4af",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -818,7 +818,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "d3f55128-2c4e-4c57-b8b1-4ca51a495cd2",
+						"id": "95462747-9262-4b27-a80f-a1b2c1be8cf3",
 						"exec": [
 							"// 정산코드 콜렉션 변수로 할당.\r",
 							"if(pm.response.code == 200 ) {\r",
@@ -845,7 +845,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    // 담당자명\r\n    // 미입력 시 기본값 적용 - 팝빌 회원 담당자명.\r\n    \"settlerName\" : \"담당자명\",\r\n\r\n    // 담당자 이메일\r\n    // 사이트에서 신청하면 자동으로 담당자 이메일.\r\n    // 미입력 시 공백 처리\r\n    \"settlerEmail\" : \"test@test.com\",\r\n   \r\n    // 담당자 휴대폰\r\n    // 무통장 입금 승인 알림톡이 전송됩니다.\r\n    \"settlerHP\" : \"01012341234\",\r\n\r\n    // [필수] 입금자명\r\n    \"paymentName\" : \"입금자명\",\r\n\r\n    // [필수] 결제금액\r\n    \"settleCost\" : \"11000\"\r\n}",
+					"raw": "{\r\n    // 담당자명\r\n    // 미입력 시 기본값 적용 - 팝빌 회원 담당자명.\r\n    \"settlerName\" : \"담당자명\",\r\n\r\n    // 담당자 이메일\r\n    // 사이트에서 신청하면 자동으로 담당자 이메일.\r\n    // 미입력 시 공백 처리\r\n    \"settlerEmail\" : \"test@test.com\",\r\n   \r\n    // 담당자 휴대폰\r\n    // 무통장 입금 승인 알림톡이 전송됩니다.\r\n    \"notifyHP\" : \"01012341234\",\r\n\r\n    // [필수] 입금자명\r\n    \"paymentName\" : \"입금자명\",\r\n\r\n    // [필수] 결제금액\r\n    \"settleCost\" : \"11000\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -875,7 +875,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "b56871fa-e048-443a-bcfc-2166ee26be66",
+						"id": "eef8d4d7-3bfd-40db-a06c-da40066c5939",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -890,7 +890,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "e822df09-77c3-434c-aa1d-290190802576",
+						"id": "193adff3-cd35-4cc0-8f12-b8f68796cd24",
 						"exec": [
 							""
 						],
