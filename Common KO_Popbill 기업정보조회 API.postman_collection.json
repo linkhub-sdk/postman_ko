@@ -31,7 +31,7 @@
 							"// Scopes 배열은 발급된 토큰으로 사용할 수 있는 서비스 코드 목록입니다.",
 							"// (170은 POPBiLL 휴폐업조회 API를 의미합니다.)",
 							"var Access_id = '1234567890'; // 사업자번호.",
-							"var Scopes = ['member', '170'];",
+							"var Scopes = ['member', '171'];",
 							"var TokenRequest = stringify({access_id : Access_id, scope : Scopes});",
 							"var Body = CryptoJS.SHA256(TokenRequest).toString(CryptoJS.enc.Base64);",
 							"",
