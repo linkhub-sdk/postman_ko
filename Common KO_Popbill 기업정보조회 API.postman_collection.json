@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "bb095238-4d57-4f7e-9788-14d9046a7615",
-		"name": "Common KO_Popbill 휴폐업조회 API",
+		"name": "Common KO_Popbill 기업정보조회 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
