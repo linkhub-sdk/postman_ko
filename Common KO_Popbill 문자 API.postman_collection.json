@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "59d17dc0-5290-48f4-809d-90abb7234f30",
+		"_postman_id": "cda91daa-5534-4e84-9552-98d8633cbf31",
 		"name": "Common KO_Popbill 문자 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -64,8 +64,7 @@
 							"    return enc;",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "f66680ad-947f-4084-b42b-e5c96b7289f7"
+						"type": "text/javascript"
 					}
 				},
 				{
@@ -78,8 +77,7 @@
 							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "c282dacb-3eda-4ddb-99ac-386f67dc0ae3"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -151,8 +149,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "982ce753-b421-4837-9ca1-68def6030854"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -206,8 +203,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "20322090-be50-40b2-854e-8b89e204b506"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -256,8 +252,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "ba5962e7-5d27-4b41-8816-681f89f931f6"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -314,8 +309,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "b0f9a655-334c-49cd-93fe-31925132225d"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -372,8 +366,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "8f6f2830-711e-4f0e-8442-cfd013f64d3d"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -430,8 +423,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "c95a3261-7be7-4ef8-ac5e-f171b792549a"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -488,8 +480,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "e14aa634-c621-4489-a0cb-743a46acd314"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -546,8 +537,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "b10f13bb-8740-47b5-9178-72e0322c8ea3"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -640,8 +630,7 @@
 							"",
 							""
 						],
-						"type": "text/javascript",
-						"id": "3516c685-ed9e-4566-aef8-e4bb3e7622ba"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -753,8 +742,7 @@
 							"",
 							""
 						],
-						"type": "text/javascript",
-						"id": "be2b81a8-fcc8-4408-b3c4-7f06122c39f2"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -866,8 +854,7 @@
 							"",
 							""
 						],
-						"type": "text/javascript",
-						"id": "8f6f0f5b-a1fc-49e6-a066-2413d9bc80f4"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -942,8 +929,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "f713cbe8-d0c8-4253-9199-44b2b3a65a57"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1000,8 +986,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "59d0b84d-de9c-40b7-b277-d0b93de090f8"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1058,8 +1043,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "624f490b-2613-4c35-87e4-96b0745c0d5f"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1119,8 +1103,7 @@
 							"var receiptNum = '021111721565100001'",
 							"pm.collectionVariables.set(\"receiptNum\", receiptNum);"
 						],
-						"type": "text/javascript",
-						"id": "5dba7b81-58cd-4288-a62b-7e31e89f2197"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1173,8 +1156,7 @@
 							"var requestNum = '20211117_TEST001'",
 							"pm.collectionVariables.set(\"requestNum\", requestNum);"
 						],
-						"type": "text/javascript",
-						"id": "384c5b5e-2040-4a5c-8a9e-41ddba433db8"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1227,8 +1209,7 @@
 							"var receiptNum = '021120117000000003'",
 							"pm.collectionVariables.set(\"receiptNum\", receiptNum);"
 						],
-						"type": "text/javascript",
-						"id": "02717067-e239-4f00-94c3-f6897554cf61"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1270,7 +1251,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "8f8d6cab-1786-416f-bc18-a26c2dd914bb",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -1334,8 +1314,7 @@
 							"var requestNum = '20211201_001'",
 							"pm.collectionVariables.set(\"requestNum\", requestNum);"
 						],
-						"type": "text/javascript",
-						"id": "17469828-c54f-4fe1-bf2c-ebc17c2b494d"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1378,7 +1357,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "f969aa37-ce68-46d8-b4aa-12de8db2e563",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -1521,8 +1499,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "5c2e8a50-812c-4d72-972c-9295587815df"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1577,8 +1554,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "a27bc6a2-7c6f-4539-ba6a-19a64ed5e35c"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1632,8 +1608,7 @@
 							"var type = 'SMS'",
 							"pm.collectionVariables.set(\"GetUnitCost_type\", type);"
 						],
-						"type": "text/javascript",
-						"id": "63c2d759-a415-4f38-9b88-faae347b8aeb"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1692,8 +1667,7 @@
 							"var type = 'SMS'",
 							"pm.collectionVariables.set(\"GetChargeInfo_type\", type);"
 						],
-						"type": "text/javascript",
-						"id": "b6097f1d-e128-4ed9-bd4c-510630249b6b"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1738,20 +1712,8 @@
 	],
 	"variable": [
 		{
-			"id": "22653d02-64b9-4f24-95bb-c700794ff615",
 			"key": "API_Session_Token",
 			"value": ""
-		},
-		{
-			"id": "7e37453d-58cc-4d6a-ab57-b809f3530ef3",
-			"key": "receiptNum",
-			"value": ""
-		},
-		{
-			"id": "9040a574-1447-4a26-9c42-2f9133ea8b88",
-			"key": "senderNumber",
-			"value": ""
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

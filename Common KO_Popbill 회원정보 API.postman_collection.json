@@ -200,7 +200,7 @@
 						}
 					]
 				},
-				"description": "ㆍ사업자번호를 조회하여 연동회원 가입여부를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#CheckIsMember"
+				"description": "ㆍ사업자번호를 조회하여 연동회원 가입여부를 확인합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#CheckIsMember"
 			},
 			"response": []
 		},
@@ -259,7 +259,7 @@
 						}
 					]
 				},
-				"description": "ㆍ사용하고자 하는 아이디의 중복여부를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#CheckID"
+				"description": "ㆍ사용하고자 하는 아이디의 중복여부를 확인합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#CheckID"
 			},
 			"response": []
 		},
@@ -340,7 +340,7 @@
 						"Join"
 					]
 				},
-				"description": "ㆍ사용자를 연동회원으로 가입처리합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#JoinMember"
+				"description": "ㆍ사용자를 연동회원으로 가입처리합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#JoinMember"
 			},
 			"response": []
 		},
@@ -389,7 +389,7 @@
 						"CorpInfo"
 					]
 				},
-				"description": "ㆍ연동회원의 회사정보를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetCorpInfo"
+				"description": "ㆍ연동회원의 회사정보를 확인합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#GetCorpInfo"
 			},
 			"response": []
 		},
@@ -463,7 +463,7 @@
 						"CorpInfo"
 					]
 				},
-				"description": "ㆍ연동회원의 회사정보를 수정합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#UpdateCorpInfo"
+				"description": "ㆍ연동회원의 회사정보를 수정합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#UpdateCorpInfo"
 			},
 			"response": []
 		},
@@ -539,7 +539,7 @@
 						"New"
 					]
 				},
-				"description": "ㆍ연동회원 사업자번호에 담당자(팝빌 로그인 계정)를 추가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#RegistContact"
+				"description": "ㆍ연동회원 사업자번호에 담당자(팝빌 로그인 계정)를 추가합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#RegistContact"
 			},
 			"response": []
 		},
@@ -609,7 +609,7 @@
 						"Contact"
 					]
 				},
-				"description": "ㆍ연동회원의 회사정보를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetCorpInfo"
+				"description": "ㆍ연동회원의 회사정보를 확인합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#GetCorpInfo"
 			},
 			"response": []
 		},
@@ -658,7 +658,7 @@
 						"IDs"
 					]
 				},
-				"description": "ㆍ연동회원 사업자번호에 등록된 담당자(팝빌 로그인 계정) 목록을 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#ListContact"
+				"description": "ㆍ연동회원 사업자번호에 등록된 담당자(팝빌 로그인 계정) 목록을 확인합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#ListContact"
 			},
 			"response": []
 		},
@@ -732,7 +732,7 @@
 						"IDs"
 					]
 				},
-				"description": "ㆍ연동회원 사업자번호에 등록된 담당자(팝빌 로그인 계정) 정보를 수정합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#UpdateContact"
+				"description": "ㆍ연동회원 사업자번호에 등록된 담당자(팝빌 로그인 계정) 정보를 수정합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#UpdateContact"
 			},
 			"response": []
 		},

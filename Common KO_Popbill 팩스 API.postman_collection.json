@@ -190,7 +190,7 @@
 						}
 					]
 				},
-				"description": "ㆍ발신번호를 등록하고 내역을 확인하는 팩스 발신번호 관리 페이지 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/fax/java/api#GetSenderNumberMgtURL"
+				"description": "ㆍ발신번호를 등록하고 내역을 확인하는 팩스 발신번호 관리 페이지 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/fax/java/api#GetSenderNumberMgtURL"
 			},
 			"response": []
 		},
@@ -239,7 +239,7 @@
 						"SenderNumber"
 					]
 				},
-				"description": "ㆍ팝빌에 등록한 연동회원의 팩스 발신번호 목록을 확인합니다.\n\nhttps://docs.popbill.com/fax/java/api#GetSenderNumberList"
+				"description": "ㆍ팝빌에 등록한 연동회원의 팩스 발신번호 목록을 확인합니다.\n\nhttps://developers.popbill.com/fax/java/api#GetSenderNumberList"
 			},
 			"response": []
 		},
@@ -357,7 +357,7 @@
 						}
 					]
 				},
-				"description": "ㆍ팩스 1건을 전송합니다. (최대 전송파일 개수: 20개)\n\nhttps://docs.popbill.com/fax/java/api#SendFAX"
+				"description": "ㆍ팩스 1건을 전송합니다. (최대 전송파일 개수: 20개)\n\nhttps://developers.popbill.com/fax/java/api#SendFAX"
 			},
 			"response": []
 		},
@@ -463,7 +463,7 @@
 						"FAX"
 					]
 				},
-				"description": "ㆍ동일한 팩스파일을 다수의 수신자에게 전송하기 위해 팝빌에 접수합니다. (최대 전송파일 개수 : 20개) (최대 1,000건)\n\nhttps://docs.popbill.com/fax/java/api#SendFAX_Multi"
+				"description": "ㆍ동일한 팩스파일을 다수의 수신자에게 전송하기 위해 팝빌에 접수합니다. (최대 전송파일 개수 : 20개) (최대 1,000건)\n\nhttps://developers.popbill.com/fax/java/api#SendFAX_Multi"
 			},
 			"response": []
 		},
@@ -525,7 +525,7 @@
 						"{{ResendFAX_ReceiptNum}}"
 					]
 				},
-				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 팩스 1건을 재전송합니다.\n\nㆍ발신/수신 정보 미입력시 기존과 동일한 정보로 팩스가 전송되고, 접수일 기준 최대 60일이 경과되지 않는 건만 재전송이 가능합니다.\n\nhttps://docs.popbill.com/fax/java/api#ResendFAX"
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 팩스 1건을 재전송합니다.\n\nㆍ발신/수신 정보 미입력시 기존과 동일한 정보로 팩스가 전송되고, 접수일 기준 최대 60일이 경과되지 않는 건만 재전송이 가능합니다.\n\nhttps://developers.popbill.com/fax/java/api#ResendFAX"
 			},
 			"response": []
 		},
@@ -587,7 +587,7 @@
 						"{{ResendFAXMulti_ReceiptNum}}"
 					]
 				},
-				"description": "ㆍ동일한 팩스파일을 다수의 수신자에게 전송하기 위해 팝빌에 접수합니다. (최대 전송파일 개수: 20개) (최대 1,000건)\n\nㆍ발신/수신 정보 미입력시 기존과 동일한 정보로 팩스가 전송되고, 접수일 기준 최대 60일이 경과되지 않는 건만 재전송이 가능합니다.\n\nhttps://docs.popbill.com/fax/java/api#ResendFAX_Multi"
+				"description": "ㆍ동일한 팩스파일을 다수의 수신자에게 전송하기 위해 팝빌에 접수합니다. (최대 전송파일 개수: 20개) (최대 1,000건)\n\nㆍ발신/수신 정보 미입력시 기존과 동일한 정보로 팩스가 전송되고, 접수일 기준 최대 60일이 경과되지 않는 건만 재전송이 가능합니다.\n\nhttps://developers.popbill.com/fax/java/api#ResendFAX_Multi"
 			},
 			"response": []
 		},
@@ -650,7 +650,7 @@
 						"{{ResendFAXRN_ORGRequestNum}}"
 					]
 				},
-				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 팩스 1건을 재전송합니다.\n\nㆍ발신/수신 정보 미입력시 기존과 동일한 정보로 팩스가 전송되고, 접수일 기준 최대 60일이 경과되지 않는 건만 재전송이 가능합니다.\n\nhttps://docs.popbill.com/fax/java/api#ResendFAXRN"
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 팩스 1건을 재전송합니다.\n\nㆍ발신/수신 정보 미입력시 기존과 동일한 정보로 팩스가 전송되고, 접수일 기준 최대 60일이 경과되지 않는 건만 재전송이 가능합니다.\n\nhttps://developers.popbill.com/fax/java/api#ResendFAXRN"
 			},
 			"response": []
 		},
@@ -713,7 +713,7 @@
 						"{{ResendFAXRN_ORGRequestNum}}"
 					]
 				},
-				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 다수건의 팩스를 재전송합니다. (최대 전송파일 개수: 20개) (최대 1,000건)\n\nㆍ발신/수신 정보 미입력시 기존과 동일한 정보로 팩스가 전송되고, 접수일 기준 최대 60일이 경과되지 않는 건만 재전송이 가능합니다.\n\nhttps://docs.popbill.com/fax/java/api#ResendFAXRN_Multi"
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 다수건의 팩스를 재전송합니다. (최대 전송파일 개수: 20개) (최대 1,000건)\n\nㆍ발신/수신 정보 미입력시 기존과 동일한 정보로 팩스가 전송되고, 접수일 기준 최대 60일이 경과되지 않는 건만 재전송이 가능합니다.\n\nhttps://developers.popbill.com/fax/java/api#ResendFAXRN_Multi"
 			},
 			"response": []
 		},
@@ -767,7 +767,7 @@
 						"Cancel"
 					]
 				},
-				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 예약접수된 팩스 전송을 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://docs.popbill.com/fax/java/api#CancelReserve"
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 예약접수된 팩스 전송을 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://developers.popbill.com/fax/java/api#CancelReserve"
 			},
 			"response": []
 		},
@@ -821,7 +821,7 @@
 						"{{requestNum}}"
 					]
 				},
-				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 예약접수된 팩스 전송을 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://docs.popbill.com/fax/java/api#CancelReserveRN"
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 예약접수된 팩스 전송을 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://developers.popbill.com/fax/java/api#CancelReserveRN"
 			},
 			"response": []
 		},
@@ -874,7 +874,7 @@
 						"{{receiptNum}}"
 					]
 				},
-				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetMessages"
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://developers.popbill.com/kakao/java/api#GetMessages"
 			},
 			"response": []
 		},
@@ -928,7 +928,7 @@
 						"{{senderNumber}}"
 					]
 				},
-				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetMessages"
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://developers.popbill.com/kakao/java/api#GetMessages"
 			},
 			"response": []
 		},
@@ -982,7 +982,7 @@
 						"{{requestNum}}"
 					]
 				},
-				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 팩스 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/fax/java/api#GetMessagesRN"
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 팩스 전송상태 및 결과를 확인합니다.\n\nhttps://developers.popbill.com/fax/java/api#GetMessagesRN"
 			},
 			"response": []
 		},
@@ -1108,7 +1108,7 @@
 						}
 					]
 				},
-				"description": "ㆍ검색조건에 해당하는 팩스 전송내역 목록을 조회합니다. (조회기간 단위 : 최대 2개월)\n\n※ 팩스 접수일시로부터 2개월 이내 접수건만 조회할 수 있습니다.\n\nhttps://docs.popbill.com/fax/java/api#Search"
+				"description": "ㆍ검색조건에 해당하는 팩스 전송내역 목록을 조회합니다. (조회기간 단위 : 최대 2개월)\n\n※ 팩스 접수일시로부터 2개월 이내 접수건만 조회할 수 있습니다.\n\nhttps://developers.popbill.com/fax/java/api#Search"
 			},
 			"response": []
 		},
@@ -1164,7 +1164,7 @@
 						}
 					]
 				},
-				"description": "ㆍ팝빌 사이트와 동일한 팩스 전송내역 확인 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/fax/java/api#GetSentListURL"
+				"description": "ㆍ팝빌 사이트와 동일한 팩스 전송내역 확인 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/fax/java/api#GetSentListURL"
 			},
 			"response": []
 		},
@@ -1218,7 +1218,7 @@
 						"{{receiptNum}}"
 					]
 				},
-				"description": "ㆍ팩스 미리보기 팝업 URL을 반환하며, 팩스전송을 위한 TIF 포맷 변환 완료 후 호출 할 수 있습니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/fax/java/api#GetPreviewURL"
+				"description": "ㆍ팩스 미리보기 팝업 URL을 반환하며, 팩스전송을 위한 TIF 포맷 변환 완료 후 호출 할 수 있습니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/fax/java/api#GetPreviewURL"
 			},
 			"response": []
 		},
@@ -1268,7 +1268,7 @@
 						"UnitCost"
 					]
 				},
-				"description": "ㆍ팩스 전송시 과금되는 포인트 단가를 확인합니다.\n\nhttps://docs.popbill.com/fax/java/api#GetUnitCost"
+				"description": "ㆍ팩스 전송시 과금되는 포인트 단가를 확인합니다.\n\nhttps://developers.popbill.com/fax/java/api#GetUnitCost"
 			},
 			"response": []
 		},
@@ -1318,7 +1318,7 @@
 						"ChargeInfo"
 					]
 				},
-				"description": "ㆍ팝빌 팩스 API 서비스 과금정보를 확인합니다.\n\nhttps://docs.popbill.com/fax/java/api#GetChargeInfo"
+				"description": "ㆍ팝빌 팩스 API 서비스 과금정보를 확인합니다.\n\nhttps://developers.popbill.com/fax/java/api#GetChargeInfo"
 			},
 			"response": []
 		}

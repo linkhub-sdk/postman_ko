@@ -199,7 +199,7 @@
 						}
 					]
 				},
-				"description": "ㆍ1건의 예금주성명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#CheckAccountInfo"
+				"description": "ㆍ1건의 예금주성명을 조회합니다.\n\nhttps://developers.popbill.com/accountcheck/java/api#CheckAccountInfo"
 			},
 			"response": []
 		},
@@ -268,7 +268,7 @@
 						}
 					]
 				},
-				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#DepositorCheck"
+				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://developers.popbill.com/accountcheck/java/api#DepositorCheck"
 			},
 			"response": []
 		},
@@ -325,7 +325,7 @@
 						}
 					]
 				},
-				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#DepositorCheck"
+				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://developers.popbill.com/accountcheck/java/api#DepositorCheck"
 			},
 			"response": []
 		},
@@ -382,7 +382,7 @@
 						}
 					]
 				},
-				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#DepositorCheck"
+				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://developers.popbill.com/accountcheck/java/api#DepositorCheck"
 			},
 			"response": []
 		}
