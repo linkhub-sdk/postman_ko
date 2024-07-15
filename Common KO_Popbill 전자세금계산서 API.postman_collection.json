@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "753f6d84-fe0c-492d-85a3-df400a0153a4",
+		"_postman_id": "e6db092a-e4ab-4ab3-abf2-f82afa2c9ff5",
 		"name": "Common KO_Popbill 전자세금계산서 API",
 		"description": "When you call GetToken Request, the token used for Bearer authentication is stored in the variable of Collection Scope.\n\n\nSo, You must always call GetToken to test the API.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -65,8 +65,7 @@
 							"    return enc;",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "c310b043-4bdf-4a54-9cfb-be053fcee17b"
+						"type": "text/javascript"
 					}
 				},
 				{
@@ -79,8 +78,7 @@
 							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "bcfdff78-31c9-4599-83d1-1ac7b316b2e4"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -156,8 +154,7 @@
 							"var invoicerMgtKey = '20210629-01'",
 							"pm.collectionVariables.set(\"CheckMgtKeyinUse_invoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "01af5db8-a240-4e17-8093-4faf6bacc7a7"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -206,8 +203,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "3c66da06-edbc-405e-b198-58d839ea5071"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -573,8 +569,7 @@
 							"",
 							""
 						],
-						"type": "text/javascript",
-						"id": "87c8abf9-e0ac-4989-8f22-fd38cb44b303"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -649,8 +644,7 @@
 							"var submitID = '20210930-01';",
 							"pm.collectionVariables.set(\"GetBulkResult_submitID\", submitID);"
 						],
-						"type": "text/javascript",
-						"id": "f87fc2c9-d8cf-4347-9942-e27e024eb5a6"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -701,8 +695,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "b6d4224f-a01a-4728-b93f-978eb5aeb961"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -762,8 +755,7 @@
 							"var invoicerMgtKey = '20210930-02'",
 							"pm.collectionVariables.set(\"Update_invoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "d8e5e04f-763a-435c-a992-f18045b4d877"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -844,8 +836,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "f9ef987d-5952-44e3-a5cb-a2744dbaed55"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -928,8 +919,7 @@
 							"",
 							""
 						],
-						"type": "text/javascript",
-						"id": "2a841fc6-c29a-4fae-955d-0262f22f707e"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -993,8 +983,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "a634d355-6ede-440b-87ca-b00d68da01aa"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1071,8 +1060,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "aa0acb0c-9c3c-4f7b-be3d-2d7ffab13448"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1152,8 +1140,7 @@
 							"}",
 							""
 						],
-						"type": "text/javascript",
-						"id": "eb933128-96d7-4135-920a-ad901e9e9b98"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1232,8 +1219,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "7ce6a1f3-9652-4f08-b7fe-34b7bf4f6881"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1301,8 +1287,7 @@
 							"pm.collectionVariables.set(\"Delete_invoicerMgtKey\", invoicerMgtKey);",
 							""
 						],
-						"type": "text/javascript",
-						"id": "d727a06e-670b-49d3-ac6e-0e80e5f1b91e"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1381,8 +1366,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "eff41865-c20c-4af9-940c-7749b5009155"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1449,8 +1433,7 @@
 							"var invoicerMgtKey = '20210930-01-97'",
 							"pm.collectionVariables.set(\"GetInfo_invoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "ceac6270-f806-4829-9bc7-29866605cd07"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1507,8 +1490,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "f4df4b41-edd4-4195-a8b4-d14eb86ea7b3"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1569,8 +1551,7 @@
 							"var invoicerMgtKey = '20220201-PB-057';",
 							"pm.collectionVariables.set(\"GetXML_invoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "05dbc616-fc80-411c-aee9-5aa9236cf145"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1630,8 +1611,7 @@
 							"var invoicerMgtKey = '20210930-01-97'",
 							"pm.collectionVariables.set(\"GetDetailInfo_invoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "83fbb833-af37-430e-bfee-60140cdd7c11"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1680,7 +1660,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "aaa3f233-98e2-445c-b431-5b8dd0c30809",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -1909,8 +1888,7 @@
 							"var invoicerMgtKey = '20210930-01-97'",
 							"pm.collectionVariables.set(\"GetLogs_invoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "5d0bfca4-f0ab-4086-9b91-5feac6f69801"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1960,13 +1938,12 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */",
 							"",
-							"// 접근 메뉴 : \"TBOX\" / \"SBOX\" / \"PBOX\" / \"WRITE\" 중 택 1",
-							"// └ TBOX = 임시 문서함, SBOX = 매출 문서함, PBOX = 매입 문서함, WRITE = 매출 문서작성",
+							"// 접근 메뉴 : \"TBOX\" / \"SBOX\" / \"PBOX\" / \"WRITE\" / \"SWBOX\" / \"PWBOX\" 중 택 1",
+							"// └ TBOX = 임시 문서함, SBOX = 매출 문서함, PBOX = 매입 문서함, WRITE = 매출 문서작성, SWBOX = 매출 발행 대기함, PWBOX = 매입 발행 대기함",
 							"var TOGO = 'TBOX'",
 							"pm.collectionVariables.set(\"GetURL_TOGO\", TOGO);"
 						],
-						"type": "text/javascript",
-						"id": "ba5ea36b-e87c-4faa-adda-23f30a775667"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2024,8 +2001,7 @@
 							"var invoicerMgtKey = '20210930-01-97'",
 							"pm.collectionVariables.set(\"GetPopUpURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "14f141b6-ec8a-4c08-b0e1-9e78bb2a329e"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2084,8 +2060,7 @@
 							"var invoicerMgtKey = '20210930-01-97'",
 							"pm.collectionVariables.set(\"GetViewURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "71013ab4-b155-4132-b627-86091e17ba61"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2144,8 +2119,7 @@
 							"var invoicerMgtKey = '20210930-01-97'",
 							"pm.collectionVariables.set(\"GetPrintURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "27b9191b-5144-4d77-9d84-6d05fc0f44f5"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2204,8 +2178,7 @@
 							"var invoicerMgtKey = '20210930-01-97'\r",
 							"pm.collectionVariables.set(\"GetOldPrintURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "ccbba833-4fcc-4d3a-826b-1869b5855aea"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2264,8 +2237,7 @@
 							"var invoicerMgtKey = '20210930-01-97'",
 							"pm.collectionVariables.set(\"GetEPrintURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "77c642da-8d92-4544-9a2a-29fac154c90c"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2328,8 +2300,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "7d91b63d-e713-4296-bbd5-263b3d43c1a7"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2396,8 +2367,7 @@
 							"var invoicerMgtKey = '20210629-02'",
 							"pm.collectionVariables.set(\"GetMailURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "42a9e537-eef6-476e-9f92-f572d464ded3"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2456,8 +2426,7 @@
 							"var invoicerMgtKey = '20210629-02'",
 							"pm.collectionVariables.set(\"GetPDFURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "32cee968-2f3e-4568-8682-f46fc8785aa4"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2513,8 +2482,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "97472d39-b0c7-445d-8dc0-3f8e3053943a"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2568,8 +2536,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "ebe1263f-c39a-4549-a98a-0adacfde0174"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2627,8 +2594,7 @@
 							"pm.collectionVariables.set(\"AttachFile_invoicerMgtKey\", invoicerMgtKey);",
 							""
 						],
-						"type": "text/javascript",
-						"id": "a7b66698-b5f7-40f2-940e-94b2d58e1d73"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2708,8 +2674,7 @@
 							"var fileID = \"3A164E96-08B8-4A5A-B5C9-EA4A0B4ED024.PBF\";",
 							"pm.collectionVariables.set(\"DeleteFile_fileID\", fileID);"
 						],
-						"type": "text/javascript",
-						"id": "e624cfc7-74ff-42c8-9ceb-b786b652cbde"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2785,8 +2750,7 @@
 							"var invoicerMgtKey = '20220328-REGISTER002';",
 							"pm.collectionVariables.set(\"GetFiles_invoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "258085a0-7a56-43d1-8f87-b292c10aaf11"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2852,8 +2816,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "deba1bba-863c-4cb0-979e-68f94baaa926"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -2934,8 +2897,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "ba526eba-1d1e-438b-85d6-87c417ed80ce"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3015,8 +2977,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "7c3bdbb6-0fb2-4ceb-b6c6-648ac81b4d59"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3100,8 +3061,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "68df31a5-c42e-40f6-80ee-9b2450d39c3f"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3186,8 +3146,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "e55fef67-f25e-422c-815e-b6631368e7dd"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3247,8 +3206,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "09a56e2d-e580-46b4-aebf-8467de287be9"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3305,8 +3263,7 @@
 							"var invoicerMgtKey = '20210930-21';",
 							"pm.collectionVariables.set(\"AssignMgtKey_InvoicerMgtKey\", invoicerMgtKey);"
 						],
-						"type": "text/javascript",
-						"id": "153cf7f8-a145-4768-8866-25f3d0184513"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3366,8 +3323,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "b86f0081-c297-4583-bf7b-aa7a758b0c55"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3415,8 +3371,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "0b94a389-7bc7-4082-ae66-3ebd52c148f7"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3474,8 +3429,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.\r",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "028e644e-cac2-441f-a461-a6b31a5c349a"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3523,8 +3477,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "29d7c4ea-1e31-4ce3-8f4d-6c81bfe3ce5b"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3577,8 +3530,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "44c10cfe-743a-4992-9f23-f03c41eb880b"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3631,8 +3583,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "9d5f47cc-6096-4949-82a9-e49403f1ee41"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3682,8 +3633,7 @@
 							"",
 							""
 						],
-						"type": "text/javascript",
-						"id": "4e1ba309-0bea-4d00-a9b6-3ddeaf608000"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3733,8 +3683,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "c6bcd749-0545-4b5a-af80-b77aceab1e01"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3788,8 +3737,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "54796300-a3b4-4bc4-80a3-e13139a03c9e"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -3828,30 +3776,24 @@
 	],
 	"variable": [
 		{
-			"id": "d981d123-b5dd-4b99-ba79-8ccd7a59d695",
 			"key": "API_Session_Token",
 			"value": ""
 		},
 		{
-			"id": "6e220db0-9610-42ee-b172-48dbcc9aa3dd",
 			"key": "AttachFile_invoicerMgtKey",
 			"value": ""
 		},
 		{
-			"id": "acc09c5b-d586-4362-be22-361769ce870e",
 			"key": "GetFiles_invoicerMgtKey",
 			"value": ""
 		},
 		{
-			"id": "5f1b4d94-714b-4e9a-9f8a-4c077a1f83f5",
 			"key": "DeleteFile_fileID",
 			"value": ""
 		},
 		{
-			"id": "e2c054fb-09bc-4055-b618-0097134a8197",
 			"key": "DeleteFile_invoicerMgtKey",
 			"value": ""
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
