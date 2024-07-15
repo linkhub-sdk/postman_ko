@@ -990,19 +990,43 @@
 				"description": "ㆍ포인트 충전에 대한 결제내역 1건을 확인합니다."
 			},
 			"response": []
+		},
+		{
+			"name": "GetRefundableBalance",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{API_Session_Token}}",
+						"type": "default"
+					},
+					{
+						"key": "x-pb-userid",
+						"value": "testkorea",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/RefundPoint",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"RefundPoint"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"variable": [
 		{
 			"key": "API_Session_Token",
-			"value": ""
-		},
-		{
-			"key": "settleCode",
-			"value": ""
-		},
-		{
-			"key": "refundCode",
 			"value": ""
 		}
 	]
