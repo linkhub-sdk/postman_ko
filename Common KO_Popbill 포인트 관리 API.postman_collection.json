@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "497d5fe2-912f-43ca-9ea0-4ce0980b54a0",
+		"_postman_id": "26d91bc0-45f4-46f6-beaf-18acb2967576",
 		"name": "Common KO_Popbill 포인트 관리 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,7 +11,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "adbf5719-c847-4a20-980b-3340a521885d",
 						"exec": [
 							"/*********************************************************************************",
 							" *",
@@ -71,7 +70,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "63f3dd62-c0fa-4ee8-ad32-3fe087652666",
 						"exec": [
 							"pm.collectionVariables.clear();",
 							"",
@@ -152,8 +150,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "d5dfd8f7-07f0-4124-9638-8308282b377c"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -197,7 +194,7 @@
 						"Point"
 					]
 				},
-				"description": "ㆍ연동회원의 잔여포인트를 확인합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#GetBalance"
+				"description": "ㆍ연동회원의 잔여포인트를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetBalance"
 			},
 			"response": []
 		},
@@ -214,8 +211,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "05e0b886-6b4b-4ba4-9ae7-afc054dec1af"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -264,7 +260,7 @@
 						}
 					]
 				},
-				"description": "ㆍ연동회원 포인트 충전을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#GetChargeURL"
+				"description": "ㆍ연동회원 포인트 충전을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetChargeURL"
 			},
 			"response": []
 		},
@@ -281,8 +277,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "63c7b35c-ed28-4d9d-8b11-132f311f2dfa"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -331,7 +326,7 @@
 						}
 					]
 				},
-				"description": "ㆍ연동회원 포인트 결제내역 확인을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#GetPayment"
+				"description": "ㆍ연동회원 포인트 결제내역 확인을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetPayment"
 			},
 			"response": []
 		},
@@ -348,8 +343,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "3c374561-b0c5-4f23-9187-d699670a3f46"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -398,7 +392,7 @@
 						}
 					]
 				},
-				"description": "ㆍ연동회원 포인트 사용내역 확인을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#GetUseHistoryURL"
+				"description": "ㆍ연동회원 포인트 사용내역 확인을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetUseHistoryURL"
 			},
 			"response": []
 		},
@@ -415,8 +409,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "18a7a3e5-790b-4733-8046-8e435794e5c7"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -460,7 +453,7 @@
 						"PartnerPoint"
 					]
 				},
-				"description": "ㆍ파트너의 잔여포인트를 확인합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#GetPartnerBalance"
+				"description": "ㆍ파트너의 잔여포인트를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetPartnerBalance"
 			},
 			"response": []
 		},
@@ -477,8 +470,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "ec597c0c-2e34-4951-aca3-f0f6bad63e5b"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -528,7 +520,7 @@
 						}
 					]
 				},
-				"description": "ㆍ파트너 포인트 충전을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#GetPartnerURL"
+				"description": "ㆍ파트너 포인트 충전을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetPartnerURL"
 			},
 			"response": []
 		},
@@ -538,7 +530,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "6b557afa-f50e-4b78-9c57-aa78be7a2c1d",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -614,7 +605,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "e265759c-28d1-4595-bc27-ddb878d72c1d",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -685,7 +675,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "1ca14e44-5d21-4dcd-9599-2a33a6c0543a",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -746,7 +735,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "43504a79-da35-452e-b93d-ab21a2755046",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -804,7 +792,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "4436b4ab-57d2-44f6-b8ba-b6aab838b4af",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -818,7 +805,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "95462747-9262-4b27-a80f-a1b2c1be8cf3",
 						"exec": [
 							"// 정산코드 콜렉션 변수로 할당.\r",
 							"if(pm.response.code == 200 ) {\r",
@@ -875,7 +861,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "eef8d4d7-3bfd-40db-a06c-da40066c5939",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -890,7 +875,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "193adff3-cd35-4cc0-8f12-b8f68796cd24",
 						"exec": [
 							""
 						],
@@ -937,19 +921,89 @@
 				"description": "ㆍ포인트 충전에 대한 결제내역 1건을 확인합니다."
 			},
 			"response": []
+		},
+		{
+			"name": "GetRefundInfo",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"",
+							"const RefundCode = \"1234501298\";",
+							"pm.collectionVariables.set(\"refundCode\", RefundCode);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"value": "testkorea",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Refund/{{refundCode}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Refund",
+						"{{refundCode}}"
+					],
+					"query": [
+						{
+							"key": null,
+							"value": "",
+							"description": "무통장입금 API 응답으로 반환된 정산코드\nPaymentRequest 의 반환값 중 settleCode 에 해당합니다.",
+							"disabled": true
+						}
+					]
+				},
+				"description": "ㆍ포인트 충전에 대한 결제내역 1건을 확인합니다."
+			},
+			"response": []
 		}
 	],
 	"variable": [
 		{
-			"id": "d0176b37-9dc0-4482-8dd4-c36b68132f85",
 			"key": "API_Session_Token",
 			"value": ""
 		},
 		{
-			"id": "7d6396b3-aa14-428d-b3ed-f25e8caa8307",
 			"key": "settleCode",
 			"value": ""
+		},
+		{
+			"key": "refundCode",
+			"value": ""
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
