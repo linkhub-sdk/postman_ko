@@ -187,7 +187,7 @@
 						}
 					]
 				},
-				"description": "ㆍ카카오톡 채널을 등록하고 내역을 확인하는 카카오톡 채널 관리 페이지 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/kakao/java/api#GetPlusFriendMgtURL"
+				"description": "ㆍ카카오톡 채널을 등록하고 내역을 확인하는 카카오톡 채널 관리 페이지 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetPlusFriendMgtURL"
 			},
 			"response": []
 		},
@@ -235,7 +235,7 @@
 						"ListPlusFriendID"
 					]
 				},
-				"description": "ㆍ팝빌에 등록한 연동회원의 카카오톡 채널 목록을 확인합니다.\n\nhttps://developers.popbill.com/kakao/java/api#ListPlusFriendID"
+				"description": "ㆍ팝빌에 등록한 연동회원의 카카오톡 채널 목록을 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#ListPlusFriendID"
 			},
 			"response": []
 		},
@@ -289,7 +289,7 @@
 						}
 					]
 				},
-				"description": "ㆍ발신번호를 등록하고 내역을 확인하는 카카오톡 발신번호 관리 페이지 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/kakao/java/api#GetSenderNumberMgtURL"
+				"description": "ㆍ발신번호를 등록하고 내역을 확인하는 카카오톡 발신번호 관리 페이지 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetSenderNumberMgtURL"
 			},
 			"response": []
 		},
@@ -337,7 +337,7 @@
 						"SenderNumber"
 					]
 				},
-				"description": "ㆍ팝빌에 등록한 연동회원의 카카오톡 발신번호 목록을 확인합니다.\n\nhttps://developers.popbill.com/kakao/java/api#GetSenderNumberList"
+				"description": "ㆍ팝빌에 등록한 연동회원의 카카오톡 발신번호 목록을 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetSenderNumberList"
 			},
 			"response": []
 		},
@@ -391,7 +391,7 @@
 						}
 					]
 				},
-				"description": "ㆍ알림톡 템플릿을 신청하고 승인심사 결과를 확인하며 등록 내역을 확인하는 알림톡 템플릿 관리 페이지 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/kakao/java/api#GetATSTemplateMgtURL"
+				"description": "ㆍ알림톡 템플릿을 신청하고 승인심사 결과를 확인하며 등록 내역을 확인하는 알림톡 템플릿 관리 페이지 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetATSTemplateMgtURL"
 			},
 			"response": []
 		},
@@ -444,7 +444,7 @@
 						"{{templateCode}}"
 					]
 				},
-				"description": "ㆍ승인된 알림톡 템플릿 정보를 확인합니다.\n\nhttps://developers.popbill.com/kakao/java/api#GetATSTemplate"
+				"description": "ㆍ승인된 알림톡 템플릿 정보를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetATSTemplate"
 			},
 			"response": []
 		},
@@ -492,7 +492,7 @@
 						"ListATSTemplate"
 					]
 				},
-				"description": "ㆍ승인된 알림톡 템플릿 목록을 확인합니다.\n\nhttps://developers.popbill.com/kakao/java/api#ListATSTemplate"
+				"description": "ㆍ승인된 알림톡 템플릿 목록을 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#ListATSTemplate"
 			},
 			"response": []
 		},
@@ -529,7 +529,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\r\n* 전송 정보\r\n* ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"021080000365\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"테스트 내용\",\r\n    \"altContent\" : \"대체문자 내용\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n     \"btns\" : [\r\n        {\r\n            \"n\" : \"앱버튼\",\r\n            \"t\" : \"AL\",\r\n            \"u1\" : \"fb://test\",\r\n            \"u2\" : \"fb://test\"\r\n        }\r\n    ],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }  \r\n    ]\r\n}",
+					"raw": "/*\r\n* 전송 정보\r\n* ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"024070000289\",\r\n    \"snd\" : \"1600-9854\",\r\n    \"content\" : \"테스트 내용\",\r\n    \"altContent\" : \"대체문자 내용\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"20250101120000\",\r\n    \"requestNum\" : \"\",\r\n     \"btns\" : [\r\n        {\r\n            \"n\" : \"앱버튼\",\r\n            \"t\" : \"AL\",\r\n            \"u1\" : \"fb://test\",\r\n            \"u2\" : \"fb://test\"\r\n        }\r\n    ],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }  \r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -549,7 +549,7 @@
 						"ATS"
 					]
 				},
-				"description": "ㆍ승인된 템플릿의 내용을 작성하여 1건의 알림톡 전송을 팝빌에 접수합니다.\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://developers.popbill.com/kakao/java/api#SendATS_one"
+				"description": "ㆍ승인된 템플릿의 내용을 작성하여 1건의 알림톡 전송을 팝빌에 접수합니다.\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendATS_one"
 			},
 			"response": []
 		},
@@ -606,7 +606,7 @@
 						"ATS"
 					]
 				},
-				"description": "ㆍ승인된 템플릿의 내용을 작성하여 다수건의 알림톡 전송을 팝빌에 접수하며, 수신자 별로 개별 내용을 전송합니다. (최대 1,000건)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://developers.popbill.com/kakao/java/api#SendATS_multi"
+				"description": "ㆍ승인된 템플릿의 내용을 작성하여 다수건의 알림톡 전송을 팝빌에 접수하며, 수신자 별로 개별 내용을 전송합니다. (최대 1,000건)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendATS_multi"
 			},
 			"response": []
 		},
@@ -662,7 +662,7 @@
 						"ATS"
 					]
 				},
-				"description": "ㆍ승인된 템플릿 내용을 작성하여 다수건의 알림톡 전송을 팝빌에 접수하며, 모든 수신자에게 동일 내용을 전송합니다. (최대 1,000건)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://developers.popbill.com/kakao/java/api#SendATS_same"
+				"description": "ㆍ승인된 템플릿 내용을 작성하여 다수건의 알림톡 전송을 팝빌에 접수하며, 모든 수신자에게 동일 내용을 전송합니다. (최대 1,000건)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendATS_same"
 			},
 			"response": []
 		},
@@ -726,7 +726,7 @@
 						}
 					]
 				},
-				"description": "ㆍ텍스트로 구성된 1건의 친구톡 전송을 팝빌에 접수합니다.\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://developers.popbill.com/kakao/java/api#SendFTS_one"
+				"description": "ㆍ텍스트로 구성된 1건의 친구톡 전송을 팝빌에 접수합니다.\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendFTS_one"
 			},
 			"response": []
 		},
@@ -783,7 +783,7 @@
 						"FTS"
 					]
 				},
-				"description": "ㆍ텍스트로 구성된 다수건의 친구톡 전송을 팝빌에 접수하며, 수신자 별로 개별 내용을 전송합니다. (최대 1,000건)\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://developers.popbill.com/kakao/java/api#SendFTS_multi"
+				"description": "ㆍ텍스트로 구성된 다수건의 친구톡 전송을 팝빌에 접수하며, 수신자 별로 개별 내용을 전송합니다. (최대 1,000건)\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendFTS_multi"
 			},
 			"response": []
 		},
@@ -840,7 +840,7 @@
 						"ATS"
 					]
 				},
-				"description": "ㆍ텍스트로 구성된 다수건의 친구톡 전송을 팝빌에 접수하며, 모든 수신자에게 동일 내용을 전송합니다. (최대 1,000건)\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://developers.popbill.com/kakao/java/api#SendFTS_same"
+				"description": "ㆍ텍스트로 구성된 다수건의 친구톡 전송을 팝빌에 접수하며, 모든 수신자에게 동일 내용을 전송합니다. (최대 1,000건)\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendFTS_same"
 			},
 			"response": []
 		},
@@ -960,7 +960,7 @@
 						}
 					]
 				},
-				"description": "ㆍ이미지가 첨부된 1건의 친구톡 전송을 팝빌에 접수합니다.\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\n※ 대체문자의 경우, 포토문자(MMS) 형식은 지원하고 있지 않습니다.\n\nhttps://developers.popbill.com/kakao/java/api#SendFMS_one"
+				"description": "ㆍ이미지가 첨부된 1건의 친구톡 전송을 팝빌에 접수합니다.\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\n※ 대체문자의 경우, 포토문자(MMS) 형식은 지원하고 있지 않습니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendFMS_one"
 			},
 			"response": []
 		},
@@ -1082,7 +1082,7 @@
 						}
 					]
 				},
-				"description": "ㆍ이미지가 첨부된 다수건의 친구톡 전송을 팝빌에 접수하며, 수신자 별로 개별 내용을 전송합니다. (최대 1,000건)\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\n※ 대체문자의 경우, 포토문자(MMS) 형식은 지원하고 있지 않습니다.\n\nhttps://developers.popbill.com/kakao/java/api#SendFMS_multi"
+				"description": "ㆍ이미지가 첨부된 다수건의 친구톡 전송을 팝빌에 접수하며, 수신자 별로 개별 내용을 전송합니다. (최대 1,000건)\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\n※ 대체문자의 경우, 포토문자(MMS) 형식은 지원하고 있지 않습니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendFMS_multi"
 			},
 			"response": []
 		},
@@ -1204,7 +1204,7 @@
 						}
 					]
 				},
-				"description": "ㆍ이미지가 첨부된 다수건의 친구톡 전송을 팝빌에 접수하며, 모든 수신자에게 동일 내용을 전송합니다. (최대 1,000건)\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\n※ 대체문자의 경우, 포토문자(MMS) 형식은 지원하고 있지 않습니다.\n\nhttps://developers.popbill.com/kakao/java/api#SendFMS_same"
+				"description": "ㆍ이미지가 첨부된 다수건의 친구톡 전송을 팝빌에 접수하며, 모든 수신자에게 동일 내용을 전송합니다. (최대 1,000건)\n\n※ 친구톡의 경우 야간 전송은 제한됩니다. (20:00 ~ 익일 08:00)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\n※ 대체문자의 경우, 포토문자(MMS) 형식은 지원하고 있지 않습니다.\n\nhttps://docs.popbill.com/kakao/java/api#SendFMS_same"
 			},
 			"response": []
 		},
@@ -1257,7 +1257,7 @@
 						"Cancel"
 					]
 				},
-				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 예약접수된 카카오톡을 전송 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://developers.popbill.com/kakao/java/api#CancelReserve"
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 예약접수된 카카오톡을 전송 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://docs.popbill.com/kakao/java/api#CancelReserve"
 			},
 			"response": []
 		},
@@ -1310,7 +1310,131 @@
 						"{{requestNum}}"
 					]
 				},
-				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 예약접수된 카카오톡을 전송 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://developers.popbill.com/kakao/java/api#CancelReserveRN"
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 예약접수된 카카오톡을 전송 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://docs.popbill.com/kakao/java/api#CancelReserveRN"
+			},
+			"response": []
+		},
+		{
+			"name": "CancelReservebyRCV",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 카카오톡 전송 접수시 팝빌로부터 반환받은 접수번호",
+							"var receiptNum = '20211117_TEST001'",
+							"pm.collectionVariables.set(\"receiptNum\", receiptNum);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"receiveNum\": \"010-1234-1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/{{receiptNum}}/Cancel",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						"{{receiptNum}}",
+						"Cancel"
+					]
+				},
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 예약접수된 카카오톡을 전송 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://docs.popbill.com/kakao/java/api#CancelReserveRN"
+			},
+			"response": []
+		},
+		{
+			"name": "CancelReserveRNbyRCV",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 카카오톡 예약전송 접수시 파트너가 할당한 요청번호",
+							"var requestNum = 'test_01203010'",
+							"pm.collectionVariables.set(\"requestNum\", requestNum);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"receiveNum\": \"010-1234-1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/KakaoTalk/Cancel/{{requestNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"KakaoTalk",
+						"Cancel",
+						"{{requestNum}}"
+					]
+				},
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 예약접수된 카카오톡을 전송 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://docs.popbill.com/kakao/java/api#CancelReserveRN"
 			},
 			"response": []
 		},
@@ -1362,7 +1486,7 @@
 						"{{receiptNum}}"
 					]
 				},
-				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://developers.popbill.com/kakao/java/api#GetMessages"
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetMessages"
 			},
 			"response": []
 		},
@@ -1415,7 +1539,7 @@
 						"{{senderNumber}}"
 					]
 				},
-				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://developers.popbill.com/kakao/java/api#GetMessages"
+				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetMessages"
 			},
 			"response": []
 		},
@@ -1468,7 +1592,7 @@
 						"{{requestNum}}"
 					]
 				},
-				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://developers.popbill.com/kakao/java/api#GetMessagesRN"
+				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetMessagesRN"
 			},
 			"response": []
 		},
@@ -1603,7 +1727,7 @@
 						}
 					]
 				},
-				"description": "ㆍ검색조건에 해당하는 카카오톡 전송내역을 조회합니다. (조회기간 단위 : 최대 2개월)\n\n※ 카카오톡 접수일시로부터 6개월 이내 접수건만 조회할 수 있습니다.\n\nhttps://developers.popbill.com/kakao/java/api#Search"
+				"description": "ㆍ검색조건에 해당하는 카카오톡 전송내역을 조회합니다. (조회기간 단위 : 최대 2개월)\n\n※ 카카오톡 접수일시로부터 6개월 이내 접수건만 조회할 수 있습니다.\n\nhttps://docs.popbill.com/kakao/java/api#Search"
 			},
 			"response": []
 		},
@@ -1658,7 +1782,7 @@
 						}
 					]
 				},
-				"description": "ㆍ팝빌 사이트와 동일한 카카오톡 전송내역을 확인하는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/kakao/java/api#GetSentListURL"
+				"description": "ㆍ팝빌 사이트와 동일한 카카오톡 전송내역을 확인하는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetSentListURL"
 			},
 			"response": []
 		},
@@ -1717,7 +1841,7 @@
 						}
 					]
 				},
-				"description": "ㆍ카카오톡 전송시 과금되는 포인트 단가를 확인합니다.\n\nhttps://developers.popbill.com/kakao/java/api#GetUnitCost"
+				"description": "ㆍ카카오톡 전송시 과금되는 포인트 단가를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetUnitCost"
 			},
 			"response": []
 		},
@@ -1776,7 +1900,7 @@
 						}
 					]
 				},
-				"description": "ㆍ팝빌 카카오톡 API 서비스 과금정보를 확인합니다.\n\nhttps://developers.popbill.com/kakao/java/api#GetChargeInfo"
+				"description": "ㆍ팝빌 카카오톡 API 서비스 과금정보를 확인합니다.\n\nhttps://docs.popbill.com/kakao/java/api#GetChargeInfo"
 			},
 			"response": []
 		}
@@ -1787,47 +1911,11 @@
 			"value": ""
 		},
 		{
-			"key": "senderNumber",
+			"key": "requestNum",
 			"value": ""
 		},
 		{
-			"key": "Search_EDate",
-			"value": ""
-		},
-		{
-			"key": "Search_Item",
-			"value": ""
-		},
-		{
-			"key": "Search_Order",
-			"value": ""
-		},
-		{
-			"key": "Search_Page",
-			"value": ""
-		},
-		{
-			"key": "Search_PerPage",
-			"value": ""
-		},
-		{
-			"key": "Search_QString",
-			"value": ""
-		},
-		{
-			"key": "Search_ReserveYN",
-			"value": ""
-		},
-		{
-			"key": "Search_SDate",
-			"value": ""
-		},
-		{
-			"key": "Search_SenderYN",
-			"value": ""
-		},
-		{
-			"key": "Search_State",
+			"key": "receiptNum",
 			"value": ""
 		}
 	]
