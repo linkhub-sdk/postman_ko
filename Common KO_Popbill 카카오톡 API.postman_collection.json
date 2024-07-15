@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "095de720-1239-452f-af9f-ce6d950c33f8",
+		"_postman_id": "50a74518-0dfb-4374-b024-b311c025170c",
 		"name": "Common KO_Popbill 카카오톡 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -64,8 +64,7 @@
 							"    return enc;",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "c082fd2f-1ec4-451b-9bef-24b40fee3816"
+						"type": "text/javascript"
 					}
 				},
 				{
@@ -78,8 +77,7 @@
 							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "1f28c4fe-7e87-43ac-b5fd-0e1d8934f704"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -151,8 +149,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "64386cbc-64d1-4922-bd16-cef37fcf6808"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -206,8 +203,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "65ad259c-0b25-4c0c-8763-6ee223d3abfc"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -255,8 +251,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "eeac533c-a343-4d54-8ebc-2105c4588a65"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -310,8 +305,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "ec51b44c-6956-431c-87d2-f0e4a53c3a87"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -359,8 +353,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "392b5439-a86d-4bce-8a63-4f61dee328f3"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -418,8 +411,7 @@
 							"var templateCode = '021110000417'",
 							"pm.collectionVariables.set(\"templateCode\", templateCode);"
 						],
-						"type": "text/javascript",
-						"id": "eeb8d936-d23c-4afc-9435-51cac9c6957a"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -468,8 +460,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "940a96e2-b1d1-4c68-a7b7-a013ee44a0ea"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -518,8 +509,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "a3afb56a-e5d8-46fc-8f8d-b4fce0d85d02"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -539,7 +529,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"021080000365\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"테스트 내용\",\r\n    \"altContent\" : \"대체문자 내용\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n     \"btns\" : [\r\n        {\r\n            \"n\" : \"앱버튼\",\r\n            \"t\" : \"AL\",\r\n            \"u1\" : \"fb://test\",\r\n            \"u2\" : \"fb://test\"\r\n        }\r\n    ],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }  \r\n    ]\r\n}",
+					"raw": "/*\r\n* 전송 정보\r\n* ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"021080000365\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"테스트 내용\",\r\n    \"altContent\" : \"대체문자 내용\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n     \"btns\" : [\r\n        {\r\n            \"n\" : \"앱버튼\",\r\n            \"t\" : \"AL\",\r\n            \"u1\" : \"fb://test\",\r\n            \"u2\" : \"fb://test\"\r\n        }\r\n    ],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }  \r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -576,8 +566,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "3efc3707-55d2-402f-a919-197d4437dc81"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -597,7 +586,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"021030000716\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"\",\r\n    \"altContent\" : \"\",\r\n    \"altSendType\" : \"\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량메시지\",\r\n            \"altmsg\" : \"\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량 메시지\",\r\n            \"altmsg\" : \"대체문자\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        }  \r\n    ]\r\n}",
+					"raw": "/*\r\n* 전송 정보\r\n* ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"021030000716\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"\",\r\n    \"altContent\" : \"\",\r\n    \"altSendType\" : \"\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량메시지\",\r\n            \"altmsg\" : \"\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량 메시지\",\r\n            \"altmsg\" : \"대체문자\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        }  \r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -633,8 +622,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "e7b4cb48-a9cb-418e-a462-cfa6a7ad3841"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -654,7 +642,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"021100000290\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"테스트\\n 회원명 : #{회원명}\\n 가입일자 : #{가입일자}\",\r\n    \"altContent\" : \"TEST\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"동보1\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"동보2\"\r\n        }  \r\n    ]\r\n}",
+					"raw": "/*\r\n* 전송 정보\r\n* ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"021100000290\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"테스트\\n 회원명 : #{회원명}\\n 가입일자 : #{가입일자}\",\r\n    \"altContent\" : \"TEST\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"동보1\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"동보2\"\r\n        }  \r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -691,8 +679,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "22583ec5-bba6-4fa6-a991-3bab558e8c7a"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -712,7 +699,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"plusFriendID\" : \"@링크허브\",\r\n    \"snd\" : \"010-111-111\",\r\n    \"content\" : \"친구톡내용\",\r\n    \"altContent\" : \"대체문자 내용\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"20211118210000\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [\r\n        {\r\n            \"n\" : \"앱버튼\",\r\n            \"t\" : \"AL\",\r\n            \"u1\" : \"fb://test\",\r\n            \"u2\" : \"fb://test\"\r\n        }\r\n    ],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"01011122\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }\r\n    ]\r\n}",
+					"raw": "/*\r\n* 전송 정보\r\n* ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수\r\n*/\r\n\r\n{\r\n    \"plusFriendID\" : \"@링크허브\",\r\n    \"snd\" : \"010-111-111\",\r\n    \"content\" : \"친구톡내용\",\r\n    \"altContent\" : \"대체문자 내용\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"20211118210000\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [\r\n        {\r\n            \"n\" : \"앱버튼\",\r\n            \"t\" : \"AL\",\r\n            \"u1\" : \"fb://test\",\r\n            \"u2\" : \"fb://test\"\r\n        }\r\n    ],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"01011122\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -756,8 +743,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "b3f0865f-32ad-459e-8aea-ce854c805c5d"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -777,7 +763,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"plusFriendID\" : \"@팝빌\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"\",\r\n    \"altContent\" : \"TEST\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량 내용\",\r\n            \"altmsg\" : \"123\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        },\r\n         {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량내용\",\r\n            \"altmsg\" : \"123\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        }  \r\n    ]\r\n}",
+					"raw": "/*\r\n* 전송 정보\r\n* ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수\r\n*/\r\n\r\n{\r\n    \"plusFriendID\" : \"@팝빌\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"\",\r\n    \"altContent\" : \"TEST\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량 내용\",\r\n            \"altmsg\" : \"123\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        },\r\n         {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량내용\",\r\n            \"altmsg\" : \"123\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        }  \r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -814,8 +800,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "c0c2622b-2d93-4762-a905-676e2bfe9a1e"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -835,7 +820,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"021100000290\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"친구톡 동보내용\",\r\n    \"altContent\" : \"TEST\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }  \r\n    ]\r\n}",
+					"raw": "/*\r\n* 전송 정보\r\n* ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"021100000290\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"친구톡 동보내용\",\r\n    \"altContent\" : \"TEST\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }  \r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -884,7 +869,7 @@
 							"",
 							"var RequestBody = {",
 							"    plusFriendID : \"@링크허브\",         // 팝빌에 등록한 카카오톡 검색용 아이디",
-							"    snd : \"070-4304-2991\",             // 발신번호",
+							"    snd : \"070-4304-2991\",             // 발신번호 ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수",
 							"    content : \"친구톡내용\",             // 친구톡 내용",
 							"    altContent : \"대체문자 내용\",       // 대체문자 내용",
 							"    altSendType : \"A\",                 // 대체문자 유형 : null / \"C\" / \"A\" 중 택 1",
@@ -917,8 +902,7 @@
 							"",
 							""
 						],
-						"type": "text/javascript",
-						"id": "1363e7a7-42da-4ae1-8b56-5d005d01a742"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1017,7 +1001,7 @@
 							"",
 							"var RequestBody = {",
 							"    plusFriendID : \"@링크허브\",         // 팝빌에 등록한 카카오톡 검색용 아이디",
-							"    snd : \"070-4304-2991\",             // 발신번호",
+							"    snd : \"070-4304-2991\",             // 발신번호, ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수",
 							"    altSendType : \"A\",                 // 대체문자 유형 : null / \"C\" / \"A\" 중 택 1",
 							"    adsYN : false,                     // 광고성 메시지 여부 true - 광고, false - 일반",
 							"    sndDT : \"\",                        // 전송 예약 일시 (형식 : yyyyMMddHHmmss)",
@@ -1040,8 +1024,7 @@
 							"",
 							""
 						],
-						"type": "text/javascript",
-						"id": "bdc45fcb-4c38-489c-bc6a-1b9bd5d1bc51"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1130,7 +1113,7 @@
 							"",
 							"var RequestBody = {",
 							"    plusFriendID : \"@링크허브\",         // 팝빌에 등록한 카카오톡 검색용 아이디",
-							"    snd : \"070-4304-2991\",             // 발신번호",
+							"    snd : \"070-4304-2991\",             // 발신번호 ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수",
 							"    content : \"동보전송 친구톡내용\",     // 친구톡 내용",
 							"    altContent : \"대체문자 내용\",       // 대체문자 내용",
 							"    altSendType : \"A\",                 // 대체문자 유형 : null / \"C\" / \"A\" 중 택 1",
@@ -1163,8 +1146,7 @@
 							"",
 							""
 						],
-						"type": "text/javascript",
-						"id": "5a25db62-76d6-4a4b-946d-c9efd2312d9b"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1242,8 +1224,7 @@
 							"var receiptNum = '021111721565100001'",
 							"pm.collectionVariables.set(\"receiptNum\", receiptNum);"
 						],
-						"type": "text/javascript",
-						"id": "07a7a032-6982-4900-931e-08a4fe186309"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1296,8 +1277,7 @@
 							"var requestNum = '20211117_TEST001'",
 							"pm.collectionVariables.set(\"requestNum\", requestNum);"
 						],
-						"type": "text/javascript",
-						"id": "7500a6ef-6040-404f-850a-8bd9b91055f0"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1350,8 +1330,7 @@
 							"var receiptNum = '021102612144100001'",
 							"pm.collectionVariables.set(\"receiptNum\", receiptNum);"
 						],
-						"type": "text/javascript",
-						"id": "4823c28a-169b-4273-997f-c52a769402bf"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1393,7 +1372,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "f739db14-0126-4501-ade6-e9e8bd2f1657",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -1457,8 +1435,7 @@
 							"var requestNum = 'RequstNum-FTS001'",
 							"pm.collectionVariables.set(\"requestNum\", requestNum);"
 						],
-						"type": "text/javascript",
-						"id": "b1eb6424-828a-4c26-94e8-6abbc1f2af83"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1501,7 +1478,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "534327b6-82ac-4b0b-85d0-0c92bc077b81",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -1644,8 +1620,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "ef71b47b-064d-40aa-bc1b-8c1a7c57a5f2"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1704,8 +1679,7 @@
 							"var type = 'ATS'",
 							"pm.collectionVariables.set(\"GetUniCost_Type\", type);"
 						],
-						"type": "text/javascript",
-						"id": "6de4cd79-40d7-40d7-8c9d-d073c74d4fbd"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1764,8 +1738,7 @@
 							"var type = 'ATS'",
 							"pm.collectionVariables.set(\"GetChargeInfo_Type\", type);"
 						],
-						"type": "text/javascript",
-						"id": "abcc9ffa-a51d-439f-a147-245c7cea5107"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1810,65 +1783,52 @@
 	],
 	"variable": [
 		{
-			"id": "235f71df-3864-4827-95b7-60516efe154a",
 			"key": "API_Session_Token",
 			"value": ""
 		},
 		{
-			"id": "aba7a3fe-d53e-499c-a3c4-108fe12e0f7e",
 			"key": "senderNumber",
 			"value": ""
 		},
 		{
-			"id": "43278cb0-a5d4-4b0c-b0ae-e406ec43fd30",
 			"key": "Search_EDate",
 			"value": ""
 		},
 		{
-			"id": "2282f185-efe3-4619-b133-62093cd101db",
 			"key": "Search_Item",
 			"value": ""
 		},
 		{
-			"id": "8fe6716a-fa90-4c46-8f87-65d5630e6b7a",
 			"key": "Search_Order",
 			"value": ""
 		},
 		{
-			"id": "f862d511-803a-43bd-a2ec-ecbc4c037894",
 			"key": "Search_Page",
 			"value": ""
 		},
 		{
-			"id": "f63961ce-518c-45de-bda5-7dd500e417e2",
 			"key": "Search_PerPage",
 			"value": ""
 		},
 		{
-			"id": "1597faef-7cff-4b5a-9915-70dc39f74640",
 			"key": "Search_QString",
 			"value": ""
 		},
 		{
-			"id": "beaacce4-3886-43e4-92e2-55ae5a506035",
 			"key": "Search_ReserveYN",
 			"value": ""
 		},
 		{
-			"id": "f02500ed-5e7e-4748-8ec4-5f6f23ce4c99",
 			"key": "Search_SDate",
 			"value": ""
 		},
 		{
-			"id": "a9d9b314-8d5c-4d13-b2d5-df8c6f36b382",
 			"key": "Search_SenderYN",
 			"value": ""
 		},
 		{
-			"id": "9667ea44-cebe-4318-a1fd-5e235a4d1659",
 			"key": "Search_State",
 			"value": ""
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
