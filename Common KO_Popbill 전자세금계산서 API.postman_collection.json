@@ -715,7 +715,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\n*\n* 세금계산서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://docs.popbill.com/en/taxinvoice/java/api#Taxinvoice\n*\n*/\n\n{\n    // 거래명세서 동시작성 여부 \n    // └ true = 사용 / false = 미사용(default) \n    \"writeSpecification\" : false,\n\n    // 작성일자\n    // - 형식 : yyyyMMdd\n    \"writeDate\": \"20210730\",\n\n    // 과금방향\n    // - \"정과금\" / \"역과금\" 중 택 1\n    \"chargeDirection\": \"정과금\",\n\n    // 발행형태\n    // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1\n    \"issueType\": \"정발행\",\n\n    // 과세형태\n    // - \"과세\" / \"영세\" / \"면세\" 중 택 1\n    \"taxType\": \"과세\",\n\n    // 공급자 사업자번호\n    // └ 하이픈('-') 제외 10자리 숫자값\n    \"invoicerCorpNum\": \"1234567890\",\n\n    // 공급자 문서번호\n    // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoicerMgtKey\": \"20210930-CER002\",\n\n    // 공급자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoicerTaxRegID\": \"\",\n\n    // 공급자 상호\t\n    \"invoicerCorpName\": \"Seller Company Name\",\n\n    // 공급자 대표자 성명\t\n    \"invoicerCEOName\": \"Seller Company's CEO Name\",\n\n    // 공급자 주소\n    \"invoicerAddr\": \"Seller Address\",\n\n    // 공급자 업태\n    \"invoicerBizClass\": \"Seller Business Class\",\n\n    // 공급자 종목\n    \"invoicerBizType\": \"Seller Business Type\",\n\n    // 공급자 담당자 성명\n    \"invoicerContactName\": \"Business Contractor Name\",\n\n    // 공급자 담당자 연락처\n    \"invoicerTEL\": \"070-4304-2991\",\n\n    // 공급자 담당자 휴대폰\n    \"invoicerHP\": \"010-111-222\",\n\n    // 공급자 담당자 이메일\n    \"invoicerEmail\": \"seller@test.com\",\n\n    // 공급자 문자전송 여부\n    // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoicerSMSSendYN\": false,\n\n    // 공급받는자 구분\n    // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1\n    \"invoiceeType\": \"사업자\",\n\n    // 공급받는자 사업자번호\t\n    // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)\n    // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)\n    // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)\n    \"invoiceeCorpNum\": \"8888888888\",\n\n    // 공급받는자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoiceeTaxRegID\": \"\",\n\n    // 공급받는자 상호\n    \"invoiceeCorpName\": \"Buyer Corp Name\",\n\n    // 공급받는자 대표자 성명\n    \"invoiceeCEOName\": \"Buyer Corp CEO Name\",\n\n    // 공급받는자 주소\n    \"invoiceeAddr\": \"Buyer Address\",\n\n    // \t공급받는자 종목\n    \"invoiceeBizClass\": \"Buyer Business Class\",\n\n    // 공급받는자 업태\n    \"invoiceeBizType\": \"Buyer Business Type\",\n\n    // 공급받는자 주) 담당자 성명\n    \"invoiceeContactName1\": \"Buyer Contacter Name\",\n\n    // 공급받는자 주) 담당자 연락처\n    \"invoiceeTEL1\": \"070-111-222\",\n\n    // 공급받는자 주) 담당자 휴대폰\t\n    \"invoiceeHP1\": \"010-222-333\",\n\n    // 공급받는자 주) 담당자 이메일\n    \"invoiceeEmail1\": \"test@test.com\",\n\n    // 공급받는자 문자전송 여부\n    // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoiceeSMSSendYN\": null,\n\n\n    // 공급가액 합계\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"supplyCostTotal\": \"200000\",\n\n    // 세액 합계\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"taxTotal\": \"20000\",\n\n    // 합계금액\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"totalAmount\": \"220000\",\n\n    // \t수정 사유코드\n    // └ 수정세금계산서 작성시 필수\n    // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1\n    // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,\n    // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급\n    \"modifyCode\": null,\n\n    // 영수/청구\n    // - \"영수\" / \"청구\" / \"없음\" 중 택 1\n    \"purposeType\": \"영수\",\n\n    // 일련번호\n    \"serialNum\": \"\",\n\n    // 현금\n    \"cash\": \"\",\n\n    // 수표\n    \"chkBill\": \"\",\n\n    // 외상\n    \"credit\": \"\",\n\n    // 어음\n    \"note\": \"\",\n    \n    // 비고1\n    // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력\n    \"remark1\": \"remark 1\",\n\n    // 비고2\n    \"remark2\": \"remark 2\",\n\n    // 비고3\n    \"remark3\": \"remark 3\",\n\n    // 사업자등록증 첨부\n    // - true : 첨부, false : 미첨부(Default)     \n    \"businessLicenseYN\": false,\n\n    // 통장사본 첨부\t\n    // └ true : 첨부, false : 미첨부(Default)\n    \"bankBookYN\": false,\n\n    // [리스트] 거래 물품 상세 정보 (최대 99건)\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ],\n\n    // [리스트] 공급받는자 담당자 정보 (최대 5명)\n    \"addContactList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 5)\n            \"serialNum\": 1,\n\n            // 이메일\n            \"email\": \"test@test.com\",\n\n            // 담당자 성명\n            \"contactName\": \"Buyer Contacter Addtion 01\"\n        },\n        {\n            \"serialNum\": 2,\n\n            \"email\": \"test@test.com\",\n\n            \"contactName\": \"Buyer Contacter Addtion 02\"\n        }\n    ]\n}",
+					"raw": "/*\n*\n* 세금계산서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://docs.popbill.com/en/taxinvoice/java/api#Taxinvoice\n*\n*/\n\n{\n    // 거래명세서 동시작성 여부 \n    // └ true = 사용 / false = 미사용(default) \n    \"writeSpecification\" : false,\n\n    // 작성일자\n    // - 형식 : yyyyMMdd\n    \"writeDate\": \"20240717\",\n\n    // 과금방향\n    // - \"정과금\" / \"역과금\" 중 택 1\n    \"chargeDirection\": \"정과금\",\n\n    // 발행형태\n    // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1\n    \"issueType\": \"정발행\",\n\n    // 과세형태\n    // - \"과세\" / \"영세\" / \"면세\" 중 택 1\n    \"taxType\": \"과세\",\n\n    // 공급자 사업자번호\n    // └ 하이픈('-') 제외 10자리 숫자값\n    \"invoicerCorpNum\": \"1234567890\",\n\n    // 공급자 문서번호\n    // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoicerMgtKey\": \"20210930-CEdR002\",\n\n    // 공급자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoicerTaxRegID\": \"\",\n\n    // 공급자 상호\t\n    \"invoicerCorpName\": \"Seller Company Name\",\n\n    // 공급자 대표자 성명\t\n    \"invoicerCEOName\": \"Seller Company's CEO Name\",\n\n    // 공급자 주소\n    \"invoicerAddr\": \"Seller Address\",\n\n    // 공급자 업태\n    \"invoicerBizClass\": \"Seller Business Class\",\n\n    // 공급자 종목\n    \"invoicerBizType\": \"Seller Business Type\",\n\n    // 공급자 담당자 성명\n    \"invoicerContactName\": \"Business Contractor Name\",\n\n    // 공급자 담당자 연락처\n    \"invoicerTEL\": \"070-4304-2991\",\n\n    // 공급자 담당자 휴대폰\n    \"invoicerHP\": \"010-111-222\",\n\n    // 공급자 담당자 이메일\n    \"invoicerEmail\": \"seller@test.com\",\n\n    // 공급자 문자전송 여부\n    // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoicerSMSSendYN\": false,\n\n    // 공급받는자 구분\n    // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1\n    \"invoiceeType\": \"사업자\",\n\n    // 공급받는자 사업자번호\t\n    // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)\n    // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)\n    // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)\n    \"invoiceeCorpNum\": \"8888888888\",\n\n    // 공급받는자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoiceeTaxRegID\": \"\",\n\n    // 공급받는자 상호\n    \"invoiceeCorpName\": \"Buyer Corp Name\",\n\n    // 공급받는자 대표자 성명\n    \"invoiceeCEOName\": \"Buyer Corp CEO Name\",\n\n    // 공급받는자 주소\n    \"invoiceeAddr\": \"Buyer Address\",\n\n    // \t공급받는자 종목\n    \"invoiceeBizClass\": \"Buyer Business Class\",\n\n    // 공급받는자 업태\n    \"invoiceeBizType\": \"Buyer Business Type\",\n\n    // 공급받는자 주) 담당자 성명\n    \"invoiceeContactName1\": \"Buyer Contacter Name\",\n\n    // 공급받는자 주) 담당자 연락처\n    \"invoiceeTEL1\": \"070-111-222\",\n\n    // 공급받는자 주) 담당자 휴대폰\t\n    \"invoiceeHP1\": \"010-222-333\",\n\n    // 공급받는자 주) 담당자 이메일\n    \"invoiceeEmail1\": \"test@test.com\",\n\n    // 공급받는자 문자전송 여부\n    // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoiceeSMSSendYN\": null,\n\n\n    // 공급가액 합계\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"supplyCostTotal\": \"200000\",\n\n    // 세액 합계\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"taxTotal\": \"20000\",\n\n    // 합계금액\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"totalAmount\": \"220000\",\n\n    // \t수정 사유코드\n    // └ 수정세금계산서 작성시 필수\n    // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1\n    // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,\n    // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급\n    \"modifyCode\": null,\n\n    // 영수/청구\n    // - \"영수\" / \"청구\" / \"없음\" 중 택 1\n    \"purposeType\": \"영수\",\n\n    // 일련번호\n    \"serialNum\": \"\",\n\n    // 현금\n    \"cash\": \"\",\n\n    // 수표\n    \"chkBill\": \"\",\n\n    // 외상\n    \"credit\": \"\",\n\n    // 어음\n    \"note\": \"\",\n    \n    // 비고1\n    // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력\n    \"remark1\": \"remark 1\",\n\n    // 비고2\n    \"remark2\": \"remark 2\",\n\n    // 비고3\n    \"remark3\": \"remark 3\",\n\n    // 사업자등록증 첨부\n    // - true : 첨부, false : 미첨부(Default)     \n    \"businessLicenseYN\": false,\n\n    // 통장사본 첨부\t\n    // └ true : 첨부, false : 미첨부(Default)\n    \"bankBookYN\": false,\n\n    // [리스트] 거래 물품 상세 정보 (최대 99건)\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ],\n\n    // [리스트] 공급받는자 담당자 정보 (최대 5명)\n    \"addContactList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 5)\n            \"serialNum\": 1,\n\n            // 이메일\n            \"email\": \"test@test.com\",\n\n            // 담당자 성명\n            \"contactName\": \"Buyer Contacter Addtion 01\"\n        },\n        {\n            \"serialNum\": 2,\n\n            \"email\": \"test@test.com\",\n\n            \"contactName\": \"Buyer Contacter Addtion 02\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1998,7 +1998,7 @@
 							" */",
 							"",
 							"// 확인할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-01-97'",
+							"var invoicerMgtKey = '20210930-CEdR002'",
 							"pm.collectionVariables.set(\"GetPopUpURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -2501,7 +2501,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://popbill-test.linkhub.co.kr/?TG=LOGIN",
+					"raw": "https://popbill-test.linkhub.co.kr/Member?TG=LOGIN",
 					"protocol": "https",
 					"host": [
 						"popbill-test",
@@ -2510,7 +2510,7 @@
 						"kr"
 					],
 					"path": [
-						""
+						"Member"
 					],
 					"query": [
 						{
@@ -2555,7 +2555,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://popbill-test.linkhub.co.kr/?TG=SEAL",
+					"raw": "https://popbill-test.linkhub.co.kr/Member?TG=SEAL",
 					"protocol": "https",
 					"host": [
 						"popbill-test",
@@ -2564,7 +2564,7 @@
 						"kr"
 					],
 					"path": [
-						""
+						"Member"
 					],
 					"query": [
 						{
@@ -2590,9 +2590,11 @@
 							" */",
 							"",
 							"// 파일을 첨부할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20220328-REGISTER002';",
+							"var invoicerMgtKey = '20210930-CEdR002';",
 							"pm.collectionVariables.set(\"AttachFile_invoicerMgtKey\", invoicerMgtKey);",
-							""
+							"",
+							"var DisplayName = \"displayName.jpg\";",
+							"pm.collectionVariables.set(\"DisplayName\", DisplayName);"
 						],
 						"type": "text/javascript"
 					}
@@ -2610,6 +2612,11 @@
 						"key": "x-pb-userid",
 						"type": "text",
 						"value": "testkorea"
+					},
+					{
+						"key": "Content-Disposition",
+						"value": "form-data; name=\"Filedata\"; filename=\"{{DisplayName}}\";",
+						"type": "default"
 					}
 				],
 				"body": {
@@ -2618,7 +2625,7 @@
 						{
 							"key": "Filedata",
 							"type": "file",
-							"src": "/C:/Users/wjkim/Documents/test.txt"
+							"src": "/Users/hyeseon/Documents/Temp/ScreenShots/스크린샷 2024-03-12 17.22.14.png"
 						}
 					],
 					"options": {
@@ -3496,7 +3503,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://popbill-test.linkhub.co.kr/?TG=CERT",
+					"raw": "https://popbill-test.linkhub.co.kr/Member?TG=CERT",
 					"protocol": "https",
 					"host": [
 						"popbill-test",
@@ -3505,7 +3512,7 @@
 						"kr"
 					],
 					"path": [
-						""
+						"Member"
 					],
 					"query": [
 						{
@@ -3777,22 +3784,6 @@
 	"variable": [
 		{
 			"key": "API_Session_Token",
-			"value": ""
-		},
-		{
-			"key": "AttachFile_invoicerMgtKey",
-			"value": ""
-		},
-		{
-			"key": "GetFiles_invoicerMgtKey",
-			"value": ""
-		},
-		{
-			"key": "DeleteFile_fileID",
-			"value": ""
-		},
-		{
-			"key": "DeleteFile_invoicerMgtKey",
 			"value": ""
 		}
 	]

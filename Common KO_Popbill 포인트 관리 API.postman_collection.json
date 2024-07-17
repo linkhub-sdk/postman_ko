@@ -242,7 +242,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://popbill-test.linkhub.co.kr/?TG=CHRG",
+					"raw": "https://popbill-test.linkhub.co.kr/Member?TG=CHRG",
 					"protocol": "https",
 					"host": [
 						"popbill-test",
@@ -251,7 +251,7 @@
 						"kr"
 					],
 					"path": [
-						""
+						"Member"
 					],
 					"query": [
 						{
@@ -308,7 +308,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://popbill-test.linkhub.co.kr/?TG=PAYMENT",
+					"raw": "https://popbill-test.linkhub.co.kr/Member?TG=PAYMENT",
 					"protocol": "https",
 					"host": [
 						"popbill-test",
@@ -317,7 +317,7 @@
 						"kr"
 					],
 					"path": [
-						""
+						"Member"
 					],
 					"query": [
 						{
@@ -374,7 +374,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://popbill-test.linkhub.co.kr/?TG=USEHISTORY",
+					"raw": "https://popbill-test.linkhub.co.kr/Member?TG=USEHISTORY",
 					"protocol": "https",
 					"host": [
 						"popbill-test",
@@ -383,7 +383,7 @@
 						"kr"
 					],
 					"path": [
-						""
+						"Member"
 					],
 					"query": [
 						{
