@@ -586,7 +586,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\r\n* 전송 정보\r\n* ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"021030000716\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"\",\r\n    \"altContent\" : \"\",\r\n    \"altSendType\" : \"\",\r\n    \"sndDT\" : \"\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량메시지\",\r\n            \"altmsg\" : \"\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111222\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량 메시지\",\r\n            \"altmsg\" : \"대체문자\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        }  \r\n    ]\r\n}",
+					"raw": "/*\r\n* 전송 정보\r\n* ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수\r\n*/\r\n\r\n{\r\n    \"templateCode\" : \"024070000289\",\r\n    \"snd\" : \"070-111-222\",\r\n    \"content\" : \"#{이름} #{이름} #{이름} #{이름} #{이름} #{이름} #{이름} #{이름} #{이름} #{이름} #{이름} #{이름} #{이름} #{이름} test\",\r\n    \"altContent\" : \"\",\r\n    \"altSendType\" : \"\",\r\n    \"sndDT\" : \"20241212121212\",\r\n    \"requestNum\" : \"test_12341234\",\r\n    \"btns\" : [],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"01011112222\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량메시지\",\r\n            \"altmsg\" : \"\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        },\r\n        {\r\n            \"rcv\" : \"010111224\",\r\n            \"rcvnm\" : \"테스트\",\r\n            \"msg\" : \"대량 메시지\",\r\n            \"altmsg\" : \"대체문자\",\r\n            \"btns\" : [],\r\n            \"interOPRefKey\" : \"\"\r\n        }  \r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1327,7 +1327,7 @@
 							" */",
 							"",
 							"// 카카오톡 전송 접수시 팝빌로부터 반환받은 접수번호",
-							"var receiptNum = '20211117_TEST001'",
+							"var receiptNum = '024071716243100001'",
 							"pm.collectionVariables.set(\"receiptNum\", receiptNum);"
 						],
 						"type": "text/javascript"
@@ -1350,7 +1350,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"receiveNum\": \"010-1234-1234\"\n}",
+					"raw": "{\n  \"receiveNum\": \"01011112222\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1389,7 +1389,7 @@
 							" */",
 							"",
 							"// 카카오톡 예약전송 접수시 파트너가 할당한 요청번호",
-							"var requestNum = 'test_01203010'",
+							"var requestNum = 'test_12341234'",
 							"pm.collectionVariables.set(\"requestNum\", requestNum);"
 						],
 						"type": "text/javascript"
@@ -1412,7 +1412,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"receiveNum\": \"010-1234-1234\"\n}",
+					"raw": "{\n  \"receiveNum\": \"01011112222\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1911,11 +1911,11 @@
 			"value": ""
 		},
 		{
-			"key": "requestNum",
+			"key": "receiptNum",
 			"value": ""
 		},
 		{
-			"key": "receiptNum",
+			"key": "requestNum",
 			"value": ""
 		}
 	]
