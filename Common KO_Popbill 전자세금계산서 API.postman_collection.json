@@ -3201,55 +3201,6 @@
 			"response": []
 		},
 		{
-			"name": "GetEmailPublicKeys",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							"/**",
-							" * API 호출전 GetToken을 실행해야 합니다.",
-							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
-							" */",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "{{API_Session_Token}}"
-					},
-					{
-						"key": "x-pb-userid",
-						"type": "text",
-						"value": "testkorea"
-					}
-				],
-				"url": {
-					"raw": "https://popbill-test.linkhub.co.kr/Taxinvoice/EmailPublicKeys",
-					"protocol": "https",
-					"host": [
-						"popbill-test",
-						"linkhub",
-						"co",
-						"kr"
-					],
-					"path": [
-						"Taxinvoice",
-						"EmailPublicKeys"
-					]
-				},
-				"description": "ㆍ전자세금계산서 유통사업자의 메일 목록을 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetEmailPublicKeys"
-			},
-			"response": []
-		},
-		{
 			"name": "AssignMgtKey",
 			"event": [
 				{
