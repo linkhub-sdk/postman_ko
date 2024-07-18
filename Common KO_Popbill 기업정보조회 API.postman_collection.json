@@ -193,7 +193,7 @@
 						}
 					]
 				},
-				"description": "ㆍ사업자번호 1건에 대한 휴폐업정보를 확인합니다.\n\nhttps://developers.popbill.com/closedown/java/api#CheckCorpNum"
+				"description": "ㆍ사업자번호 1건에 대한 기업정보를 확인합니다.\n\nhttps://developers.popbill.com/reference/bizinfocheck/java/api/check#CheckBizInfo"
 			},
 			"response": []
 		},
@@ -242,7 +242,7 @@
 						"UnitCost"
 					]
 				},
-				"description": "ㆍ휴폐업 조회시 과금되는 포인트 단가를 확인합니다.\n\nhttps://developers.popbill.com/closedown/java/api#GetUnitCost"
+				"description": "ㆍ기업정보 조회시 과금되는 포인트 단가를 확인합니다.\n\nhttps://developers.popbill.com/reference/bizinfocheck/java/api/point#GetUnitCost"
 			},
 			"response": []
 		},
@@ -291,7 +291,7 @@
 						"ChargeInfo"
 					]
 				},
-				"description": "ㆍ팝빌 휴폐업조회 API 서비스 과금정보를 확인합니다.\n\nhttps://developers.popbill.com/closedown/java/api#GetChargeInfo"
+				"description": "ㆍ팝빌 기업정보조회 API 서비스 과금정보를 확인합니다.\n\nhttps://developers.popbill.com/reference/bizinfocheck/java/api/point#GetChargeInfo"
 			},
 			"response": []
 		}

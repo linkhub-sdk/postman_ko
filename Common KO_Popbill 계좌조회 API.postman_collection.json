@@ -230,7 +230,7 @@
 						}
 					]
 				},
-				"description": "ㆍ계좌조회 서비스를 이용할 계좌를 팝빌에 등록합니다..\n\nhttps://docs.popbill.com/easyfinbank/java/api#RegistBankAccount"
+				"description": "ㆍ계좌조회 서비스를 이용할 계좌를 팝빌에 등록합니다..\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/manage#RegistBankAccount"
 			},
 			"response": []
 		},
@@ -325,7 +325,7 @@
 						"Update"
 					]
 				},
-				"description": "ㆍ팝빌에 등록된 계좌정보를 수정합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#UpdateBankAccount"
+				"description": "ㆍ팝빌에 등록된 계좌정보를 수정합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/manage#UpdateBankAccount"
 			},
 			"response": []
 		},
@@ -384,7 +384,7 @@
 						"{{GetBankAccountInfo_AccountNumber}}"
 					]
 				},
-				"description": "ㆍ팝빌에 등록된 계좌 정보를 확인합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#GetBankAccountInfo"
+				"description": "ㆍ팝빌에 등록된 계좌 정보를 확인합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/manage#GetBankAccountInfo"
 			},
 			"response": []
 		},
@@ -434,7 +434,7 @@
 						"ListBankAccount"
 					]
 				},
-				"description": "ㆍ팝빌에 등록된 계좌 정보를 확인합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#ListBankAccount"
+				"description": "ㆍ팝빌에 등록된 계좌 정보를 확인합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/manage#ListBankAccount"
 			},
 			"response": []
 		},
@@ -489,7 +489,7 @@
 						}
 					]
 				},
-				"description": "ㆍ계좌 등록, 수정 및 삭제할 수 있는 계좌 관리 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#GetBankAccountMgtURL"
+				"description": "ㆍ계좌 등록, 수정 및 삭제할 수 있는 계좌 관리 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/manage#GetBankAccountMgtURL"
 			},
 			"response": []
 		},
@@ -554,7 +554,7 @@
 						}
 					]
 				},
-				"description": "ㆍ계좌의 정액제 해지를 요청합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#CloseBankAccount"
+				"description": "ㆍ계좌의 정액제 해지를 요청합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/manage#CloseBankAccount"
 			},
 			"response": []
 		},
@@ -615,7 +615,7 @@
 						}
 					]
 				},
-				"description": "ㆍ신청한 정액제 해지요청을 취소합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#RevokeCloseBankAccount"
+				"description": "ㆍ신청한 정액제 해지요청을 취소합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/manage#RevokeCloseBankAccount"
 			},
 			"response": []
 		},
@@ -689,7 +689,7 @@
 						"Delete"
 					]
 				},
-				"description": "ㆍ등록된 계좌를 삭제합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#DeleteBankAccount"
+				"description": "ㆍ등록된 계좌를 삭제합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/manage#DeleteBankAccount"
 			},
 			"response": []
 		},
@@ -781,7 +781,7 @@
 						}
 					]
 				},
-				"description": "ㆍ계좌 거래내역을 확인하기 위해 팝빌에 수집요청을 합니다. (조회기간 단위 : 최대 1개월)\n\n※ 조회일로부터 최대 3개월 이전 내역까지 조회할 수 있습니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#RequestJob"
+				"description": "ㆍ계좌 거래내역을 확인하기 위해 팝빌에 수집요청을 합니다. (조회기간 단위 : 최대 1개월)\n\n※ 조회일로부터 최대 3개월 이전 내역까지 조회할 수 있습니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/job#RequestJob"
 			},
 			"response": []
 		},
@@ -848,7 +848,7 @@
 						"State"
 					]
 				},
-				"description": "ㆍ[RequestJob - 수집 요청]를 통해 반환 받은 작업아이디의 상태를 확인합니다.\n\nㆍ[Search – 거래 내역 조회] 또는 [Summary – 거래 요약 정보 조회] 를 사용하기 전에 수집 작업의 진행 상태, 수집 작업의 성공 여부를 확인해야 합니다.\n\n※ 작업 상태(jobState) = 3(완료), 수집 결과 코드(errorCode) = 1(수집성공)이면 거래 내역 조회 또는 거래 요약 정보 조회를 해야합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#GetJobState"
+				"description": "ㆍ[RequestJob - 수집 요청]를 통해 반환 받은 작업아이디의 상태를 확인합니다.\n\nㆍ[Search – 거래 내역 조회] 또는 [Summary – 거래 요약 정보 조회] 를 사용하기 전에 수집 작업의 진행 상태, 수집 작업의 성공 여부를 확인해야 합니다.\n\n※ 작업 상태(jobState) = 3(완료), 수집 결과 코드(errorCode) = 1(수집성공)이면 거래 내역 조회 또는 거래 요약 정보 조회를 해야합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/job#GetJobState"
 			},
 			"response": []
 		},
@@ -910,7 +910,7 @@
 						"JobList"
 					]
 				},
-				"description": "ㆍ[RequestJob - 수집 요청]를 통해 반환 받은 작업아이디의 목록을 확인합니다.\n\nㆍ수집 요청 후 1시간이 경과한 수집 요청건은 상태정보가 반환되지 않습니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#ListActiveJob"
+				"description": "ㆍ[RequestJob - 수집 요청]를 통해 반환 받은 작업아이디의 목록을 확인합니다.\n\nㆍ수집 요청 후 1시간이 경과한 수집 요청건은 상태정보가 반환되지 않습니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/job#ListActiveJob"
 			},
 			"response": []
 		},
@@ -1011,7 +1011,7 @@
 						}
 					]
 				},
-				"description": "ㆍ[GetJobState – 수집 상태 확인]를 통해 상태 정보가 확인된 작업아이디를 활용하여 계좌 거래 내역을 조회합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#EFBankSearch"
+				"description": "ㆍ[GetJobState – 수집 상태 확인]를 통해 상태 정보가 확인된 작업아이디를 활용하여 계좌 거래 내역을 조회합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/search#Search"
 			},
 			"response": []
 		},
@@ -1087,7 +1087,7 @@
 						}
 					]
 				},
-				"description": "ㆍ[GetJobState – 수집 상태 확인]를 통해 상태 정보가 확인된 작업아이디를 활용하여 계좌 거래내역의 요약 정보를 조회합니다.\n\n※ 요약 정보는 입·출 금액 합계, 입·출 거래 건수를 가리킵니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#Summary"
+				"description": "ㆍ[GetJobState – 수집 상태 확인]를 통해 상태 정보가 확인된 작업아이디를 활용하여 계좌 거래내역의 요약 정보를 조회합니다.\n\n※ 요약 정보는 입·출 금액 합계, 입·출 거래 건수를 가리킵니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/search#Summary"
 			},
 			"response": []
 		},
@@ -1164,7 +1164,7 @@
 						}
 					]
 				},
-				"description": "ㆍ한 건의 거래 내역에 메모를 저장합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#SaveMemo"
+				"description": "ㆍ한 건의 거래 내역에 메모를 저장합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/search#SaveMemo"
 			},
 			"response": []
 		},
@@ -1219,7 +1219,7 @@
 						}
 					]
 				},
-				"description": "ㆍ계좌조회 정액제 서비스 신청 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/easyfinbank/java/api#GetFlatRatePopUpURL"
+				"description": "ㆍ계좌조회 정액제 서비스 신청 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/point#GetFlatRatePopUpURL"
 			},
 			"response": []
 		},
@@ -1278,7 +1278,7 @@
 						"{{GetFlatRateState_AccountNumber}}"
 					]
 				},
-				"description": "ㆍ홈택스연동 정액제 서비스 상태를 확인합니다.\n\nhttps://docs.popbill.com/httaxinvoice/java/api#GetFlatRatePopUpURL"
+				"description": "ㆍ계좌조회 정액제 서비스 상태를 확인합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/point#GetFlatRateState"
 			},
 			"response": []
 		}

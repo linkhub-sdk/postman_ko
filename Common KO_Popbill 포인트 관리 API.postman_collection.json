@@ -194,7 +194,7 @@
 						"Point"
 					]
 				},
-				"description": "ㆍ연동회원의 잔여포인트를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetBalance"
+				"description": "ㆍ연동회원의 잔여포인트를 확인합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/point#GetBalance"
 			},
 			"response": []
 		},
@@ -260,7 +260,7 @@
 						}
 					]
 				},
-				"description": "ㆍ연동회원 포인트 충전을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetChargeURL"
+				"description": "ㆍ연동회원 포인트 충전을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/point#GetChargeURL"
 			},
 			"response": []
 		},
@@ -326,7 +326,7 @@
 						}
 					]
 				},
-				"description": "ㆍ연동회원 포인트 결제내역 확인을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetPayment"
+				"description": "ㆍ연동회원 포인트 결제내역 확인을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/point#GetPaymentURL"
 			},
 			"response": []
 		},
@@ -392,7 +392,7 @@
 						}
 					]
 				},
-				"description": "ㆍ연동회원 포인트 사용내역 확인을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetUseHistoryURL"
+				"description": "ㆍ연동회원 포인트 사용내역 확인을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/point#GetUseHistoryURL"
 			},
 			"response": []
 		},
@@ -453,7 +453,7 @@
 						"PartnerPoint"
 					]
 				},
-				"description": "ㆍ파트너의 잔여포인트를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetPartnerBalance"
+				"description": "ㆍ파트너의 잔여포인트를 확인합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/point#GetPartnerBalance"
 			},
 			"response": []
 		},
@@ -520,7 +520,7 @@
 						}
 					]
 				},
-				"description": "ㆍ파트너 포인트 충전을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetPartnerURL"
+				"description": "ㆍ파트너 포인트 충전을 위한 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/point#GetPartnerURL"
 			},
 			"response": []
 		},

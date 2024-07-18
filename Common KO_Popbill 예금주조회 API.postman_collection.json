@@ -196,12 +196,12 @@
 						}
 					]
 				},
-				"description": "ㆍ1건의 예금주성명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#CheckAccountInfo"
+				"description": "ㆍ1건의 예금주성명을 조회합니다.\n\nhttps://developers.popbill.com/reference/accountcheck/java/api/check#CheckAccountInfo"
 			},
 			"response": []
 		},
 		{
-			"name": "DepositorCheck",
+			"name": "CheckDepositorInfo",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -264,7 +264,7 @@
 						}
 					]
 				},
-				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#DepositorCheck"
+				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://developers.popbill.com/reference/accountcheck/java/api/check#CheckDepositorInfo"
 			},
 			"response": []
 		},
@@ -320,12 +320,12 @@
 						}
 					]
 				},
-				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#DepositorCheck"
+				"description": "ㆍ예금주 조회시 과금되는 포인트 단가를 확인합니다.\n\nhttps://developers.popbill.com/reference/accountcheck/java/api/point#GetUnitCost"
 			},
 			"response": []
 		},
 		{
-			"name": "ChargeInfo",
+			"name": "GetChargeInfo",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -376,7 +376,7 @@
 						}
 					]
 				},
-				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#DepositorCheck"
+				"description": "ㆍ팝빌 예금주조회 API 서비스 과금정보를 확인합니다.\n\nhttps://developers.popbill.com/reference/accountcheck/java/api/point#GetChargeInfo"
 			},
 			"response": []
 		}
