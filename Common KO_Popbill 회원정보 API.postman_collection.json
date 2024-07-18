@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a94dac5e-0edd-4aee-b9d7-80c8bbe5f399",
+		"_postman_id": "8971957d-7889-438c-8667-05ca9015ec96",
 		"name": "Common KO_Popbill 회원정보 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -24,7 +24,7 @@
 							"var SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I='; //ex. 'CAuU7dpL4viqfoT6G+HJjqWzHhg3hRDD5sKIkp7Yqwc='",
 							"",
 							"/*",
-							" * 아래는 HMAC Message Digest 를 구성하는 코드입니다.",
+							" * 아래는 HMAC Message Digest 를 생성하는 코드입니다.",
 							" */",
 							"",
 							"// access_id 는 사용자의 사업자번호 입니다. (10자리 숫자('-' 제외))",
@@ -63,8 +63,7 @@
 							"    return enc;",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "671bc322-9acb-4d09-8cb8-0fef9c0beda7"
+						"type": "text/javascript"
 					}
 				},
 				{
@@ -77,8 +76,7 @@
 							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "d11c94d0-f243-4bf4-9ccd-f3aeebbf0e82"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -158,8 +156,7 @@
 							"var linkID = 'TESTER'",
 							"pm.collectionVariables.set(\"CheckIsMember_LinkID\", linkID);"
 						],
-						"type": "text/javascript",
-						"id": "58c12828-f584-4783-ac3e-2bc11ca575cf"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -200,7 +197,7 @@
 						}
 					]
 				},
-				"description": "ㆍ사업자번호를 조회하여 연동회원 가입여부를 확인합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#CheckIsMember"
+				"description": "ㆍ사업자번호를 조회하여 연동회원 가입여부를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#CheckIsMember"
 			},
 			"response": []
 		},
@@ -221,8 +218,7 @@
 							"pm.collectionVariables.set(\"CheckIsMember_UserID\", userID);",
 							""
 						],
-						"type": "text/javascript",
-						"id": "62bf9530-2ab1-4ea1-92e9-92ed3d8bce30"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -259,7 +255,7 @@
 						}
 					]
 				},
-				"description": "ㆍ사용하고자 하는 아이디의 중복여부를 확인합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#CheckID"
+				"description": "ㆍ사용하고자 하는 아이디의 중복여부를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#CheckID"
 			},
 			"response": []
 		},
@@ -269,7 +265,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "9ea13984-64c1-4720-bb46-4107ec7ecdbf",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -340,7 +335,7 @@
 						"Join"
 					]
 				},
-				"description": "ㆍ사용자를 연동회원으로 가입처리합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#JoinMember"
+				"description": "ㆍ사용자를 연동회원으로 가입처리합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#JoinMember"
 			},
 			"response": []
 		},
@@ -357,8 +352,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "6ac8d988-eab6-4bee-8e19-148ee08622f5"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -389,7 +383,7 @@
 						"CorpInfo"
 					]
 				},
-				"description": "ㆍ연동회원의 회사정보를 확인합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#GetCorpInfo"
+				"description": "ㆍ연동회원의 회사정보를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetCorpInfo"
 			},
 			"response": []
 		},
@@ -422,8 +416,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "3731e8da-8c68-4f32-8931-875cb2984aa4"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -451,19 +444,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://popbill-test.linkhub.co.kr/CorpInfo",
-					"protocol": "https",
+					"raw": "{{API_URL}}/CorpInfo",
 					"host": [
-						"popbill-test",
-						"linkhub",
-						"co",
-						"kr"
+						"{{API_URL}}"
 					],
 					"path": [
 						"CorpInfo"
 					]
 				},
-				"description": "ㆍ연동회원의 회사정보를 수정합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#UpdateCorpInfo"
+				"description": "ㆍ연동회원의 회사정보를 수정합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#UpdateCorpInfo"
 			},
 			"response": []
 		},
@@ -473,7 +462,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "4fc62a73-2ccf-4f1f-af50-62865c7ff880",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -539,7 +527,7 @@
 						"New"
 					]
 				},
-				"description": "ㆍ연동회원 사업자번호에 담당자(팝빌 로그인 계정)를 추가합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#RegistContact"
+				"description": "ㆍ연동회원 사업자번호에 담당자(팝빌 로그인 계정)를 추가합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#RegistContact"
 			},
 			"response": []
 		},
@@ -568,8 +556,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "fb306b9a-a9f7-4e46-97bc-d691800cc662"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -609,7 +596,7 @@
 						"Contact"
 					]
 				},
-				"description": "ㆍ연동회원의 회사정보를 확인합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#GetCorpInfo"
+				"description": "ㆍ연동회원의 회사정보를 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#GetCorpInfo"
 			},
 			"response": []
 		},
@@ -626,8 +613,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "0bd285b2-3521-4f0c-9f61-a27270aaa6fa"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -658,7 +644,7 @@
 						"IDs"
 					]
 				},
-				"description": "ㆍ연동회원 사업자번호에 등록된 담당자(팝빌 로그인 계정) 목록을 확인합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#ListContact"
+				"description": "ㆍ연동회원 사업자번호에 등록된 담당자(팝빌 로그인 계정) 목록을 확인합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#ListContact"
 			},
 			"response": []
 		},
@@ -668,7 +654,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "f807ab71-7dbe-4fc6-ae9e-86a6ab8216ff",
 						"exec": [
 							"/**",
 							" * API 호출전 GetToken을 실행해야 합니다.",
@@ -732,7 +717,7 @@
 						"IDs"
 					]
 				},
-				"description": "ㆍ연동회원 사업자번호에 등록된 담당자(팝빌 로그인 계정) 정보를 수정합니다.\n\nhttps://developers.popbill.com/taxinvoice/java/api#UpdateContact"
+				"description": "ㆍ연동회원 사업자번호에 등록된 담당자(팝빌 로그인 계정) 정보를 수정합니다.\n\nhttps://docs.popbill.com/taxinvoice/java/api#UpdateContact"
 			},
 			"response": []
 		},
@@ -747,6 +732,16 @@
 							" * API 호출전 GetToken을 실행해야 합니다.",
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 발급된 인증 토큰 삭제",
+							"pm.collectionVariables.unset(\"API_Session_Token\")"
 						],
 						"type": "text/javascript"
 					}
@@ -795,15 +790,8 @@
 	],
 	"variable": [
 		{
-			"id": "90d6c0e2-6aac-4663-93af-6767028fa8f1",
 			"key": "API_Session_Token",
 			"value": ""
-		},
-		{
-			"id": "b1def4a7-2527-4fc9-8c33-34d0cf826887",
-			"key": "GetContactInfo_RequestBody",
-			"value": ""
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "41968c63-7b33-48a6-877a-5d4907ee207f",
+		"_postman_id": "423bd459-d865-4f1b-b997-1c2ba36780d1",
 		"name": "Common KO_Popbill 홈택스 연동 현금영수증 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -24,7 +24,7 @@
 							"var SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I='; //ex. 'CAuU7dpL4viqfoT6G+HJjqWzHhg3hRDD5sKIkp7Yqwc='",
 							"",
 							"/*",
-							" * 아래는 HMAC Message Digest 를 구성하는 코드입니다.",
+							" * 아래는 HMAC Message Digest 를 생성하는 코드입니다.",
 							" */",
 							"",
 							"// access_id 는 사용자의 사업자번호 입니다. (10자리 숫자('-' 제외))",
@@ -64,8 +64,7 @@
 							"    return enc;",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "a283042c-32ac-43a8-ae38-74a7a847ad22"
+						"type": "text/javascript"
 					}
 				},
 				{
@@ -78,8 +77,7 @@
 							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "c27dddf4-df98-406b-80bd-b64c3ec018a4"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -159,8 +157,7 @@
 							"var EDate = '20211201';",
 							"pm.collectionVariables.set(\"RequestJob_EDate\", EDate);"
 						],
-						"type": "text/javascript",
-						"id": "c1cc0fef-0169-4033-96e4-290cea4ce1ed"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -213,7 +210,7 @@
 						}
 					]
 				},
-				"description": "ㆍ홈택스에 신고된 현금영수증 매입/매출 내역 수집을 팝빌에 요청합니다. (조회기간 단위 : 최대 3개월)\n\nhttps://developers.popbill.com/htcashbill/java/api#RequestJob"
+				"description": "ㆍ홈택스에 신고된 현금영수증 매입/매출 내역 수집을 팝빌에 요청합니다. (조회기간 단위 : 최대 3개월)\n\nhttps://docs.popbill.com/htcashbill/java/api#RequestJob"
 			},
 			"response": []
 		},
@@ -234,8 +231,7 @@
 							"pm.collectionVariables.set(\"GetJobState_JobID\", jobID);",
 							""
 						],
-						"type": "text/javascript",
-						"id": "a1e4dc4a-23fc-441e-86e9-33b5f8acf2f4"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -281,7 +277,7 @@
 						"State"
 					]
 				},
-				"description": "ㆍ함수 [RequestJob – 수집 요청]를 통해 반환 받은 작업 아이디의 상태를 확인합니다.\n\nㆍ[Search – 수집 결과 조회] 또는 [Summary – 수집결과 요약정보 조회]를 사용하기 전에 수집 작업의 진행 상태, 수집 작업의 성공 여부를 확인해야 합니다.\n\nhttps://developers.popbill.com/htcashbill/java/api#GetJobState"
+				"description": "ㆍ함수 [RequestJob – 수집 요청]를 통해 반환 받은 작업 아이디의 상태를 확인합니다.\n\nㆍ[Search – 수집 결과 조회] 또는 [Summary – 수집결과 요약정보 조회]를 사용하기 전에 수집 작업의 진행 상태, 수집 작업의 성공 여부를 확인해야 합니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#GetJobState"
 			},
 			"response": []
 		},
@@ -298,8 +294,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "d945685a-28b3-4fa1-8d27-f5ee19f4db11"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -344,7 +339,7 @@
 						"JobList"
 					]
 				},
-				"description": "ㆍ현금영수증 매입/매출 내역 수집요청에 대한 상태 목록을 확인합니다.\n\nㆍ수집 요청 후 1시간이 경과한 수집 요청건은 상태정보가 반환되지 않습니다.\n\nhttps://developers.popbill.com/htcashbill/java/api#ListActiveJob"
+				"description": "ㆍ현금영수증 매입/매출 내역 수집요청에 대한 상태 목록을 확인합니다.\n\nㆍ수집 요청 후 1시간이 경과한 수집 요청건은 상태정보가 반환되지 않습니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#ListActiveJob"
 			},
 			"response": []
 		},
@@ -390,8 +385,7 @@
 							"",
 							""
 						],
-						"type": "text/javascript",
-						"id": "ce51914a-aec3-482e-8b69-0288ba117730"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -446,7 +440,7 @@
 						}
 					]
 				},
-				"description": "ㆍ[GetJobState – 수집 상태 확인]를 통해 상태 정보 확인된 작업아이디를 활용하여 현금영수증 매입/매출 내역을 조회합니다.\n\nhttps://developers.popbill.com/htcashbill/java/api#Search"
+				"description": "ㆍ[GetJobState – 수집 상태 확인]를 통해 상태 정보 확인된 작업아이디를 활용하여 현금영수증 매입/매출 내역을 조회합니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#Search"
 			},
 			"response": []
 		},
@@ -477,8 +471,7 @@
 							"var TradeType = ['N', 'C'];",
 							"pm.collectionVariables.set(\"Summary_TradeType\", TradeType.join(','));"
 						],
-						"type": "text/javascript",
-						"id": "c8127e88-2b74-42bd-8fe6-7335d3ac041b"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -522,7 +515,7 @@
 						}
 					]
 				},
-				"description": "ㆍ함수 [GetJobState – 수집 상태 확인]를 통해 상태 정보가 확인된 작업아이디를 활용하여 수집된 현금영수증 매입/매출 내역의 요약 정보를 조회합니다.\n\n※ 요약정보: 현금영수증 수집 건수, 공급가액 합계, 세액 합계, 봉사료 합계, 합계 금액\n\nhttps://developers.popbill.com/htcashbill/java/api#Summary"
+				"description": "ㆍ함수 [GetJobState – 수집 상태 확인]를 통해 상태 정보가 확인된 작업아이디를 활용하여 수집된 현금영수증 매입/매출 내역의 요약 정보를 조회합니다.\n\n※ 요약정보: 현금영수증 수집 건수, 공급가액 합계, 세액 합계, 봉사료 합계, 합계 금액\n\nhttps://docs.popbill.com/htcashbill/java/api#Summary"
 			},
 			"response": []
 		},
@@ -539,8 +532,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "8856c95f-6698-434a-b6df-1031914ff05a"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -578,7 +570,7 @@
 						}
 					]
 				},
-				"description": "ㆍ홈택스연동 인증정보를 관리하는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/htcashbill/java/api#GetCertificatePopUpURL"
+				"description": "ㆍ홈택스연동 인증정보를 관리하는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#GetCertificatePopUpURL"
 			},
 			"response": []
 		},
@@ -595,8 +587,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "5a44d608-e2a1-4d29-8827-f677e6f4ac75"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -629,7 +620,7 @@
 						"CertInfo"
 					]
 				},
-				"description": "ㆍ홈택스연동 인증정보를 관리하는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/htcashbill/java/api#GetCertificateExpireDate"
+				"description": "ㆍ홈택스연동 인증정보를 관리하는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#GetCertificateExpireDate"
 			},
 			"response": []
 		},
@@ -646,8 +637,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "fcf102ce-8873-437d-bdad-3ca85b4fac94"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -680,7 +670,7 @@
 						"CertCheck"
 					]
 				},
-				"description": "ㆍ팝빌에 등록된 인증서로 홈택스 로그인 가능 여부를 확인합니다.\n\nhttps://developers.popbill.com/httaxinvoice/java/api#CheckCertValidation"
+				"description": "ㆍ팝빌에 등록된 인증서로 홈택스 로그인 가능 여부를 확인합니다.\n\nhttps://docs.popbill.com/httaxinvoice/java/api#CheckCertValidation"
 			},
 			"response": []
 		},
@@ -710,8 +700,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "34908f3e-100c-4913-bcf9-b9ceaa17518a"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -753,7 +742,7 @@
 						"DeptUser"
 					]
 				},
-				"description": "ㆍ홈택스연동 인증을 위해 팝빌에 현금영수증 자료조회 부서사용자 계정을 등록합니다.\n\nhttps://developers.popbill.com/htcashbill/java/api#RegistDeptUser"
+				"description": "ㆍ홈택스연동 인증을 위해 팝빌에 현금영수증 자료조회 부서사용자 계정을 등록합니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#RegistDeptUser"
 			},
 			"response": []
 		},
@@ -770,8 +759,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "efe2809a-4197-441a-b33a-c79b3c253525"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -804,7 +792,7 @@
 						"DeptUser"
 					]
 				},
-				"description": "ㆍ팝빌에 등록된 인증서로 홈택스 로그인 가능 여부를 확인합니다.\n\nhttps://developers.popbill.com/httaxinvoice/java/api#CheckCertValidation"
+				"description": "ㆍ팝빌에 등록된 인증서로 홈택스 로그인 가능 여부를 확인합니다.\n\nhttps://docs.popbill.com/httaxinvoice/java/api#CheckCertValidation"
 			},
 			"response": []
 		},
@@ -821,8 +809,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "8516735a-5a09-44ca-9769-2c4659c8dace"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -856,7 +843,7 @@
 						"Check"
 					]
 				},
-				"description": "ㆍ팝빌에 등록된 현금영수증 자료조회 부서사용자 계정 정보로 홈택스 로그인 가능 여부를 확인합니다.\n\nhttps://developers.popbill.com/htcashbill/java/api#CheckLoginDeptUser"
+				"description": "ㆍ팝빌에 등록된 현금영수증 자료조회 부서사용자 계정 정보로 홈택스 로그인 가능 여부를 확인합니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#CheckLoginDeptUser"
 			},
 			"response": []
 		},
@@ -873,8 +860,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "ddfb87c6-dad3-4db3-b9fd-1f4fa7441986"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -921,7 +907,7 @@
 						"DeptUser"
 					]
 				},
-				"description": "ㆍ팝빌에 등록된 홈택스 현금영수증 자료조회 부서사용자 계정을 삭제합니다.\n\nhttps://developers.popbill.com/htcashbill/java/api#DeleteDeptUser"
+				"description": "ㆍ팝빌에 등록된 홈택스 현금영수증 자료조회 부서사용자 계정을 삭제합니다.\n\nhttps://docs.popbill.com/htcashbill/java/api#DeleteDeptUser"
 			},
 			"response": []
 		},
@@ -938,8 +924,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "adcbfd66-f6dc-417b-8283-58617c4c4bb4"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -977,7 +962,7 @@
 						}
 					]
 				},
-				"description": "ㆍ홈택스연동 정액제 서비스 신청 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/httaxinvoice/java/api#GetFlatRatePopUpURL"
+				"description": "ㆍ홈택스연동 정액제 서비스 신청 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://docs.popbill.com/httaxinvoice/java/api#GetFlatRatePopUpURL"
 			},
 			"response": []
 		},
@@ -994,8 +979,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "b223d48b-74be-481a-9ed8-3ebef51d733c"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -1028,82 +1012,67 @@
 						"Contract"
 					]
 				},
-				"description": "ㆍ홈택스연동 정액제 서비스 상태를 확인합니다.\n\nhttps://developers.popbill.com/httaxinvoice/java/api#GetFlatRatePopUpURL"
+				"description": "ㆍ홈택스연동 정액제 서비스 상태를 확인합니다.\n\nhttps://docs.popbill.com/httaxinvoice/java/api#GetFlatRatePopUpURL"
 			},
 			"response": []
 		}
 	],
 	"variable": [
 		{
-			"id": "0c39156f-23b9-42e0-b085-b36e1c384cb4",
 			"key": "API_Session_Token",
 			"value": ""
 		},
 		{
-			"id": "a1786ff6-2ff7-4b4b-b143-debaff4dc098",
 			"key": "RequestJob_EDate",
 			"value": ""
 		},
 		{
-			"id": "b56eea6a-0296-4d87-a16f-eda8f9cd7edf",
 			"key": "RequestJob_SDate",
 			"value": ""
 		},
 		{
-			"id": "4ed94154-e3fa-4f7a-9a9e-00d3c45cc787",
 			"key": "GetJobState_JobID",
 			"value": ""
 		},
 		{
-			"id": "36766a26-a2cd-47aa-b149-bff0c48080db",
 			"key": "Search_JobID",
 			"value": ""
 		},
 		{
-			"id": "fbd6fc67-e914-4cf7-9ddb-d7cef1276563",
 			"key": "Search_Order",
 			"value": ""
 		},
 		{
-			"id": "8700049a-8df8-40a0-b58f-50205670d428",
 			"key": "Search_Page",
 			"value": ""
 		},
 		{
-			"id": "2abf5315-3c50-40fe-bfda-774a96357aa3",
 			"key": "Search_PerPage",
 			"value": ""
 		},
 		{
-			"id": "4a86966c-7651-42f1-82ea-19aeac2c5796",
 			"key": "Search_TradeType",
 			"value": ""
 		},
 		{
-			"id": "f939b326-8f1c-4959-b84e-2fe1eb1d5065",
 			"key": "Search_TradeUsage",
 			"value": ""
 		},
 		{
-			"id": "0754c0c8-f417-4672-8ba0-596e0ecbcc89",
 			"key": "Summary_JobID",
 			"value": ""
 		},
 		{
-			"id": "845194e9-f674-403e-bfc1-1933df064a02",
 			"key": "Summary_TradeType",
 			"value": ""
 		},
 		{
-			"id": "d43b07ac-2b7b-4c4c-a7db-77879d27a698",
 			"key": "Summary_TradeUsage",
 			"value": ""
 		},
 		{
-			"id": "a9867128-dc7a-4bd5-bdeb-bc0badaf758a",
 			"key": "RegistDeptUser_RequestBody",
 			"value": ""
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

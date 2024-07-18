@@ -24,7 +24,7 @@
 							"var SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I='; //ex. 'CAuU7dpL4viqfoT6G+HJjqWzHhg3hRDD5sKIkp7Yqwc='",
 							"",
 							"/*",
-							" * 아래는 HMAC Message Digest 를 구성하는 코드입니다.",
+							" * 아래는 HMAC Message Digest 를 생성하는 코드입니다.",
 							" */",
 							"",
 							"// access_id 는 사용자의 사업자번호 입니다. (10자리 숫자('-' 제외))",

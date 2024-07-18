@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "bb095238-4d57-4f7e-9788-14d9046a7615",
-		"name": "Common KO_Popbill 기업정보조회 API",
+		"_postman_id": "812adc9e-3138-4caa-b054-48e02e964b6c",
+		"name": "Common KO_Popbill 기업정보조회 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -24,7 +24,7 @@
 							"var SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I='; //ex. 'CAuU7dpL4viqfoT6G+HJjqWzHhg3hRDD5sKIkp7Yqwc='",
 							"",
 							"/*",
-							" * 아래는 HMAC Message Digest 를 구성하는 코드입니다.",
+							" * 아래는 HMAC Message Digest 를 생성하는 코드입니다.",
 							" */",
 							"",
 							"// access_id 는 사용자의 사업자번호 입니다. (10자리 숫자('-' 제외))",

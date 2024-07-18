@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9c2b13d8-3ecb-4bc8-99d5-18684efa0723",
+		"_postman_id": "fa2604d8-2d5c-4017-abc4-1ad638a12100",
 		"name": "Common KO_Popbill 휴폐업조회 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -24,7 +24,7 @@
 							"var SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I='; //ex. 'CAuU7dpL4viqfoT6G+HJjqWzHhg3hRDD5sKIkp7Yqwc='",
 							"",
 							"/*",
-							" * 아래는 HMAC Message Digest 를 구성하는 코드입니다.",
+							" * 아래는 HMAC Message Digest 를 생성하는 코드입니다.",
 							" */",
 							"",
 							"// access_id 는 사용자의 사업자번호 입니다. (10자리 숫자('-' 제외))",
@@ -64,8 +64,7 @@
 							"    return enc;",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "c6fa0c86-d99a-4a87-b937-b8d2eb2b2fa6"
+						"type": "text/javascript"
 					}
 				},
 				{
@@ -78,8 +77,7 @@
 							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "e6a8876b-61be-42b6-8f4a-93ca4181241b"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -157,8 +155,7 @@
 							"var corpNum = '6798700433'",
 							"pm.collectionVariables.set(\"CheckCorpNum_CorpNum\", corpNum);"
 						],
-						"type": "text/javascript",
-						"id": "22277157-681c-440b-acce-7767d62a917e"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -195,7 +192,7 @@
 						}
 					]
 				},
-				"description": "ㆍ사업자번호 1건에 대한 휴폐업정보를 확인합니다.\n\nhttps://developers.popbill.com/closedown/java/api#CheckCorpNum"
+				"description": "ㆍ사업자번호 1건에 대한 휴폐업정보를 확인합니다.\n\nhttps://docs.popbill.com/closedown/java/api#CheckCorpNum"
 			},
 			"response": []
 		},
@@ -221,8 +218,7 @@
 							"  return JSON.stringify(obj,function(key,value){return !value ? undefined : value;});",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "bf9d1fe7-3402-4f7c-96bc-ee543557d5e9"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -262,7 +258,7 @@
 						"CloseDown"
 					]
 				},
-				"description": "ㆍ다수건의 사업자번호에 대한 휴폐업정보를 확인합니다. (최대 1,000건)\n\nhttps://developers.popbill.com/closedown/java/api#CheckCorpNums"
+				"description": "ㆍ다수건의 사업자번호에 대한 휴폐업정보를 확인합니다. (최대 1,000건)\n\nhttps://docs.popbill.com/closedown/java/api#CheckCorpNums"
 			},
 			"response": []
 		},
@@ -279,8 +275,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "41dffb0b-d634-4537-9754-d5aaa4407d3d"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -312,7 +307,7 @@
 						"UnitCost"
 					]
 				},
-				"description": "ㆍ휴폐업 조회시 과금되는 포인트 단가를 확인합니다.\n\nhttps://developers.popbill.com/closedown/java/api#GetUnitCost"
+				"description": "ㆍ휴폐업 조회시 과금되는 포인트 단가를 확인합니다.\n\nhttps://docs.popbill.com/closedown/java/api#GetUnitCost"
 			},
 			"response": []
 		},
@@ -329,8 +324,7 @@
 							" */",
 							""
 						],
-						"type": "text/javascript",
-						"id": "d1305982-be17-4c3f-81f1-c77b5faaf7c7"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -362,17 +356,15 @@
 						"ChargeInfo"
 					]
 				},
-				"description": "ㆍ팝빌 휴폐업조회 API 서비스 과금정보를 확인합니다.\n\nhttps://developers.popbill.com/closedown/java/api#GetChargeInfo"
+				"description": "ㆍ팝빌 휴폐업조회 API 서비스 과금정보를 확인합니다.\n\nhttps://docs.popbill.com/closedown/java/api#GetChargeInfo"
 			},
 			"response": []
 		}
 	],
 	"variable": [
 		{
-			"id": "782be6bf-ecb5-408c-890c-f2aecfb6c98f",
 			"key": "API_Session_Token",
 			"value": ""
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

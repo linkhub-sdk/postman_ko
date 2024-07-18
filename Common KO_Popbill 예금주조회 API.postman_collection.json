@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "165c54db-f2d1-462d-9486-60badecdd862",
+		"_postman_id": "ae67ed43-b103-4aff-add0-a426161e47bb",
 		"name": "Common KO_Popbill 예금주조회 API",
 		"description": "When you call GetToken Request, the token used for Bearer authentication is stored in the variable of Collection Scope.\n\n\nSo, You must always call GetToken to test the API.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -25,7 +25,7 @@
 							"var SecretKey = 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I='; //ex. 'CAuU7dpL4viqfoT6G+HJjqWzHhg3hRDD5sKIkp7Yqwc='",
 							"",
 							"/*",
-							" * 아래는 HMAC Message Digest 를 구성하는 코드입니다.",
+							" * 아래는 HMAC Message Digest 를 생성하는 코드입니다.",
 							" */",
 							"",
 							"// access_id 는 사용자의 사업자번호 입니다. (10자리 숫자('-' 제외))",
@@ -65,8 +65,7 @@
 							"    return enc;",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "5257b77b-4409-48ad-b3e4-8a72a13b8fe0"
+						"type": "text/javascript"
 					}
 				},
 				{
@@ -79,8 +78,7 @@
 							"    pm.collectionVariables.set(\"API_Session_Token\",'Bearer ' +  pm.response.json().session_token);",
 							"}"
 						],
-						"type": "text/javascript",
-						"id": "6067f89d-8d5b-42ff-9cb6-551a04b23a95"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -152,8 +150,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "d8789a8a-447a-41b0-9bc2-dcb4f944c6db"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -199,7 +196,7 @@
 						}
 					]
 				},
-				"description": "ㆍ1건의 예금주성명을 조회합니다.\n\nhttps://developers.popbill.com/accountcheck/java/api#CheckAccountInfo"
+				"description": "ㆍ1건의 예금주성명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#CheckAccountInfo"
 			},
 			"response": []
 		},
@@ -215,8 +212,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "5f1b37bf-0333-441e-a3b3-7c5f25a2aa3e"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -268,7 +264,7 @@
 						}
 					]
 				},
-				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://developers.popbill.com/accountcheck/java/api#DepositorCheck"
+				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#DepositorCheck"
 			},
 			"response": []
 		},
@@ -284,8 +280,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "5915d72b-ae95-4087-b902-a22f295ebac5"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -325,7 +320,7 @@
 						}
 					]
 				},
-				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://developers.popbill.com/accountcheck/java/api#DepositorCheck"
+				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#DepositorCheck"
 			},
 			"response": []
 		},
@@ -341,8 +336,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */"
 						],
-						"type": "text/javascript",
-						"id": "590104c9-3456-4fcc-bbfc-3809f1ae3b39"
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -382,17 +376,15 @@
 						}
 					]
 				},
-				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://developers.popbill.com/accountcheck/java/api#DepositorCheck"
+				"description": "ㆍ1건의 예금주실명을 조회합니다.\n\nhttps://docs.popbill.com/accountcheck/java/api#DepositorCheck"
 			},
 			"response": []
 		}
 	],
 	"variable": [
 		{
-			"id": "6ee1486e-1dfc-46e2-b624-2650c7a3c7d1",
 			"key": "API_Session_Token",
 			"value": ""
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
