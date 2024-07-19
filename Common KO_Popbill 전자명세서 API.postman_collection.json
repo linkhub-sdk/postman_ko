@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3bb7ce93-d39d-4e20-bffe-e99133375203",
+		"_postman_id": "0c580037-0277-4eb9-925b-8147202089b5",
 		"name": "Common KO_Popbill 전자명세서 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1516,7 +1516,7 @@
 						}
 					]
 				},
-				"description": "ㆍ팝빌 사이트에 로그인 상태로 접근할 수 있는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/reference/statement/java/api#GetAccessURL"
+				"description": "ㆍ팝빌 사이트에 로그인 상태로 접근할 수 있는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/reference/statement/java/api/member#GetAccessURL"
 			},
 			"response": []
 		},
