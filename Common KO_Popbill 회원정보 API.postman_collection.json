@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8971957d-7889-438c-8667-05ca9015ec96",
+		"_postman_id": "acaa49df-298d-4daf-a2d9-8eb150ba73cd",
 		"name": "Common KO_Popbill 회원정보 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -475,7 +475,7 @@
 							"  personName : '',  // 담당자 성명",
 							"  tel :'',          // 담당자 연락처(전화번호)",
 							"  email :'',        // 담당자 이메일",
-							"  searchRole :''    // 담당자 권한",
+							"  searchRole :'3'    // 담당자 권한",
 							"};",
 							"",
 							"var RequestBody = stringify(reqBodyObj);",
@@ -666,7 +666,7 @@
 							"  personName : '',  // 담당자 성명",
 							"  tel :'',          // 담당자 연락처(전화번호)",
 							"  email :'',        // 담당자 이메일",
-							"  searchRole :''    // 담당자 권한",
+							"  searchRole :'3'    // 담당자 권한",
 							"};",
 							"",
 							"var RequestBody = stringify(reqBodyObj);",
