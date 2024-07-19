@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2674df7c-2045-4c15-aaf9-a1f9864ca9fd",
+		"_postman_id": "08e294c9-b2c7-441f-9fdf-c54d6777c710",
 		"name": "Common KO_Popbill 계좌조회 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -263,7 +263,7 @@
 							"  AccountName : '',     // 계좌 별칭",
 							"  BankID : '',          // 인터넷뱅킹 아이디",
 							"  FastID : '',          // 조회전용 계정 아이디",
-							"  FastPWD : '',         // 조회전영 계정 비밀번호",
+							"  FastPWD : '',         // 조회전용 계정 비밀번호",
 							"  Memo : ''             // 메모",
 							"};",
 							"",
