@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "26d91bc0-45f4-46f6-beaf-18acb2967576",
+		"_postman_id": "418be95f-5cd6-4791-b2ee-6a3fa39ed2b2",
 		"name": "Common KO_Popbill 포인트 관리 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -595,7 +595,7 @@
 						}
 					]
 				},
-				"description": "ㆍ포인트 사용내역을 확인합니다."
+				"description": "ㆍ연동회원의 포인트 사용내역을 확인합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/point#GetUseHistory"
 			},
 			"response": []
 		},
@@ -665,7 +665,7 @@
 						}
 					]
 				},
-				"description": "ㆍ포인트 결제내역을 확인합니다."
+				"description": "ㆍ연동회원의 포인트 결제내역을 확인합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/point#GetPaymentHistory"
 			},
 			"response": []
 		},
@@ -725,7 +725,7 @@
 						}
 					]
 				},
-				"description": "ㆍ포인트 환불내역을 확인합니다."
+				"description": "ㆍ연동회원의 포인트 환불신청내역을 확인합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/point#GetRefundHistory"
 			},
 			"response": []
 		},
@@ -782,7 +782,7 @@
 						"Refund"
 					]
 				},
-				"description": "ㆍ결제를 통해 충전한 포인트를 환불 신청합니다."
+				"description": "ㆍ연동회원 포인트를 환불 신청합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/point#Refund"
 			},
 			"response": []
 		},
@@ -851,7 +851,7 @@
 						"Payment"
 					]
 				},
-				"description": "ㆍ포인트 충전을 위해 무통장입금을 신청합니다."
+				"description": "ㆍ연동회원 포인트 충전을 위해 무통장입금을 신청합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/point#PaymentRequest"
 			},
 			"response": []
 		},
@@ -918,7 +918,7 @@
 						}
 					]
 				},
-				"description": "ㆍ포인트 충전에 대한 결제내역 1건을 확인합니다."
+				"description": "ㆍ연동회원 포인트 무통장 입금신청내역 1건을 확인합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/point#GetSettleResult"
 			},
 			"response": []
 		},
@@ -987,7 +987,7 @@
 						}
 					]
 				},
-				"description": "ㆍ포인트 충전에 대한 결제내역 1건을 확인합니다."
+				"description": "ㆍ포인트 환불에 대한 상세정보 1건을 확인합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/point#GetRefundInfo"
 			},
 			"response": []
 		},
@@ -1019,7 +1019,8 @@
 					"path": [
 						"RefundPoint"
 					]
-				}
+				},
+				"description": "ㆍ환불 가능한 포인트를 확인합니다. (보너스 포인트는 환불가능포인트에서 제외됩니다.)\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/point#GetRefundableBalance"
 			},
 			"response": []
 		}
