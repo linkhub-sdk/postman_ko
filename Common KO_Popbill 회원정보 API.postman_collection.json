@@ -273,10 +273,10 @@
 							"",
 							"// JoinMember info",
 							"var reqBodyObj = {",
-							"  ID : '',          // 아이디",
-							"  Password : '',    // 비밀번호",
-							"  LinkID : '',      // 파트너 링크아이디",
-							"  CorpNum :'',      // 사업자번호",
+							"  ID : '',          // 아이디 (6자 이상 50자 이하)",
+							"  Password : '',    // 비밀번호 (8자 이상 20자 이하. 영문,숫자,특수문자 조합)",
+							"  LinkID : '',      // 파트너 링크아이디 (팝빌에서 발급한 링크아이디)",
+							"  CorpNum :'',      // 사업자번호 ('-' 제외)",
 							"  CEOName : '',     // 대표자 성명",
 							"  CorpName : '',    // 회사명",
 							"  Addr : '',        // 사업장 주소",
@@ -422,6 +422,7 @@
 			],
 			"request": {
 				"method": "POST",
+				"protocol": "https",
 				"header": [
 					{
 						"key": "Authorization",
@@ -444,9 +445,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{API_URL}}/CorpInfo",
+					"raw": "https://popbill-test.linkhub.co.kr/CorpInfo",
 					"host": [
-						"{{API_URL}}"
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
 					],
 					"path": [
 						"CorpInfo"
@@ -470,8 +474,8 @@
 							"",
 							"// ContactInfo",
 							"var reqBodyObj = {",
-							"  id : '',          // 아이디",
-							"  Password : '',    // 비밀번호    ",
+							"  id : '',          // 아이디 (6자 이상 50자 이하)",
+							"  Password : '',    // 비밀번호 (8자 이상 20자 이하. 영문,숫자,특수문자 조합)",
 							"  personName : '',  // 담당자 성명",
 							"  tel :'',          // 담당자 연락처(전화번호)",
 							"  email :'',        // 담당자 이메일",
@@ -596,7 +600,7 @@
 						"Contact"
 					]
 				},
-				"description": "ㆍ연동회원의 회사정보를 확인합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/member#GetCorpInfo"
+				"description": "ㆍ연동회원 사업자번호에 등록된 담당자(팝빌 로그인 계정) 정보를 확인합니다.\n\nhttps://developers.popbill.com/reference/taxinvoice/java/api/member#GetContactInfo"
 			},
 			"response": []
 		},
@@ -662,7 +666,7 @@
 							"",
 							"// ContactInfo",
 							"var reqBodyObj = {",
-							"  id : '',          // 아이디",
+							"  id : '',          // 아이디 (6자 이상, 50자 이하)",
 							"  personName : '',  // 담당자 성명",
 							"  tel :'',          // 담당자 연락처(전화번호)",
 							"  email :'',        // 담당자 이메일",
