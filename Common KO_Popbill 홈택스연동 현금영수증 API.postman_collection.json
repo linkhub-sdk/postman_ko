@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "423bd459-d865-4f1b-b997-1c2ba36780d1",
-		"name": "Common KO_Popbill 홈택스 연동 현금영수증 API",
+		"_postman_id": "59622f71-8ea4-4e10-a7af-c82ff3efda55",
+		"name": "Common KO_Popbill 홈택스연동 현금영수증 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
