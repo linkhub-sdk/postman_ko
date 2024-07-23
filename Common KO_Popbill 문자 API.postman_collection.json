@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "cda91daa-5534-4e84-9552-98d8633cbf31",
+		"_postman_id": "3334369f-ad94-41a3-a73d-e4e153815a2a",
 		"name": "Common KO_Popbill 문자 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -411,7 +411,7 @@
 						"SMS"
 					]
 				},
-				"description": "ㆍ최대 90byte의 단문(SMS) 메시지 다수건 전송을 팝빌에 접수합니다. (최대 1,000건)\n\nㆍ모든 수신자에게 동일한 내용을 전송하거나(동보전송).\n\nhttps://developers.popbill.com/reference/sms/java/api/send#SendSMSAll"
+				"description": "ㆍ최대 90byte의 단문(SMS) 메시지 다수건 전송을 팝빌에 접수합니다. (최대 1,000건)\n\nㆍ모든 수신자에게 동일한 내용을 전송합니다(동보전송).\n\nhttps://developers.popbill.com/reference/sms/java/api/send#SendSMSAll"
 			},
 			"response": []
 		},
@@ -585,7 +585,7 @@
 						"LMS"
 					]
 				},
-				"description": "ㆍ최대 2,000byte의 장문(LMS) 메시지 다수건 전송을 팝빌에 접수합니다. (최대 1,000건)\n\nㆍ모든 수신자에게 동일한 내용을 전송하거나(동보전송).\n\nhttps://developers.popbill.com/reference/sms/java/api/send#SendLMSAll"
+				"description": "ㆍ최대 2,000byte의 장문(LMS) 메시지 다수건 전송을 팝빌에 접수합니다. (최대 1,000건)\n\nㆍ모든 수신자에게 동일한 내용을 전송합니다(동보전송).\n\nhttps://developers.popbill.com/reference/sms/java/api/send#SendLMSAll"
 			},
 			"response": []
 		},
@@ -810,7 +810,7 @@
 						}
 					]
 				},
-				"description": "ㆍ최대 2,000byte의 메시지와 이미지로 구성된 포토문자(MMS) 다수건 전송을 팝빌에 접수합니다. (최대 1,000건)\n\n※ 이미지 파일 포맷/규격 : 최대 300Kbyte(JPEG), 가로/세로 1,000px 이하 권장\n\nㆍ수신자마다 개별 내용을 전송할 수 있습니다.\n\nhttps://developers.popbill.com/reference/sms/java/api/send#SendMMSAll"
+				"description": "ㆍ최대 2,000byte의 메시지와 이미지로 구성된 포토문자(MMS) 다수건 전송을 팝빌에 접수합니다. (최대 1,000건)\n\n※ 이미지 파일 포맷/규격 : 최대 300Kbyte(JPEG), 가로/세로 1,000px 이하 권장\n\nㆍ수신자마다 개별 내용을 전송할 수 있습니다(대량전송).\n\nhttps://developers.popbill.com/reference/sms/java/api/send#SendMMSAll"
 			},
 			"response": []
 		},
@@ -923,7 +923,7 @@
 						}
 					]
 				},
-				"description": "ㆍ최대 2,000byte의 메시지와 이미지로 구성된 포토문자(MMS) 다수건 전송을 팝빌에 접수합니다. (최대 1,000건)\n\n※ 이미지 파일 포맷/규격 : 최대 300Kbyte(JPEG), 가로/세로 1,000px 이하 권장\n\nㆍ수신자마다 개별 내용을 전송할 수 있습니다.\n\nhttps://developers.popbill.com/reference/sms/java/api/send#SendMMSAll"
+				"description": "ㆍ최대 2,000byte의 메시지와 이미지로 구성된 포토문자(MMS) 다수건 전송을 팝빌에 접수합니다. (최대 1,000건)\n\n※ 이미지 파일 포맷/규격 : 최대 300Kbyte(JPEG), 가로/세로 1,000px 이하 권장\n\nㆍ모든 수신자에게 동일한 내용을 전송합니다(동보전송).\n\nhttps://developers.popbill.com/reference/sms/java/api/send#SendMMSAll"
 			},
 			"response": []
 		},
@@ -1097,7 +1097,7 @@
 						"XMS"
 					]
 				},
-				"description": "ㆍ메시지 크기(90byte)에 따라 단문/장문(SMS/LMS)을 자동으로 인식하여 다수건의 메시지 전송을 팝빌에 접수합니다. (최대 1,000건)\n\nㆍ모든 수신자에게 동일한 내용을 전송하거나(동보전송).\n\n※ 단문(SMS) = 90byte 이하의 메시지, 장문(LMS) = 2000byte 이하의 메시지.\n\nhttps://developers.popbill.com/reference/sms/java/api/send#SendXMSAll"
+				"description": "ㆍ메시지 크기(90byte)에 따라 단문/장문(SMS/LMS)을 자동으로 인식하여 다수건의 메시지 전송을 팝빌에 접수합니다. (최대 1,000건)\n\nㆍ모든 수신자에게 동일한 내용을 전송합니다(동보전송).\n\n※ 단문(SMS) = 90byte 이하의 메시지, 장문(LMS) = 2000byte 이하의 메시지.\n\nhttps://developers.popbill.com/reference/sms/java/api/send#SendXMSAll"
 			},
 			"response": []
 		},
@@ -1156,6 +1156,73 @@
 			"response": []
 		},
 		{
+			"name": "CancelReservebyRCV",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 문자 전송 접수시 팝빌로부터 반환받은 접수번호",
+							"var receiptNum = '021111721565100001'",
+							"pm.collectionVariables.set(\"receiptNum\", receiptNum);",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"receiveNum\": \"01012341234\" // 예약문자 전송요청시 팝빌로 요청한 수신번호\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/{{receiptNum}}/Cancel",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						"{{receiptNum}}",
+						"Cancel"
+					]
+				},
+				"description": "ㆍ팝빌에서 반환받은 접수번호로 접수 건을 식별하여 수신번호에 예약된 문자를 전송 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://developers.popbill.com/reference/sms/java/api/send#CancelReservebyRCV"
+			},
+			"response": []
+		},
+		{
 			"name": "CancelReserveRN",
 			"event": [
 				{
@@ -1206,6 +1273,69 @@
 					]
 				},
 				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 예약접수된 문자 전송을 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://developers.popbill.com/reference/sms/java/api/send#CancelReserveRN"
+			},
+			"response": []
+		},
+		{
+			"name": "CancelReserveRNbyRCV",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**",
+							" * API 호출전 GetToken을 실행해야 합니다.",
+							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
+							" */",
+							"",
+							"// 예약문자 전송요청시 파트너가 할당한 요청번호",
+							"var requestNum = '20211117_TEST001'",
+							"pm.collectionVariables.set(\"requestNum\", requestNum);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{API_Session_Token}}"
+					},
+					{
+						"key": "x-pb-userid",
+						"type": "text",
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"receiveNum\": \"01012341234\" // 예약문자 전송요청시 팝빌로 요청한 수신번호\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://popbill-test.linkhub.co.kr/Message/Cancel/{{requestNum}}",
+					"protocol": "https",
+					"host": [
+						"popbill-test",
+						"linkhub",
+						"co",
+						"kr"
+					],
+					"path": [
+						"Message",
+						"Cancel",
+						"{{requestNum}}"
+					]
+				},
+				"description": "ㆍ파트너가 할당한 요청번호로 접수 건을 식별하여 수신번호에 예약된 문자를 전송 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://developers.popbill.com/reference/sms/java/api/send#CancelReserveRNbyRCV"
 			},
 			"response": []
 		},
@@ -1310,7 +1440,7 @@
 						"{{senderNumber}}"
 					]
 				},
-				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 문자 전송상태 및 결과를 확인합니다.\n\nhttps://developers.popbill.com/reference/sms/java/api/sendnum#CheckSenderNumber"
+				"description": "ㆍ문자 발신번호 등록여부를 확인합니다.\n\nㆍ발신번호 상태가 '승인'인 경우에만 리턴값 Response 의 변수 'code'가 1로 반환됩니다.\n\nhttps://developers.popbill.com/reference/sms/java/api/sendnum#CheckSenderNumber"
 			},
 			"response": []
 		},
@@ -1773,7 +1903,8 @@
 						"Message",
 						"AutoDenyNumberInfo"
 					]
-				}
+				},
+				"description": "ㆍ팝빌회원에 등록된 080 수신거부 번호 정보를 확인합니다.\n\nhttps://developers.popbill.com/reference/sms/java/api/info#CheckAutoDenyNumber"
 			},
 			"response": []
 		}
