@@ -171,7 +171,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"url": {
@@ -233,7 +234,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"url": {
@@ -310,7 +312,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"body": {
@@ -367,7 +370,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"url": {
@@ -432,7 +436,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"body": {
@@ -505,7 +510,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"body": {
@@ -575,7 +581,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"body": {
@@ -632,7 +639,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"url": {
@@ -696,7 +704,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"body": {
@@ -762,7 +771,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"body": {

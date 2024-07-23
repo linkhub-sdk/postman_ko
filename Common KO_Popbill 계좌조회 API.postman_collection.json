@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "08e294c9-b2c7-441f-9fdf-c54d6777c710",
+		"_postman_id": "b9fc7b26-93a1-4bdb-bf92-10073343085d",
 		"name": "Common KO_Popbill 계좌조회 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -191,7 +191,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					},
 					{
 						"key": "X-HTTP-Method-Override",
@@ -226,7 +227,8 @@
 					"query": [
 						{
 							"key": "UsePeriod",
-							"value": "{{RegistBankAccount_UsePeriod}}"
+							"value": "{{RegistBankAccount_UsePeriod}}",
+							"description": "정액제 이용할 개월 수\n→ 파트너 포인트 사용시 입력값에 관계 없이 기본값 적용"
 						}
 					]
 				},
@@ -290,7 +292,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					},
 					{
 						"key": "X-HTTP-Method-Override",
@@ -364,7 +367,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"url": {
@@ -416,7 +420,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"url": {
@@ -466,7 +471,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"url": {
@@ -521,7 +527,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"url": {
@@ -586,7 +593,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"url": {
@@ -661,7 +669,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"body": {
@@ -736,7 +745,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"body": {
@@ -820,7 +830,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"body": {
@@ -883,7 +894,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"body": {
@@ -971,7 +983,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"url": {
@@ -1058,7 +1071,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"url": {
@@ -1127,7 +1141,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"body": {
@@ -1196,7 +1211,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"url": {
@@ -1258,7 +1274,8 @@
 					{
 						"key": "x-pb-userid",
 						"type": "text",
-						"value": "testkorea"
+						"value": "testkorea",
+						"description": "팝빌회원 아이디"
 					}
 				],
 				"url": {
