@@ -563,7 +563,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://popbill-test.linkhub.co.kr/UseHistory?SDate=20220801&EDate=20220830&Page=1&PerPage=100&Order=D",
+					"raw": "https://popbill-test.linkhub.co.kr/UseHistory?SDate=20240724&EDate=20240724&Page=1&PerPage=100&Order=D",
 					"protocol": "https",
 					"host": [
 						"popbill-test",
@@ -577,12 +577,12 @@
 					"query": [
 						{
 							"key": "SDate",
-							"value": "20220801",
+							"value": "20240724",
 							"description": "조회 기간의 시작일자"
 						},
 						{
 							"key": "EDate",
-							"value": "20220830",
+							"value": "20240724",
 							"description": "조회 기간의 종료일"
 						},
 						{
@@ -639,7 +639,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://popbill-test.linkhub.co.kr/PaymentHistory?SDate=20220801&EDate=20220830&Page=1&PerPage=100",
+					"raw": "https://popbill-test.linkhub.co.kr/PaymentHistory?SDate=20240724&EDate=20240724&Page=1&PerPage=100",
 					"protocol": "https",
 					"host": [
 						"popbill-test",
@@ -653,12 +653,12 @@
 					"query": [
 						{
 							"key": "SDate",
-							"value": "20220801",
+							"value": "20240724",
 							"description": "조회기간의 시작일자"
 						},
 						{
 							"key": "EDate",
-							"value": "20220830",
+							"value": "20240724",
 							"description": "조회기간의 종료일"
 						},
 						{

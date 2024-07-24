@@ -150,11 +150,11 @@
 							" */",
 							"",
 							"// 조회 기간의 시작일자",
-							"var SDate = '20211201';",
+							"var SDate = '20240724';",
 							"pm.collectionVariables.set(\"RequestJob_SDate\", SDate);",
 							"",
 							"// 조회 기간의 종료일자",
-							"var EDate = '20211201';",
+							"var EDate = '20240724';",
 							"pm.collectionVariables.set(\"RequestJob_EDate\", EDate);"
 						],
 						"type": "text/javascript"

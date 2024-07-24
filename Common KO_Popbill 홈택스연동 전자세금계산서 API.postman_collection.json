@@ -155,11 +155,11 @@
 							"pm.collectionVariables.set(\"RequestJob_DType\", DType);",
 							"",
 							"// 조회 기간의 시작일자",
-							"var SDate = '20211201';",
+							"var SDate = '20240724';",
 							"pm.collectionVariables.set(\"RequestJob_SDate\", SDate);",
 							"",
 							"// 조회 기간의 종료일자",
-							"var EDate = '20211201';",
+							"var EDate = '20240724';",
 							"pm.collectionVariables.set(\"RequestJob_EDate\", EDate);"
 						],
 						"type": "text/javascript"
@@ -634,7 +634,7 @@
 							" */",
 							"",
 							"// 전자세금계산서 국세청승인번호",
-							"var ntsConfirmNum = '20211122888888880000009a'",
+							"var ntsConfirmNum = '20241122888888880000009a'",
 							"pm.collectionVariables.set(\"GetInfo_NTSConfirmNum\", ntsConfirmNum);"
 						],
 						"type": "text/javascript"
@@ -688,7 +688,7 @@
 							" */",
 							"",
 							"// 전자세금계산서 국세청승인번호",
-							"var ntsConfirmNum = '20211122888888880000009a'",
+							"var ntsConfirmNum = '20241122888888880000009a'",
 							"pm.collectionVariables.set(\"GetInfo_NTSConfirmNum\", ntsConfirmNum);"
 						],
 						"type": "text/javascript"
@@ -748,7 +748,7 @@
 							" */",
 							"",
 							"// 전자세금계산서 국세청승인번호",
-							"var ntsConfirmNum = '20211122888888880000009a'",
+							"var ntsConfirmNum = '20241122888888880000009a'",
 							"pm.collectionVariables.set(\"GetPopUpURL_NTSConfirmNum\", ntsConfirmNum);"
 						],
 						"type": "text/javascript"
@@ -803,7 +803,7 @@
 							" */",
 							"",
 							"// 전자세금계산서 국세청승인번호",
-							"var ntsConfirmNum = '20211122888888880000009a'",
+							"var ntsConfirmNum = '20241122888888880000009a'",
 							"pm.collectionVariables.set(\"GetPrintURL_NTSConfirmNum\", ntsConfirmNum);"
 						],
 						"type": "text/javascript"

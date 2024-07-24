@@ -728,11 +728,11 @@
 							"pm.collectionVariables.set(\"RequestJob_AccountNumber\", accountNumber);",
 							"",
 							"// 조회 기간의 시작일자 (yyyyMMdd)",
-							"var SDate = '20220325';",
+							"var SDate = '20240724';",
 							"pm.collectionVariables.set(\"RequestJob_SDate\", SDate);",
 							"",
 							"// 조회 기간의 종료일자 (yyyyMMdd)",
-							"var EDate = '20220421';",
+							"var EDate = '20240724';",
 							"pm.collectionVariables.set(\"RequestJob_EDate\", EDate);"
 						],
 						"type": "text/javascript"

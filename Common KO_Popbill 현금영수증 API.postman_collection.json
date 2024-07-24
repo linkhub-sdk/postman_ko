@@ -150,7 +150,7 @@
 							" */",
 							"",
 							"// 이미 사용 중인 문서번호는 중복 사용이 불가하고, 현금영수증 삭제된 경우에만 문서번호의 재사용이 가능합니다.",
-							"var mgtKey = '20210629-01'",
+							"var mgtKey = '20240629-01'",
 							"pm.collectionVariables.set(\"CheckMgtKeyinUse_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -228,7 +228,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\n*\n* 현금영수증 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/cashbill/java/api/object#Cashbill_Input\n*\n*/\n\n{\n    // [필수] 현금영수증 문서번호,\n    \"mgtKey\" : \"20211101-001\",\n\n    // 현금영수증 거래일시\n    // - 당일 과 전일만 입력 가능\n    // - 공백이나 미입력시 발행일시 사용\n    // - 형식 : yyyyMMddHHmmss\n    \"tradeDT\" : \"\",\n\n    // [필수] 문서형태, (승인거래, 취소거래) 중 기재\n    \"tradeType\" : \"승인거래\",\n\n    // [필수] 거래구분, (소득공제용, 지출증빙용) 중 기재\n    \"tradeUsage\" : \"소득공제용\",\n\n    // [필수] 거래유형, (일반, 도서공연, 대중교통) 중 기재\n    \"tradeOpt\" : \"일반\",\n\n    // [필수] 과세형태, (과세, 비과세) 중 기재\n    \"taxationType\" : \"과세\",\n\n    // [필수] 거래금액, ','콤마 불가 숫자만 가능\n    \"totalAmount\" : \"11000\",\n\n    // [필수] 공급가액, ','콤마 불가 숫자만 가능\n    \"supplyCost\" : \"10000\",\n\n    // [필수] 부가세, ','콤마 불가 숫자만 가능\n    \"tax\" : \"1000\",\n\n    // [필수] 봉사료, ','콤마 불가 숫자만 가능\n    \"serviceFee\" : \"0\",\n\n    // [필수] 가맹점 사업자번호\n    \"franchiseCorpNum\" : \"1234567890\",\n\n    // 가맹점 종사업장 식별번호\n    \"franchiseTaxRegID\" : \"\",\n\n    // 가맹점 상호\n    \"franchiseCorpName\" : \"발행자 상호\",\n\n    // 가맹점 대표자 성명\n    \"franchiseCEOName\" : \"발행자 대표자명\",\n\n    // 가맹점 주소\n    \"franchiseAddr\" : \"발행자 주소\",\n\n    // 가맹점 전화번호\n    \"franchiseTEL\" : \"070-1234-1234\",\n\n    // [필수] 식별번호, 거래구분에 따라 작성\n    // 소득공제용 - 주민등록/휴대폰/카드번호 기재가능\n    // 지출증빙용 - 사업자번호/주민등록/휴대폰/카드번호 기재가능\n    \"identityNum\" : \"154420201111111111\",\n\n    // 주문자명\n    \"customerName\" : \"주식회사주문자명담당자\",\n\n    // 주문상품명\n    \"itemName\" : \"상품명\",\n\n    // 주문주문번호\n    \"orderNumber\" : \"주문번호\",\n\n    // 주문자 이메일\n    // 팝빌 테스트환경에서 테스트하는 경우에도 안내 메일이 전송되므로,\n    // 실제 거래처의 메일주소가 기재되지 않도록 주의\n    \"email\" : \"test@test.com\",\n\n    // 주문자 휴대폰\n    \"hp\" : \"010-111-222\",\n\n    // 발행시 알림문자 전송여부\n    \"smssendYN\" : false,\n\n    // 현금영수증 발행 안내메일 제목\n    // 미입력시 팝빌에서 설정한 기본값 사용\n    \"emailSubject\" : \"\"\n}",
+					"raw": "/*\n*\n* 현금영수증 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/cashbill/java/api/object#Cashbill_Input\n*\n*/\n\n{\n    // [필수] 현금영수증 문서번호,\n    \"mgtKey\" : \"20241101-001\",\n\n    // 현금영수증 거래일시\n    // - 당일 과 전일만 입력 가능\n    // - 공백이나 미입력시 발행일시 사용\n    // - 형식 : yyyyMMddHHmmss\n    \"tradeDT\" : \"\",\n\n    // [필수] 문서형태, (승인거래, 취소거래) 중 기재\n    \"tradeType\" : \"승인거래\",\n\n    // [필수] 거래구분, (소득공제용, 지출증빙용) 중 기재\n    \"tradeUsage\" : \"소득공제용\",\n\n    // [필수] 거래유형, (일반, 도서공연, 대중교통) 중 기재\n    \"tradeOpt\" : \"일반\",\n\n    // [필수] 과세형태, (과세, 비과세) 중 기재\n    \"taxationType\" : \"과세\",\n\n    // [필수] 거래금액, ','콤마 불가 숫자만 가능\n    \"totalAmount\" : \"11000\",\n\n    // [필수] 공급가액, ','콤마 불가 숫자만 가능\n    \"supplyCost\" : \"10000\",\n\n    // [필수] 부가세, ','콤마 불가 숫자만 가능\n    \"tax\" : \"1000\",\n\n    // [필수] 봉사료, ','콤마 불가 숫자만 가능\n    \"serviceFee\" : \"0\",\n\n    // [필수] 가맹점 사업자번호\n    \"franchiseCorpNum\" : \"1234567890\",\n\n    // 가맹점 종사업장 식별번호\n    \"franchiseTaxRegID\" : \"\",\n\n    // 가맹점 상호\n    \"franchiseCorpName\" : \"발행자 상호\",\n\n    // 가맹점 대표자 성명\n    \"franchiseCEOName\" : \"발행자 대표자명\",\n\n    // 가맹점 주소\n    \"franchiseAddr\" : \"발행자 주소\",\n\n    // 가맹점 전화번호\n    \"franchiseTEL\" : \"070-1234-1234\",\n\n    // [필수] 식별번호, 거래구분에 따라 작성\n    // 소득공제용 - 주민등록/휴대폰/카드번호 기재가능\n    // 지출증빙용 - 사업자번호/주민등록/휴대폰/카드번호 기재가능\n    \"identityNum\" : \"154420201111111111\",\n\n    // 주문자명\n    \"customerName\" : \"주식회사주문자명담당자\",\n\n    // 주문상품명\n    \"itemName\" : \"상품명\",\n\n    // 주문주문번호\n    \"orderNumber\" : \"주문번호\",\n\n    // 주문자 이메일\n    // 팝빌 테스트환경에서 테스트하는 경우에도 안내 메일이 전송되므로,\n    // 실제 거래처의 메일주소가 기재되지 않도록 주의\n    \"email\" : \"test@test.com\",\n\n    // 주문자 휴대폰\n    \"hp\" : \"010-111-222\",\n\n    // 발행시 알림문자 전송여부\n    \"smssendYN\" : false,\n\n    // 현금영수증 발행 안내메일 제목\n    // 미입력시 팝빌에서 설정한 기본값 사용\n    \"emailSubject\" : \"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -605,7 +605,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "\n{\n    // [필수] 현금영수증 문서번호,\n    \"mgtKey\" : \"20211101-001\",\n\n    // 현금영수증 거래일시\n    // - 당일 과 전일만 입력 가능\n    // - 공백이나 미입력시 발행일시 사용\n    // - 형식 : yyyyMMddHHmmss\n    \"tradeDT\" : \"\",\n    \n    // 당초 승인 현금영수증의 국세청 승인번호\n    // - 'CashbillInfo'의 변수 'confirmNum'를 통해 내용 확인 가능\n    \"orgConfirmNum\" : \"K00000002\",\n\n    // 당초 승인 현금영수증의 거래일자 (형식 : yyyyMMdd)\n    // - 'CashbillInfo'의 변수 'tradeDate'를 통해 내용 확인 가능\n    \"orgTradeDate\" : \"20211126\",\n\n    // 발행시 알림문자 전송여부\n    \"smssendYN\" : false,\n\n    // 현금영수증 상태 이력을 관리하기 위한 메모\n    \"memo\" : \"메모\",\n\n    // 현금영수증 취소유형 : true / false 중 택 1\n    // - true = 부분 취소, false = 전체 취소\n    // - 미입력시 기본값 false 처리\n    \"isPartCancel\" : true,\n\n    // 현금영수증 취소사유 : 1 / 2 / 3 중 택 1\n    // - 1 = 거래취소, 2 = 오류발급취소, 3 = 기타\n    // - 미입력시 기본값 1 처리\n    \"cancelType\" : \"1\",\n\n    // 공급가액\n    // - {isPartCancel} 값이 true 인 경우 취소할 공급가액 입력\n    // - {isPartCancel} 값이 false 인 경우 미입력\n    \"supplyCost\" : \"10000\",\n\n    // 부가세\n    // - {isPartCancel} 값이 true 인 경우 취소할 부가세 입력\n    // - {isPartCancel} 값이 false 인 경우 미입력\n    \"tax\" : \"1000\",\n\n    // 봉사료\n    // - {isPartCancel} 값이 true 인 경우 취소할 봉사료 입력\n    // - {isPartCancel} 값이 false 인 경우 미입력\n    \"serviceFee\" : \"0\",\n\n    // 거래금액 (공급가액+부가세+봉사료)\n    // - {isPartCancel} 값이 true 인 경우 취소할 거래금액 입력\n    // - {isPartCancel} 값이 false 인 경우 미입력\n    \"totalAmount\" : \"11000\",\n\n    // 현금영수증 발행 안내메일 제목\n    // 미입력시 팝빌에서 설정한 기본값 사용\n    \"emailSubject\" : \"\"\n}",
+					"raw": "\n{\n    // [필수] 현금영수증 문서번호,\n    \"mgtKey\" : \"20241101-001\",\n\n    // 현금영수증 거래일시\n    // - 당일 과 전일만 입력 가능\n    // - 공백이나 미입력시 발행일시 사용\n    // - 형식 : yyyyMMddHHmmss\n    \"tradeDT\" : \"\",\n    \n    // 당초 승인 현금영수증의 국세청 승인번호\n    // - 'CashbillInfo'의 변수 'confirmNum'를 통해 내용 확인 가능\n    \"orgConfirmNum\" : \"K00000002\",\n\n    // 당초 승인 현금영수증의 거래일자 (형식 : yyyyMMdd)\n    // - 'CashbillInfo'의 변수 'tradeDate'를 통해 내용 확인 가능\n    \"orgTradeDate\" : \"20241126\",\n\n    // 발행시 알림문자 전송여부\n    \"smssendYN\" : false,\n\n    // 현금영수증 상태 이력을 관리하기 위한 메모\n    \"memo\" : \"메모\",\n\n    // 현금영수증 취소유형 : true / false 중 택 1\n    // - true = 부분 취소, false = 전체 취소\n    // - 미입력시 기본값 false 처리\n    \"isPartCancel\" : true,\n\n    // 현금영수증 취소사유 : 1 / 2 / 3 중 택 1\n    // - 1 = 거래취소, 2 = 오류발급취소, 3 = 기타\n    // - 미입력시 기본값 1 처리\n    \"cancelType\" : \"1\",\n\n    // 공급가액\n    // - {isPartCancel} 값이 true 인 경우 취소할 공급가액 입력\n    // - {isPartCancel} 값이 false 인 경우 미입력\n    \"supplyCost\" : \"10000\",\n\n    // 부가세\n    // - {isPartCancel} 값이 true 인 경우 취소할 부가세 입력\n    // - {isPartCancel} 값이 false 인 경우 미입력\n    \"tax\" : \"1000\",\n\n    // 봉사료\n    // - {isPartCancel} 값이 true 인 경우 취소할 봉사료 입력\n    // - {isPartCancel} 값이 false 인 경우 미입력\n    \"serviceFee\" : \"0\",\n\n    // 거래금액 (공급가액+부가세+봉사료)\n    // - {isPartCancel} 값이 true 인 경우 취소할 거래금액 입력\n    // - {isPartCancel} 값이 false 인 경우 미입력\n    \"totalAmount\" : \"11000\",\n\n    // 현금영수증 발행 안내메일 제목\n    // 미입력시 팝빌에서 설정한 기본값 사용\n    \"emailSubject\" : \"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -642,7 +642,7 @@
 							" */",
 							"",
 							"// 상태 및 요약정보를 확인할 현금영수증 문서번호",
-							"var mgtKey = '20210701-001'",
+							"var mgtKey = '20240701-001'",
 							"pm.collectionVariables.set(\"GetInfo_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -695,7 +695,7 @@
 							" */",
 							"",
 							"// 상태 및 요약 정보를 확인할 현금영수증 문서번호 배열 (최대 : 1000건)",
-							"var InovicerMgtKeyList = ['20211129_06','20210930-01-95', '20210930-01-93']",
+							"var InovicerMgtKeyList = ['20241129_06','20240930-01-95', '20240930-01-93']",
 							"pm.collectionVariables.set(\"GetInfos_InovicerMgtKeyList\", stringify(InovicerMgtKeyList));",
 							"",
 							"function stringify(obj) {",
@@ -761,7 +761,7 @@
 							" */",
 							"",
 							"// 상세정보를 확일할 현금영수증 문서번호",
-							"var mgtKey = '20211129_06'",
+							"var mgtKey = '20241129_06'",
 							"pm.collectionVariables.set(\"GetDetailInfo_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -825,11 +825,11 @@
 							"pm.collectionVariables.set(\"Search_DType\", DType);",
 							"",
 							"// 조회 기간의 시작일자 (형식 : yyyyMMdd)",
-							"var SDate = '20210601'",
+							"var SDate = '20240724'",
 							"pm.collectionVariables.set(\"Search_SDate\", SDate);",
 							"",
 							"// 조회 기간의 종료일자 (형식 : yyyyMMdd)",
-							"var EDate = '20210629'",
+							"var EDate = '20240724'",
 							"pm.collectionVariables.set(\"Search_EDate\", EDate);",
 							"",
 							"// [배열] 현금영수증 상태코드",
@@ -1050,7 +1050,7 @@
 							" */",
 							"",
 							"// 확인할 현금영수증 문서번호",
-							"var mgtKey = '20211129_06'",
+							"var mgtKey = '20241129_06'",
 							"pm.collectionVariables.set(\"GetPopUpURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -1109,7 +1109,7 @@
 							" */",
 							"",
 							"// 확인할 현금영수증 문서번호",
-							"var mgtKey = '20211129_06'",
+							"var mgtKey = '20241129_06'",
 							"pm.collectionVariables.set(\"GetViewURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -1168,7 +1168,7 @@
 							" */",
 							"",
 							"// 인쇄할 현금영수증 문서번호",
-							"var mgtKey = '20211129_06'",
+							"var mgtKey = '20241129_06'",
 							"pm.collectionVariables.set(\"GetPrintURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -1227,7 +1227,7 @@
 							" */",
 							"",
 							"// 인쇄할 현금영수증 문서번호 배열 (최대 : 1000 건)",
-							"var mgtKeyList = ['20211129_06','20211129_05', '20210629-03']",
+							"var mgtKeyList = ['20241129_06','20241129_05', '20240629-03']",
 							"pm.collectionVariables.set(\"GetMassPrintURL_MgtKeyList\", stringify(mgtKeyList));",
 							"",
 							"function stringify(obj) {",
@@ -1293,7 +1293,7 @@
 							" */",
 							"",
 							"// 현금영수증 문서번호",
-							"var mgtKey = '20211129_06'",
+							"var mgtKey = '20241129_06'",
 							"pm.collectionVariables.set(\"GetMailURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -1352,7 +1352,7 @@
 							" */",
 							"",
 							"// 현금영수증 문서번호",
-							"var mgtKey = '20211129_06'",
+							"var mgtKey = '20241129_06'",
 							"pm.collectionVariables.set(\"GetPDFURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -1466,7 +1466,7 @@
 							" */",
 							"",
 							"// 이메일 재전송할 현금영수증 문서번호",
-							"var mgtKey = '20211129_06';",
+							"var mgtKey = '20241129_06';",
 							"pm.collectionVariables.set(\"SendEmail_MgtKey\", mgtKey);",
 							"",
 							"// 수신자 이메일주소",
@@ -1545,7 +1545,7 @@
 							" */",
 							"",
 							"// 현금영수증 문서번호 ",
-							"var mgtKey = '20211129_06';",
+							"var mgtKey = '20241129_06';",
 							"pm.collectionVariables.set(\"SendSMS_MgtKey\", mgtKey);",
 							"",
 							"// SMS 정보",
@@ -1626,7 +1626,7 @@
 							" */",
 							"",
 							"// 현금영수증 문서번호 ",
-							"var mgtKey = '20211129_06';",
+							"var mgtKey = '20241129_06';",
 							"pm.collectionVariables.set(\"SendFAX_mgtKey\", mgtKey);",
 							"",
 							"// FAX 정보.",
@@ -1711,7 +1711,7 @@
 							"pm.collectionVariables.set(\"AssignMgtKey_ItemKey\", popbillItemKey);",
 							"",
 							"// 할당할 현금영수증 문서번호",
-							"var invoicerMgtKey = '20211130-001';",
+							"var invoicerMgtKey = '20241130-001';",
 							"pm.collectionVariables.set(\"AssignMgtKey_InvoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"

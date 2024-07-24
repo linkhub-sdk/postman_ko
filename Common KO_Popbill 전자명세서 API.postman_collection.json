@@ -157,7 +157,7 @@
 							"pm.collectionVariables.set(\"CheckMgtKeyinUse_ItemCode\", itemCode);",
 							"",
 							"// 이미 사용 중인 문서번호는 중복 사용이 불가하고, 전자명세서가 삭제된 경우에만 문서번호의 재사용이 가능합니다.",
-							"var mgtKey = '20211129-002'",
+							"var mgtKey = '20241129-002'",
 							"pm.collectionVariables.set(\"CheckMgtKeyinUse_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -236,7 +236,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\n*\n* 전자명세서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/statement/java/api/object#Statement_Input\n*\n*/\n\n{\n    // [필수] 기재상 작성일자\n    \"writeDate\" : \"20211130\",\n\n    // [필수] 과세형태, (과세, 영세, 면세) 중 기재\n    \"taxType\" : \"과세\",\n\n    // [필수] (영수, 청구) 중 기재\n    \"purposeType\" : \"영수\",\n\n    // 전자명세서 문서유형 : 121 / 122 / 123 / 124 / 125 / 126 중 택 1\n    // └ 121 = 거래명세서, 122 = 청구서, 123 = 견적서, 124 = 발주서, 125 = 입금표, 126 = 영수증\n    \"itemCode\" : \"121\",\n\n    // 전자명세서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능 \n    \"mgtKey\" : \"20220325_001\",\n\n    //\t전자명세서 발행 안내메일 제목\n    // ※ 미입력시 팝빌에서 지정한 이메일 제목으로 전송\n    \"emailSubject\" : \"\",\n\n    //전자명세서 상태 이력을 관리하기 위한 메모\n    \"memo\" : \"\",\n\n    /************************************************************\n     *                         공급자 정보\n     ************************************************************/\n\n    \"senderCorpNum\" : \"1234567890\",\n    \"senderTaxRegID\" : \"\",\n    \"senderCorpName\" : \"테스트 상호\",\n    \"senderCEOName\" : \"테스트 대표\",\n    \"senderAddr\" : \"테스트 주소\",\n    \"senderBizType\" : \"테스트 업태\",\n    \"senderBizClass\" : \"테스트 종목\",\n    \"senderContactName\" : \"테스트 담당자 성명\",\n    \"senderDeptName\" : \"테스트 부서명\",\n    \"senderTEL\" : \"070-111-222\",\n    \"senderHP\" : \"010-000-222\",\n    \"senderEmail\" : \"test@test.com\",\n    \n    /************************************************************\n     *                     공급받는자 정보\n     ************************************************************/\n\n    \"receiverCorpNum\" : \"8888888888\",\n    \"receiverTaxRegID\" : \"\"\t,\n    \"receiverCorpName\" : \"공급받는자 상호\",\n    \"receiverCEOName\" : \"공급받는자 대표자 성명\",\n    \"receiverAddr\" : \"공급받는자 주소\",\n    \"receiverBizClass\" : \"공급받는자 업종\",\n    \"eceiverBizType\" : \"공급받는자 업태\",\n    \"receiverContactName\" : \"공급받는자 담당자명\",\n    \"receiverTEL\" : \"010-0000-1111\",\n    \"receiverHP\" : \"010-1111-2222\",\n    // 팝빌 테스트환경에서 테스트하는 경우에도 안내 메일이 전송되므로,\n    // 실제 거래처의 메일주소가 기재되지 않도록 주의\n    \"receiverEmail\" : \"test@test.com\",\n\n    /************************************************************\n     *                   전자명세서 기재정보\n     ************************************************************/\n\n    \"supplyCostTotal\" : \"200000\",\t\t\t// [필수] 공급가액 합계\n    \"taxTotal\" : \"20000\",\t\t\t\t\t// [필수] 세액 합계\n    \"totalAmount\" : \"220000\",\t\t\t\t// [필수] 합계금액 (공급가액 합계+세액합계)\n\n    \"serialNum\" : \"123\",\t\t\t\t\t// 기재상 일련번호 항목\n    \"remark1\" : \"비고1\",\n    \"remark2\" : \"비고2\",\n    \"remark3\" : \"비고3\",\n\n    \"businessLicenseYN\" : false,\t\t\t//사업자등록증 첨부 여부\n    \"bankBookYN\" : false,\t\t\t\t\t//통장사본 첨부 여부\n    \"smssendYN\" : false,\t\t\t\t\t//발행시 안내문자 전송여부\n\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ]\n}",
+					"raw": "/*\n*\n* 전자명세서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/statement/java/api/object#Statement_Input\n*\n*/\n\n{\n    // [필수] 기재상 작성일자\n    \"writeDate\" : \"20240724\",\n\n    // [필수] 과세형태, (과세, 영세, 면세) 중 기재\n    \"taxType\" : \"과세\",\n\n    // [필수] (영수, 청구) 중 기재\n    \"purposeType\" : \"영수\",\n\n    // 전자명세서 문서유형 : 121 / 122 / 123 / 124 / 125 / 126 중 택 1\n    // └ 121 = 거래명세서, 122 = 청구서, 123 = 견적서, 124 = 발주서, 125 = 입금표, 126 = 영수증\n    \"itemCode\" : \"121\",\n\n    // 전자명세서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능 \n    \"mgtKey\" : \"20240325_001\",\n\n    //\t전자명세서 발행 안내메일 제목\n    // ※ 미입력시 팝빌에서 지정한 이메일 제목으로 전송\n    \"emailSubject\" : \"\",\n\n    //전자명세서 상태 이력을 관리하기 위한 메모\n    \"memo\" : \"\",\n\n    /************************************************************\n     *                         공급자 정보\n     ************************************************************/\n\n    \"senderCorpNum\" : \"1234567890\",\n    \"senderTaxRegID\" : \"\",\n    \"senderCorpName\" : \"테스트 상호\",\n    \"senderCEOName\" : \"테스트 대표\",\n    \"senderAddr\" : \"테스트 주소\",\n    \"senderBizType\" : \"테스트 업태\",\n    \"senderBizClass\" : \"테스트 종목\",\n    \"senderContactName\" : \"테스트 담당자 성명\",\n    \"senderDeptName\" : \"테스트 부서명\",\n    \"senderTEL\" : \"070-111-222\",\n    \"senderHP\" : \"010-000-222\",\n    \"senderEmail\" : \"test@test.com\",\n    \n    /************************************************************\n     *                     공급받는자 정보\n     ************************************************************/\n\n    \"receiverCorpNum\" : \"8888888888\",\n    \"receiverTaxRegID\" : \"\"\t,\n    \"receiverCorpName\" : \"공급받는자 상호\",\n    \"receiverCEOName\" : \"공급받는자 대표자 성명\",\n    \"receiverAddr\" : \"공급받는자 주소\",\n    \"receiverBizClass\" : \"공급받는자 업종\",\n    \"eceiverBizType\" : \"공급받는자 업태\",\n    \"receiverContactName\" : \"공급받는자 담당자명\",\n    \"receiverTEL\" : \"010-0000-1111\",\n    \"receiverHP\" : \"010-1111-2222\",\n    // 팝빌 테스트환경에서 테스트하는 경우에도 안내 메일이 전송되므로,\n    // 실제 거래처의 메일주소가 기재되지 않도록 주의\n    \"receiverEmail\" : \"test@test.com\",\n\n    /************************************************************\n     *                   전자명세서 기재정보\n     ************************************************************/\n\n    \"supplyCostTotal\" : \"200000\",\t\t\t// [필수] 공급가액 합계\n    \"taxTotal\" : \"20000\",\t\t\t\t\t// [필수] 세액 합계\n    \"totalAmount\" : \"220000\",\t\t\t\t// [필수] 합계금액 (공급가액 합계+세액합계)\n\n    \"serialNum\" : \"123\",\t\t\t\t\t// 기재상 일련번호 항목\n    \"remark1\" : \"비고1\",\n    \"remark2\" : \"비고2\",\n    \"remark3\" : \"비고3\",\n\n    \"businessLicenseYN\" : false,\t\t\t//사업자등록증 첨부 여부\n    \"bankBookYN\" : false,\t\t\t\t\t//통장사본 첨부 여부\n    \"smssendYN\" : false,\t\t\t\t\t//발행시 안내문자 전송여부\n\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -293,7 +293,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\n*\n* 전자명세서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/statement/java/api/object#Statement_Input\n*\n*/\n\n{\n    // [필수] 기재상 작성일자\n    \"writeDate\" : \"20220328\",\n\n    // [필수] 과세형태, (과세, 영세, 면세) 중 기재\n    \"taxType\" : \"과세\",\n\n    // [필수] (영수, 청구) 중 기재\n    \"purposeType\" : \"영수\",\n\n    // 전자명세서 문서유형 : 121 / 122 / 123 / 124 / 125 / 126 중 택 1\n    // └ 121 = 거래명세서, 122 = 청구서, 123 = 견적서, 124 = 발주서, 125 = 입금표, 126 = 영수증\n    \"itemCode\" : \"121\",\n\n    // 전자명세서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능 \n    \"mgtKey\" : \"20220328_004\",\n\n    /************************************************************\n     *                         공급자 정보\n     ************************************************************/\n\n    \"senderCorpNum\" : \"1234567890\",\n    \"senderTaxRegID\" : \"\",\n    \"senderCorpName\" : \"테스트 상호\",\n    \"senderCEOName\" : \"테스트 대표\",\n    \"senderAddr\" : \"테스트 주소\",\n    \"senderBizType\" : \"테스트 업태\",\n    \"senderBizClass\" : \"테스트 종목\",\n    \"senderContactName\" : \"테스트 담당자 성명\",\n    \"senderDeptName\" : \"테스트 부서명\",\n    \"senderTEL\" : \"070-111-222\",\n    \"senderHP\" : \"010-000-222\",\n    \"senderEmail\" : \"test@test.com\",\n    \n    /************************************************************\n     *                     공급받는자 정보\n     ************************************************************/\n\n    \"receiverCorpNum\" : \"8888888888\",\n    \"receiverTaxRegID\" : \"\"\t,\n    \"receiverCorpName\" : \"공급받는자 상호\",\n    \"receiverCEOName\" : \"공급받는자 대표자 성명\",\n    \"receiverAddr\" : \"공급받는자 주소\",\n    \"receiverBizClass\" : \"공급받는자 업종\",\n    \"eceiverBizType\" : \"공급받는자 업태\",\n    \"receiverContactName\" : \"공급받는자 담당자명\",\n    \"receiverTEL\" : \"010-0000-1111\",\n    \"receiverHP\" : \"010-1111-2222\",\n    // 팝빌 테스트환경에서 테스트하는 경우에도 안내 메일이 전송되므로,\n    // 실제 거래처의 메일주소가 기재되지 않도록 주의\n    \"receiverEmail\" : \"test@test.com\",\n\n    /************************************************************\n     *                   전자명세서 기재정보\n     ************************************************************/\n\n    \"supplyCostTotal\" : \"200000\",\t\t\t// [필수] 공급가액 합계\n    \"taxTotal\" : \"20000\",\t\t\t\t\t// [필수] 세액 합계\n    \"totalAmount\" : \"220000\",\t\t\t\t// [필수] 합계금액 (공급가액 합계+세액합계)\n\n    \"serialNum\" : \"123\",\t\t\t\t\t// 기재상 일련번호 항목\n    \"remark1\" : \"비고1\",\n    \"remark2\" : \"비고2\",\n    \"remark3\" : \"비고3\",\n\n    \"businessLicenseYN\" : false,\t\t\t//사업자등록증 첨부 여부\n    \"bankBookYN\" : false,\t\t\t\t\t//통장사본 첨부 여부\n    \"smssendYN\" : false,\t\t\t\t\t//발행시 안내문자 전송여부\n\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ]\n}",
+					"raw": "/*\n*\n* 전자명세서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/statement/java/api/object#Statement_Input\n*\n*/\n\n{\n    // [필수] 기재상 작성일자\n    \"writeDate\" : \"20240724\",\n\n    // [필수] 과세형태, (과세, 영세, 면세) 중 기재\n    \"taxType\" : \"과세\",\n\n    // [필수] (영수, 청구) 중 기재\n    \"purposeType\" : \"영수\",\n\n    // 전자명세서 문서유형 : 121 / 122 / 123 / 124 / 125 / 126 중 택 1\n    // └ 121 = 거래명세서, 122 = 청구서, 123 = 견적서, 124 = 발주서, 125 = 입금표, 126 = 영수증\n    \"itemCode\" : \"121\",\n\n    // 전자명세서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능 \n    \"mgtKey\" : \"20240328_004\",\n\n    /************************************************************\n     *                         공급자 정보\n     ************************************************************/\n\n    \"senderCorpNum\" : \"1234567890\",\n    \"senderTaxRegID\" : \"\",\n    \"senderCorpName\" : \"테스트 상호\",\n    \"senderCEOName\" : \"테스트 대표\",\n    \"senderAddr\" : \"테스트 주소\",\n    \"senderBizType\" : \"테스트 업태\",\n    \"senderBizClass\" : \"테스트 종목\",\n    \"senderContactName\" : \"테스트 담당자 성명\",\n    \"senderDeptName\" : \"테스트 부서명\",\n    \"senderTEL\" : \"070-111-222\",\n    \"senderHP\" : \"010-000-222\",\n    \"senderEmail\" : \"test@test.com\",\n    \n    /************************************************************\n     *                     공급받는자 정보\n     ************************************************************/\n\n    \"receiverCorpNum\" : \"8888888888\",\n    \"receiverTaxRegID\" : \"\"\t,\n    \"receiverCorpName\" : \"공급받는자 상호\",\n    \"receiverCEOName\" : \"공급받는자 대표자 성명\",\n    \"receiverAddr\" : \"공급받는자 주소\",\n    \"receiverBizClass\" : \"공급받는자 업종\",\n    \"eceiverBizType\" : \"공급받는자 업태\",\n    \"receiverContactName\" : \"공급받는자 담당자명\",\n    \"receiverTEL\" : \"010-0000-1111\",\n    \"receiverHP\" : \"010-1111-2222\",\n    // 팝빌 테스트환경에서 테스트하는 경우에도 안내 메일이 전송되므로,\n    // 실제 거래처의 메일주소가 기재되지 않도록 주의\n    \"receiverEmail\" : \"test@test.com\",\n\n    /************************************************************\n     *                   전자명세서 기재정보\n     ************************************************************/\n\n    \"supplyCostTotal\" : \"200000\",\t\t\t// [필수] 공급가액 합계\n    \"taxTotal\" : \"20000\",\t\t\t\t\t// [필수] 세액 합계\n    \"totalAmount\" : \"220000\",\t\t\t\t// [필수] 합계금액 (공급가액 합계+세액합계)\n\n    \"serialNum\" : \"123\",\t\t\t\t\t// 기재상 일련번호 항목\n    \"remark1\" : \"비고1\",\n    \"remark2\" : \"비고2\",\n    \"remark3\" : \"비고3\",\n\n    \"businessLicenseYN\" : false,\t\t\t//사업자등록증 첨부 여부\n    \"bankBookYN\" : false,\t\t\t\t\t//통장사본 첨부 여부\n    \"smssendYN\" : false,\t\t\t\t\t//발행시 안내문자 전송여부\n\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -335,7 +335,7 @@
 							"pm.collectionVariables.set(\"Update_ItemCode\", itemCode);",
 							"",
 							"// 수정할 전자명세서 문서번호",
-							"var mgtKey = '20211130_003'",
+							"var mgtKey = '20241130_003'",
 							"pm.collectionVariables.set(\"Update_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -364,7 +364,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\n*\n* 전자명세서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/statement/java/api/object#Statement_Input\n*\n*/\n\n{\n    // [필수] 기재상 작성일자\n    \"writeDate\" : \"20211130\",\n\n    // [필수] 과세형태, (과세, 영세, 면세) 중 기재\n    \"taxType\" : \"과세\",\n\n    // [필수] (영수, 청구) 중 기재\n    \"purposeType\" : \"영수\",\n\n    // 전자명세서 문서유형 : 121 / 122 / 123 / 124 / 125 / 126 중 택 1\n    // └ 121 = 거래명세서, 122 = 청구서, 123 = 견적서, 124 = 발주서, 125 = 입금표, 126 = 영수증\n    \"itemCode\" : \"121\",\n\n    // 전자명세서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능 \n    \"mgtKey\" : \"20211130_003\",\n\n    /************************************************************\n     *                         공급자 정보\n     ************************************************************/\n\n    \"senderCorpNum\" : \"1234567890\",\n    \"senderTaxRegID\" : \"\",\n    \"senderCorpName\" : \"테스트 상호\",\n    \"senderCEOName\" : \"업데이트 대표\",\n    \"senderAddr\" : \"테스트 주소\",\n    \"senderBizType\" : \"테스트 업태\",\n    \"senderBizClass\" : \"테스트 종목\",\n    \"senderContactName\" : \"테스트 담당자 성명\",\n    \"senderDeptName\" : \"테스트 부서명\",\n    \"senderTEL\" : \"070-111-222\",\n    \"senderHP\" : \"010-000-222\",\n    \"senderEmail\" : \"test@test.com\",\n    \n    /************************************************************\n     *                     공급받는자 정보\n     ************************************************************/\n\n    \"receiverCorpNum\" : \"8888888888\",\n    \"receiverTaxRegID\" : \"\"\t,\n    \"receiverCorpName\" : \"공급받는자 상호\",\n    \"receiverCEOName\" : \"공급받는자 대표자 성명\",\n    \"receiverAddr\" : \"공급받는자 주소\",\n    \"receiverBizClass\" : \"공급받는자 업종\",\n    \"eceiverBizType\" : \"공급받는자 업태\",\n    \"receiverContactName\" : \"공급받는자 담당자명\",\n    \"receiverTEL\" : \"010-0000-1111\",\n    \"receiverHP\" : \"010-1111-2222\",\n    // 팝빌 테스트환경에서 테스트하는 경우에도 안내 메일이 전송되므로,\n    // 실제 거래처의 메일주소가 기재되지 않도록 주의\n    \"receiverEmail\" : \"test@test.com\",\n\n    /************************************************************\n     *                   전자명세서 기재정보\n     ************************************************************/\n\n    \"supplyCostTotal\" : \"200000\",\t\t\t// [필수] 공급가액 합계\n    \"taxTotal\" : \"20000\",\t\t\t\t\t// [필수] 세액 합계\n    \"totalAmount\" : \"220000\",\t\t\t\t// [필수] 합계금액 (공급가액 합계+세액합계)\n\n    \"serialNum\" : \"123\",\t\t\t\t\t// 기재상 일련번호 항목\n    \"remark1\" : \"비고1\",\n    \"remark2\" : \"비고2\",\n    \"remark3\" : \"비고3\",\n\n    \"businessLicenseYN\" : false,\t\t\t//사업자등록증 첨부 여부\n    \"bankBookYN\" : false,\t\t\t\t\t//통장사본 첨부 여부\n    \"smssendYN\" : false,\t\t\t\t\t//발행시 안내문자 전송여부\n\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ]\n}",
+					"raw": "/*\n*\n* 전자명세서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/statement/java/api/object#Statement_Input\n*\n*/\n\n{\n    // [필수] 기재상 작성일자\n    \"writeDate\" : \"20240724\",\n\n    // [필수] 과세형태, (과세, 영세, 면세) 중 기재\n    \"taxType\" : \"과세\",\n\n    // [필수] (영수, 청구) 중 기재\n    \"purposeType\" : \"영수\",\n\n    // 전자명세서 문서유형 : 121 / 122 / 123 / 124 / 125 / 126 중 택 1\n    // └ 121 = 거래명세서, 122 = 청구서, 123 = 견적서, 124 = 발주서, 125 = 입금표, 126 = 영수증\n    \"itemCode\" : \"121\",\n\n    // 전자명세서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능 \n    \"mgtKey\" : \"20241130_003\",\n\n    /************************************************************\n     *                         공급자 정보\n     ************************************************************/\n\n    \"senderCorpNum\" : \"1234567890\",\n    \"senderTaxRegID\" : \"\",\n    \"senderCorpName\" : \"테스트 상호\",\n    \"senderCEOName\" : \"업데이트 대표\",\n    \"senderAddr\" : \"테스트 주소\",\n    \"senderBizType\" : \"테스트 업태\",\n    \"senderBizClass\" : \"테스트 종목\",\n    \"senderContactName\" : \"테스트 담당자 성명\",\n    \"senderDeptName\" : \"테스트 부서명\",\n    \"senderTEL\" : \"070-111-222\",\n    \"senderHP\" : \"010-000-222\",\n    \"senderEmail\" : \"test@test.com\",\n    \n    /************************************************************\n     *                     공급받는자 정보\n     ************************************************************/\n\n    \"receiverCorpNum\" : \"8888888888\",\n    \"receiverTaxRegID\" : \"\"\t,\n    \"receiverCorpName\" : \"공급받는자 상호\",\n    \"receiverCEOName\" : \"공급받는자 대표자 성명\",\n    \"receiverAddr\" : \"공급받는자 주소\",\n    \"receiverBizClass\" : \"공급받는자 업종\",\n    \"eceiverBizType\" : \"공급받는자 업태\",\n    \"receiverContactName\" : \"공급받는자 담당자명\",\n    \"receiverTEL\" : \"010-0000-1111\",\n    \"receiverHP\" : \"010-1111-2222\",\n    // 팝빌 테스트환경에서 테스트하는 경우에도 안내 메일이 전송되므로,\n    // 실제 거래처의 메일주소가 기재되지 않도록 주의\n    \"receiverEmail\" : \"test@test.com\",\n\n    /************************************************************\n     *                   전자명세서 기재정보\n     ************************************************************/\n\n    \"supplyCostTotal\" : \"200000\",\t\t\t// [필수] 공급가액 합계\n    \"taxTotal\" : \"20000\",\t\t\t\t\t// [필수] 세액 합계\n    \"totalAmount\" : \"220000\",\t\t\t\t// [필수] 합계금액 (공급가액 합계+세액합계)\n\n    \"serialNum\" : \"123\",\t\t\t\t\t// 기재상 일련번호 항목\n    \"remark1\" : \"비고1\",\n    \"remark2\" : \"비고2\",\n    \"remark3\" : \"비고3\",\n\n    \"businessLicenseYN\" : false,\t\t\t//사업자등록증 첨부 여부\n    \"bankBookYN\" : false,\t\t\t\t\t//통장사본 첨부 여부\n    \"smssendYN\" : false,\t\t\t\t\t//발행시 안내문자 전송여부\n\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -408,7 +408,7 @@
 							"pm.collectionVariables.set(\"Issue_ItemCode\", itemCode);",
 							"",
 							"// 발행할 전자명세서 문서번호",
-							"var mgtKey = '20211130_003'",
+							"var mgtKey = '20241130_003'",
 							"pm.collectionVariables.set(\"Issue_MgtKey\", mgtKey);",
 							"",
 							"// Iussue info",
@@ -494,7 +494,7 @@
 							"pm.collectionVariables.set(\"Issue_ItemCode\", itemCode);",
 							"",
 							"// 취소할 전자명세서 문서번호",
-							"var mgtKey = '20211130_003'",
+							"var mgtKey = '20241130_003'",
 							"pm.collectionVariables.set(\"Issue_MgtKey\", mgtKey);",
 							"",
 							"// Cancel info",
@@ -580,7 +580,7 @@
 							"pm.collectionVariables.set(\"Issue_ItemCode\", itemCode);",
 							"",
 							"// 삭제할 전자명세서 문서번호",
-							"var mgtKey = '20211130_003'",
+							"var mgtKey = '20241130_003'",
 							"pm.collectionVariables.set(\"Issue_MgtKey\", mgtKey);",
 							""
 						],
@@ -654,7 +654,7 @@
 							"pm.collectionVariables.set(\"GetInfo_ItemCode\", itemCode);",
 							"",
 							"// 확인할 전자명세서 문서번호",
-							"var mgtKey = '20211130_001'",
+							"var mgtKey = '20241130_001'",
 							"pm.collectionVariables.set(\"GetInfo_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -713,7 +713,7 @@
 							"pm.collectionVariables.set(\"GetInfos_ItemCode\", itemCode);",
 							"",
 							"// 상태 및 요약 정보를 확인할 현금영수증 문서번호 배열 (최대 : 1000건)",
-							"var InovicerMgtKeyList = ['20211130_002','20211130_001', '20211130_003']",
+							"var InovicerMgtKeyList = ['20241130_002','20241130_001', '20241130_003']",
 							"pm.collectionVariables.set(\"GetInfos_InovicerMgtKeyList\", stringify(InovicerMgtKeyList));",
 							"",
 							"function stringify(obj) {",
@@ -784,7 +784,7 @@
 							"pm.collectionVariables.set(\"GetDetailInfo_ItemCode\", itemCode);",
 							"",
 							"// 확인할 전자명세서 문서번호",
-							"var mgtKey = '20211130_001'",
+							"var mgtKey = '20241130_001'",
 							"pm.collectionVariables.set(\"GetDetailInfo_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -849,11 +849,11 @@
 							"pm.collectionVariables.set(\"Search_DType\", DType);",
 							"",
 							"// 조회 기간의 시작일자 (형식 : yyyyMMdd)",
-							"var SDate = '20211130'",
+							"var SDate = '20240724'",
 							"pm.collectionVariables.set(\"Search_SDate\", SDate);",
 							"",
 							"// 조회 기간의 종료일자 (형식 : yyyyMMdd)",
-							"var EDate = '20211130'",
+							"var EDate = '20240724'",
 							"pm.collectionVariables.set(\"Search_EDate\", EDate);",
 							"",
 							"// [배열] 전자명세서 상태코드",
@@ -978,7 +978,7 @@
 							"pm.collectionVariables.set(\"GetLogs_ItemCode\", itemCode);",
 							"",
 							"// 확인할 전자명세서 문서번호",
-							"var mgtKey = '20211130_001'",
+							"var mgtKey = '20241130_001'",
 							"pm.collectionVariables.set(\"GetLogs_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -1165,7 +1165,7 @@
 							"pm.collectionVariables.set(\"GetViewURL_ItemCode\", itemCode);",
 							"",
 							"// 확인할 전자명세서 문서번호",
-							"var mgtKey = '20211130_001'",
+							"var mgtKey = '20241130_001'",
 							"pm.collectionVariables.set(\"GetViewURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -1230,7 +1230,7 @@
 							"pm.collectionVariables.set(\"GetPrintURL_ItemCode\", itemCode);",
 							"",
 							"// 인쇄할 전자명세서 문서번호",
-							"var mgtKey = '20211130_001'",
+							"var mgtKey = '20241130_001'",
 							"pm.collectionVariables.set(\"GetPrintURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -1295,7 +1295,7 @@
 							"pm.collectionVariables.set(\"GetEPrintURL_ItemCode\", itemCode);",
 							"",
 							"// 인쇄할 전자명세서 문서번호",
-							"var mgtKey = '20211130_001'",
+							"var mgtKey = '20241130_001'",
 							"pm.collectionVariables.set(\"GetEPrintURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -1360,7 +1360,7 @@
 							"pm.collectionVariables.set(\"GetMassPrintURL_ItemCode\", itemCode);",
 							"",
 							"// 인쇄할 전자명세서 문서번호 배열 (최대 : 1000 건)",
-							"var mgtKeyList = ['20211130_001','20211130_002', '20211130_003']",
+							"var mgtKeyList = ['20241130_001','20241130_002', '20241130_003']",
 							"pm.collectionVariables.set(\"GetMassPrintURL_MgtKeyList\", stringify(mgtKeyList));",
 							"",
 							"function stringify(obj) {",
@@ -1438,7 +1438,7 @@
 							"pm.collectionVariables.set(\"GetMailURL_ItemCode\", itemCode);",
 							"",
 							"// 전자명세서 문서번호",
-							"var mgtKey = '20211130_001'",
+							"var mgtKey = '20241130_001'",
 							"pm.collectionVariables.set(\"GetMailURL_MgtKey\", mgtKey);"
 						],
 						"type": "text/javascript"
@@ -1708,7 +1708,7 @@
 							"pm.collectionVariables.set(\"DeleteFile_ItemCode\", itemCode);",
 							"",
 							"// 파일을 삭제할 전자명세서 문서번호",
-							"var mgtKey = '20220328_004';",
+							"var mgtKey = '20240328_004';",
 							"pm.collectionVariables.set(\"DeleteFile_mgtKey\", mgtKey);",
 							"",
 							"// 삭제할 파일ID",
@@ -1794,7 +1794,7 @@
 							"pm.collectionVariables.set(\"GetFiles_ItemCode\", itemCode);",
 							"",
 							"// 전자명세서 문서번호",
-							"var mgtKey = '20220328_004'",
+							"var mgtKey = '20240328_004'",
 							"pm.collectionVariables.set(\"GetFiles_MgtKey\", mgtKey);",
 							"",
 							""
@@ -1857,7 +1857,7 @@
 							"pm.collectionVariables.set(\"SendEmail_ItemCode\", itemCode);",
 							"",
 							"// 이메일 재전송할 전자명세서 문서번호",
-							"var mgtKey = '20211130_001';",
+							"var mgtKey = '20241130_001';",
 							"pm.collectionVariables.set(\"SendEmail_MgtKey\", mgtKey);",
 							"",
 							"// 수신자 이메일주소",
@@ -1943,7 +1943,7 @@
 							"pm.collectionVariables.set(\"SendSMS_ItemCode\", itemCode);",
 							"",
 							"// 이메일 재전송할 전자명세서 문서번호",
-							"var mgtKey = '20211130_001';",
+							"var mgtKey = '20241130_001';",
 							"pm.collectionVariables.set(\"SendSMS_MgtKey\", mgtKey);",
 							"",
 							"// SMS 정보",
@@ -2031,7 +2031,7 @@
 							"pm.collectionVariables.set(\"SendFAX_ItemCode\", itemCode);",
 							"",
 							"// 현금영수증 문서번호 ",
-							"var mgtKey = '20211130_001';",
+							"var mgtKey = '20241130_001';",
 							"pm.collectionVariables.set(\"SendFAX_mgtKey\", mgtKey);",
 							"",
 							"// FAX 정보.",
@@ -2138,7 +2138,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    // 발신 번호\r\n    \"sendNum\" : \"070111222\",\r\n\r\n    // 수신 번호\r\n    \"receiveNum\" : \"010111222\",\r\n\r\n    // [필수] 기재상 작성일자\r\n    \"writeDate\" : \"20211130\",\r\n\r\n    // [필수] 과세형태, (과세, 영세, 면세) 중 기재\r\n    \"taxType\" : \"과세\",\r\n\r\n    // [필수] (영수, 청구) 중 기재\r\n    \"purposeType\" : \"영수\",\r\n\r\n    // 전자명세서 문서유형 : 121 / 122 / 123 / 124 / 125 / 126 중 택 1\r\n    // └ 121 = 거래명세서, 122 = 청구서, 123 = 견적서, 124 = 발주서, 125 = 입금표, 126 = 영수증\r\n    \"itemCode\" : \"121\",\r\n\r\n    // 전자명세서 관리를 위해 파트너가 할당하는 식별번호\r\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능 \r\n    \"mgtKey\" : \"20211130_100\",\r\n\r\n    /************************************************************\r\n     *                         공급자 정보\r\n     ************************************************************/\r\n\r\n    \"senderCorpNum\" : \"1234567890\",\r\n    \"senderTaxRegID\" : \"\",\r\n    \"senderCorpName\" : \"테스트 상호\",\r\n    \"senderCEOName\" : \"테스트 대표\",\r\n    \"senderAddr\" : \"테스트 주소\",\r\n    \"senderBizType\" : \"테스트 업태\",\r\n    \"senderBizClass\" : \"테스트 종목\",\r\n    \"senderContactName\" : \"테스트 담당자 성명\",\r\n    \"senderDeptName\" : \"테스트 부서명\",\r\n    \"senderTEL\" : \"070-111-222\",\r\n    \"senderHP\" : \"010-000-222\",\r\n    \"senderEmail\" : \"test@test.com\",\r\n    \r\n    /************************************************************\r\n     *                     공급받는자 정보\r\n     ************************************************************/\r\n\r\n    \"receiverCorpNum\" : \"8888888888\",\r\n    \"receiverTaxRegID\" : \"\"\t,\r\n    \"receiverCorpName\" : \"공급받는자 상호\",\r\n    \"receiverCEOName\" : \"공급받는자 대표자 성명\",\r\n    \"receiverAddr\" : \"공급받는자 주소\",\r\n    \"receiverBizClass\" : \"공급받는자 업종\",\r\n    \"eceiverBizType\" : \"공급받는자 업태\",\r\n    \"receiverContactName\" : \"공급받는자 담당자명\",\r\n    \"receiverTEL\" : \"010-0000-1111\",\r\n    \"receiverHP\" : \"010-1111-2222\",\r\n    // 팝빌 테스트환경에서 테스트하는 경우에도 안내 메일이 전송되므로,\r\n    // 실제 거래처의 메일주소가 기재되지 않도록 주의\r\n    \"receiverEmail\" : \"test@test.com\",\r\n\r\n    /************************************************************\r\n     *                   전자명세서 기재정보\r\n     ************************************************************/\r\n\r\n    \"supplyCostTotal\" : \"200000\",\t\t\t// [필수] 공급가액 합계\r\n    \"taxTotal\" : \"20000\",\t\t\t\t\t// [필수] 세액 합계\r\n    \"totalAmount\" : \"220000\",\t\t\t\t// [필수] 합계금액 (공급가액 합계+세액합계)\r\n\r\n    \"serialNum\" : \"123\",\t\t\t\t\t// 기재상 일련번호 항목\r\n    \"remark1\" : \"비고1\",\r\n    \"remark2\" : \"비고2\",\r\n    \"remark3\" : \"비고3\",\r\n\r\n    \"businessLicenseYN\" : false,\t\t\t//사업자등록증 첨부 여부\r\n    \"bankBookYN\" : false,\t\t\t\t\t//통장사본 첨부 여부\r\n    \"smssendYN\" : false,\t\t\t\t\t//발행시 안내문자 전송여부\r\n\r\n    \"detailList\": [\r\n        {\r\n            // 일련번호\r\n            // └ 1부터 순차적으로 입력 (최대 99)\r\n            \"serialNum\": 1,\r\n\r\n            // 거래일자\r\n            // └ 형식 : yyyyMMdd\r\n            \"purchaseDT\": \"20201006\",\r\n\r\n            // 품명\r\n            \"itemName\": \"Item Name 01\",\r\n\r\n            // 규격\r\n            \"spec\": \"spec\",\r\n\r\n            // 수량\r\n            // └ 소수점 아래 2번째 자리까지 입력 가능\r\n            // └ 마이너스 입력 가능\r\n            \"qty\": \"1\",\r\n\r\n            // 단가\r\n            // └ 소수점 아래 2번째 자리까지 입력 가능\r\n            // └ 마이너스 금액 입력 가능\r\n            \"unitCost\": \"110000\",\r\n\r\n            // 공급가액\r\n            // └ 정수만 입력 가능\r\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\r\n            \"supplyCost\": \"100000\",\r\n\r\n            // 세액\r\n            // └ 정수만 입력 가능\r\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\r\n            \"tax\": \"10000\",\r\n\r\n            // 비고\r\n            \"remark\": \"Item reamrk\"\r\n        },\r\n        {\r\n            \"serialNum\": 2,\r\n            \"purchaseDT\": \"20201006\",\r\n            \"itemName\": \"Item Name 02\",\r\n            \"spec\": \"spec\",\r\n            \"qty\": \"1\",\r\n            \"unitCost\": \"110000\",\r\n            \"supplyCost\": \"100000\",\r\n            \"tax\": \"10000\",\r\n            \"remark\": \"Item reamrk\"\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    // 발신 번호\r\n    \"sendNum\" : \"070111222\",\r\n\r\n    // 수신 번호\r\n    \"receiveNum\" : \"010111222\",\r\n\r\n    // [필수] 기재상 작성일자\r\n    \"writeDate\" : \"20240724\",\r\n\r\n    // [필수] 과세형태, (과세, 영세, 면세) 중 기재\r\n    \"taxType\" : \"과세\",\r\n\r\n    // [필수] (영수, 청구) 중 기재\r\n    \"purposeType\" : \"영수\",\r\n\r\n    // 전자명세서 문서유형 : 121 / 122 / 123 / 124 / 125 / 126 중 택 1\r\n    // └ 121 = 거래명세서, 122 = 청구서, 123 = 견적서, 124 = 발주서, 125 = 입금표, 126 = 영수증\r\n    \"itemCode\" : \"121\",\r\n\r\n    // 전자명세서 관리를 위해 파트너가 할당하는 식별번호\r\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능 \r\n    \"mgtKey\" : \"20241130_100\",\r\n\r\n    /************************************************************\r\n     *                         공급자 정보\r\n     ************************************************************/\r\n\r\n    \"senderCorpNum\" : \"1234567890\",\r\n    \"senderTaxRegID\" : \"\",\r\n    \"senderCorpName\" : \"테스트 상호\",\r\n    \"senderCEOName\" : \"테스트 대표\",\r\n    \"senderAddr\" : \"테스트 주소\",\r\n    \"senderBizType\" : \"테스트 업태\",\r\n    \"senderBizClass\" : \"테스트 종목\",\r\n    \"senderContactName\" : \"테스트 담당자 성명\",\r\n    \"senderDeptName\" : \"테스트 부서명\",\r\n    \"senderTEL\" : \"070-111-222\",\r\n    \"senderHP\" : \"010-000-222\",\r\n    \"senderEmail\" : \"test@test.com\",\r\n    \r\n    /************************************************************\r\n     *                     공급받는자 정보\r\n     ************************************************************/\r\n\r\n    \"receiverCorpNum\" : \"8888888888\",\r\n    \"receiverTaxRegID\" : \"\"\t,\r\n    \"receiverCorpName\" : \"공급받는자 상호\",\r\n    \"receiverCEOName\" : \"공급받는자 대표자 성명\",\r\n    \"receiverAddr\" : \"공급받는자 주소\",\r\n    \"receiverBizClass\" : \"공급받는자 업종\",\r\n    \"eceiverBizType\" : \"공급받는자 업태\",\r\n    \"receiverContactName\" : \"공급받는자 담당자명\",\r\n    \"receiverTEL\" : \"010-0000-1111\",\r\n    \"receiverHP\" : \"010-1111-2222\",\r\n    // 팝빌 테스트환경에서 테스트하는 경우에도 안내 메일이 전송되므로,\r\n    // 실제 거래처의 메일주소가 기재되지 않도록 주의\r\n    \"receiverEmail\" : \"test@test.com\",\r\n\r\n    /************************************************************\r\n     *                   전자명세서 기재정보\r\n     ************************************************************/\r\n\r\n    \"supplyCostTotal\" : \"200000\",\t\t\t// [필수] 공급가액 합계\r\n    \"taxTotal\" : \"20000\",\t\t\t\t\t// [필수] 세액 합계\r\n    \"totalAmount\" : \"220000\",\t\t\t\t// [필수] 합계금액 (공급가액 합계+세액합계)\r\n\r\n    \"serialNum\" : \"123\",\t\t\t\t\t// 기재상 일련번호 항목\r\n    \"remark1\" : \"비고1\",\r\n    \"remark2\" : \"비고2\",\r\n    \"remark3\" : \"비고3\",\r\n\r\n    \"businessLicenseYN\" : false,\t\t\t//사업자등록증 첨부 여부\r\n    \"bankBookYN\" : false,\t\t\t\t\t//통장사본 첨부 여부\r\n    \"smssendYN\" : false,\t\t\t\t\t//발행시 안내문자 전송여부\r\n\r\n    \"detailList\": [\r\n        {\r\n            // 일련번호\r\n            // └ 1부터 순차적으로 입력 (최대 99)\r\n            \"serialNum\": 1,\r\n\r\n            // 거래일자\r\n            // └ 형식 : yyyyMMdd\r\n            \"purchaseDT\": \"20201006\",\r\n\r\n            // 품명\r\n            \"itemName\": \"Item Name 01\",\r\n\r\n            // 규격\r\n            \"spec\": \"spec\",\r\n\r\n            // 수량\r\n            // └ 소수점 아래 2번째 자리까지 입력 가능\r\n            // └ 마이너스 입력 가능\r\n            \"qty\": \"1\",\r\n\r\n            // 단가\r\n            // └ 소수점 아래 2번째 자리까지 입력 가능\r\n            // └ 마이너스 금액 입력 가능\r\n            \"unitCost\": \"110000\",\r\n\r\n            // 공급가액\r\n            // └ 정수만 입력 가능\r\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\r\n            \"supplyCost\": \"100000\",\r\n\r\n            // 세액\r\n            // └ 정수만 입력 가능\r\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\r\n            \"tax\": \"10000\",\r\n\r\n            // 비고\r\n            \"remark\": \"Item reamrk\"\r\n        },\r\n        {\r\n            \"serialNum\": 2,\r\n            \"purchaseDT\": \"20201006\",\r\n            \"itemName\": \"Item Name 02\",\r\n            \"spec\": \"spec\",\r\n            \"qty\": \"1\",\r\n            \"unitCost\": \"110000\",\r\n            \"supplyCost\": \"100000\",\r\n            \"tax\": \"10000\",\r\n            \"remark\": \"Item reamrk\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2181,7 +2181,7 @@
 							"pm.collectionVariables.set(\"AttachStatement_ItemCode\", itemCode);",
 							"",
 							"// 전자명세서를 첨부할 전자명세서 문서번호",
-							"var invoicerMgtKey = '20211130_001';",
+							"var invoicerMgtKey = '20241130_001';",
 							"pm.collectionVariables.set(\"AttachStatement_MgtKey\", invoicerMgtKey);",
 							"",
 							"// 전자명세서 정보",
@@ -2191,7 +2191,7 @@
 							"  ItemCode : '121',",
 							"",
 							"  // 첨부할 전자명세서 문서번호",
-							"  MgtKey : '20211130_002', ",
+							"  MgtKey : '20241130_002', ",
 							"};",
 							"",
 							"var RequestBody = stringify(reqBodyObj);",
@@ -2273,7 +2273,7 @@
 							"pm.collectionVariables.set(\"DetachStatement_ItemCode\", itemCode);",
 							"",
 							"// 전자명세서를 첨부할 전자명세서 문서번호",
-							"var invoicerMgtKey = '20211130_001';",
+							"var invoicerMgtKey = '20241130_001';",
 							"pm.collectionVariables.set(\"DetachStatement_MgtKey\", invoicerMgtKey);",
 							"",
 							"// 전자명세서 정보",
@@ -2283,7 +2283,7 @@
 							"  ItemCode : '121',",
 							"",
 							"  // 첨부할 전자명세서 문서번호",
-							"  MgtKey : '20211130_002', ",
+							"  MgtKey : '20241130_002', ",
 							"};",
 							"",
 							"var RequestBody = stringify(reqBodyObj);",

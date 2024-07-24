@@ -275,7 +275,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"snd\" : \"070-4304-2991\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"content\" : \"테스트 내용\",\r\n    \"sndDT\" : \"\",\r\n    \"adsYN\" : \"\",\r\n    \"requestNum\" : \"20211201_001\",\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"수신자명\"\r\n        }\r\n    ]\r\n}",
+					"raw": "/*\r\n* 전송 정보\r\n*/\r\n\r\n{\r\n    \"snd\" : \"070-4304-2991\",\r\n    \"sndnm\" : \"발신자명\",\r\n    \"content\" : \"테스트 내용\",\r\n    \"sndDT\" : \"\",\r\n    \"adsYN\" : \"\",\r\n    \"requestNum\" : \"20241201_001\",\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"010222333\",\r\n            \"rcvnm\" : \"수신자명\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1235,7 +1235,7 @@
 							" */",
 							"",
 							"// 문자 전송 접수시 팝빌로부터 반환받은 접수번호",
-							"var requestNum = '20211117_TEST001'",
+							"var requestNum = '20241117_TEST001'",
 							"pm.collectionVariables.set(\"requestNum\", requestNum);"
 						],
 						"type": "text/javascript"
@@ -1289,7 +1289,7 @@
 							" */",
 							"",
 							"// 예약문자 전송요청시 파트너가 할당한 요청번호",
-							"var requestNum = '20211117_TEST001'",
+							"var requestNum = '20241117_TEST001'",
 							"pm.collectionVariables.set(\"requestNum\", requestNum);"
 						],
 						"type": "text/javascript"
@@ -1457,7 +1457,7 @@
 							" */",
 							"",
 							"// 문자 전송 접수시 파트너가 할당한 전송요청 번호",
-							"var requestNum = '20211201_001'",
+							"var requestNum = '20241201_001'",
 							"pm.collectionVariables.set(\"requestNum\", requestNum);"
 						],
 						"type": "text/javascript"
@@ -1511,11 +1511,11 @@
 							" */",
 							"",
 							"// 조회 기간의 시작일자 (형식 : yyyyMMdd)",
-							"var SDate = '20211201'",
+							"var SDate = '20240724'",
 							"pm.collectionVariables.set(\"Search_SDate\", SDate);",
 							"",
 							"// 조회 기간의 종료일자 (형식 : yyyyMMdd)",
-							"var EDate = '20211210'",
+							"var EDate = '20240724'",
 							"pm.collectionVariables.set(\"Search_EDate\", EDate);",
 							"",
 							"// [배열] 전송상태 : \"1\" / \"2\" / \"3\" / \"4\" 중 선택 (다중 선택 가능)",

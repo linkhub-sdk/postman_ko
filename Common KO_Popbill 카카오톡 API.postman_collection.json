@@ -703,7 +703,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\r\n* 전송 정보\r\n* ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수\r\n*/\r\n\r\n{\r\n    \"plusFriendID\" : \"@링크허브\",\r\n    \"snd\" : \"010-111-111\",\r\n    \"content\" : \"친구톡내용\",\r\n    \"altContent\" : \"대체문자 내용\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"20211118210000\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [\r\n        {\r\n            \"n\" : \"앱버튼\",\r\n            \"t\" : \"AL\",\r\n            \"u1\" : \"fb://test\",\r\n            \"u2\" : \"fb://test\"\r\n        }\r\n    ],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"01011122\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }\r\n    ]\r\n}",
+					"raw": "/*\r\n* 전송 정보\r\n* ※ 대체문자를 전송하는 경우에는 사전에 등록된 발신번호 입력 필수\r\n*/\r\n\r\n{\r\n    \"plusFriendID\" : \"@링크허브\",\r\n    \"snd\" : \"010-111-111\",\r\n    \"content\" : \"친구톡내용\",\r\n    \"altContent\" : \"대체문자 내용\",\r\n    \"altSendType\" : \"A\",\r\n    \"sndDT\" : \"20241118210000\",\r\n    \"requestNum\" : \"\",\r\n    \"btns\" : [\r\n        {\r\n            \"n\" : \"앱버튼\",\r\n            \"t\" : \"AL\",\r\n            \"u1\" : \"fb://test\",\r\n            \"u2\" : \"fb://test\"\r\n        }\r\n    ],\r\n    \"msgs\" : [\r\n        {\r\n            \"rcv\" : \"01011122\",\r\n            \"rcvnm\" : \"테스트\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1283,7 +1283,7 @@
 							" */",
 							"",
 							"// 카카오톡 전송 접수시 팝빌로부터 반환받은 접수번호",
-							"var requestNum = '20211117_TEST001'",
+							"var requestNum = '20241117_TEST001'",
 							"pm.collectionVariables.set(\"requestNum\", requestNum);"
 						],
 						"type": "text/javascript"
@@ -1623,11 +1623,11 @@
 							" */",
 							"",
 							"// 조회 기간의 시작일자 (형식 : yyyyMMdd)",
-							"var SDate = '20220414'",
+							"var SDate = '20240724'",
 							"pm.collectionVariables.set(\"Search_SDate\", SDate);",
 							"",
 							"// 조회 기간의 종료일자 (형식 : yyyyMMdd)",
-							"var EDate = '20220421'",
+							"var EDate = '20240724'",
 							"pm.collectionVariables.set(\"Search_EDate\", EDate);",
 							"",
 							"// [배열] 전송상태 : \"0\" / \"1\" / \"2\" / \"3\" / \"4\" / \"5\" 중 선택 (다중 선택 가능)",

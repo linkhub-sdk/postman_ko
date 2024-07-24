@@ -151,7 +151,7 @@
 							" */",
 							"",
 							"// 이미 사용 중인 문서번호는 중복 사용이 불가하고, 세금계산서가 삭제된 경우에만 문서번호의 재사용이 가능합니다.",
-							"var invoicerMgtKey = '20210629-01'",
+							"var invoicerMgtKey = '20240629-01'",
 							"pm.collectionVariables.set(\"CheckMgtKeyinUse_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -230,7 +230,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\n*\n* 세금계산서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/taxinvoice/java/api/object#Taxinvoice_Input\n*\n*/\n\n{\n    // 세금계산서 지연발행 가능여부\n    // └ true = 가능, false = 불가능(default)\n    \"forceIssue\" : false,\n\n    // 세금계산서 발행 안내메일 제목\n    // - 미입력시 팝빌에서 설정한 기본값 사용\n    \"emailSubject\": \"\",\n\n    // 세금계산서 상태 이력을 관리하기 위한 메모\n    \"memo\": \"RegistIssue Memo\",\n\n    // 작성일자\n    // - 형식 : yyyyMMdd\n    \"writeDate\": \"20210930\",\n\n    // 과금방향\n    // - \"정과금\" / \"역과금\" 중 택 1\n    \"chargeDirection\": \"정과금\",\n\n    // 발행형태\n    // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1\n    \"issueType\": \"정발행\",\n\n    // 과세형태\n    // - \"과세\" / \"영세\" / \"면세\" 중 택 1\n    \"taxType\": \"과세\",\n\n    // 공급자 사업자번호\n    // └ 하이픈('-') 제외 10자리 숫자값\n    \"invoicerCorpNum\": \"1234567890\",\n\n    // 공급자 문서번호\n    // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoicerMgtKey\": \"20210930-01\",\n\n    // 공급자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoicerTaxRegID\": \"\",\n\n    // 공급자 상호\t\n    \"invoicerCorpName\": \"Seller Company Name\",\n\n    // 공급자 대표자 성명\t\n    \"invoicerCEOName\": \"Seller Company's CEO Name\",\n\n    // 공급자 주소\n    \"invoicerAddr\": \"Seller Address\",\n\n    // 공급자 업태\n    \"invoicerBizClass\": \"Seller Business Class\",\n\n    // 공급자 종목\n    \"invoicerBizType\": \"Seller Business Type\",\n\n    // 공급자 담당자 성명\n    \"invoicerContactName\": \"Business Contractor Name\",\n\n    // 공급자 담당자 연락처\n    \"invoicerTEL\": \"070-4304-2991\",\n\n    // 공급자 담당자 휴대폰\n    \"invoicerHP\": \"010-111-222\",\n\n    // 공급자 담당자 이메일\n    \"invoicerEmail\": \"seller@test.com\",\n\n    // 공급자 문자전송 여부\n    // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoicerSMSSendYN\": false,\n\n    // 공급받는자 구분\n    // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1\n    \"invoiceeType\": \"사업자\",\n\n    // 공급받는자 사업자번호\t\n    // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)\n    // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)\n    // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)\n    \"invoiceeCorpNum\": \"8888888888\",\n\n    // 공급받는자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoiceeTaxRegID\": \"\",\n\n    // 공급받는자 상호\n    \"invoiceeCorpName\": \"Buyer Corp Name\",\n\n    // 공급받는자 대표자 성명\n    \"invoiceeCEOName\": \"Buyer Corp CEO Name\",\n\n    // 공급받는자 주소\n    \"invoiceeAddr\": \"Buyer Address\",\n\n    // \t공급받는자 종목\n    \"invoiceeBizClass\": \"Buyer Business Class\",\n\n    // 공급받는자 업태\n    \"invoiceeBizType\": \"Buyer Business Type\",\n\n    // 공급받는자 주) 담당자 성명\n    \"invoiceeContactName1\": \"Buyer Contacter Name\",\n\n    // 공급받는자 주) 담당자 연락처\n    \"invoiceeTEL1\": \"070-111-222\",\n\n    // 공급받는자 주) 담당자 휴대폰\t\n    \"invoiceeHP1\": \"010-222-333\",\n\n    // 공급받는자 주) 담당자 이메일\n    \"invoiceeEmail1\": \"test@test.com\",\n\n    // 공급받는자 문자전송 여부\n    // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoiceeSMSSendYN\": null,\n\n\n    // 공급가액 합계\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"supplyCostTotal\": \"200000\",\n\n    // 세액 합계\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"taxTotal\": \"20000\",\n\n    // 합계금액\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"totalAmount\": \"220000\",\n\n    // \t수정 사유코드\n    // └ 수정세금계산서 작성시 필수\n    // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1\n    // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,\n    // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급\n    \"modifyCode\": null,\n\n    // 영수/청구\n    // - \"영수\" / \"청구\" / \"없음\" 중 택 1\n    \"purposeType\": \"영수\",\n\n    // 일련번호\n    \"serialNum\": \"\",\n\n    // 현금\n    \"cash\": \"\",\n\n    // 수표\n    \"chkBill\": \"\",\n\n    // 외상\n    \"credit\": \"\",\n\n    // 어음\n    \"note\": \"\",\n    \n    // 비고1\n    // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력\n    \"remark1\": \"remark 1\",\n\n    // 비고2\n    \"remark2\": \"remark 2\",\n\n    // 비고3\n    \"remark3\": \"remark 3\",\n\n    // 사업자등록증 첨부\n    // - true : 첨부, false : 미첨부(Default)     \n    \"businessLicenseYN\": false,\n\n    // 통장사본 첨부\t\n    // └ true : 첨부, false : 미첨부(Default)\n    \"bankBookYN\": false,\n\n    // [리스트] 거래 물품 상세 정보 (최대 99건)\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ],\n\n    // [리스트] 공급받는자 담당자 정보 (최대 5명)\n    \"addContactList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 5)\n            \"serialNum\": 1,\n\n            // 이메일\n            \"email\": \"test@test.com\",\n\n            // 담당자 성명\n            \"contactName\": \"Buyer Contacter Addtion 01\"\n        },\n        {\n            \"serialNum\": 2,\n\n            \"email\": \"test@test.com\",\n\n            \"contactName\": \"Buyer Contacter Addtion 02\"\n        }\n    ]\n}",
+					"raw": "/*\n*\n* 세금계산서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/taxinvoice/java/api/object#Taxinvoice_Input\n*\n*/\n\n{\n    // 세금계산서 지연발행 가능여부\n    // └ true = 가능, false = 불가능(default)\n    \"forceIssue\" : false,\n\n    // 세금계산서 발행 안내메일 제목\n    // - 미입력시 팝빌에서 설정한 기본값 사용\n    \"emailSubject\": \"\",\n\n    // 세금계산서 상태 이력을 관리하기 위한 메모\n    \"memo\": \"RegistIssue Memo\",\n\n    // 작성일자\n    // - 형식 : yyyyMMdd\n    \"writeDate\": \"20240724\",\n\n    // 과금방향\n    // - \"정과금\" / \"역과금\" 중 택 1\n    \"chargeDirection\": \"정과금\",\n\n    // 발행형태\n    // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1\n    \"issueType\": \"정발행\",\n\n    // 과세형태\n    // - \"과세\" / \"영세\" / \"면세\" 중 택 1\n    \"taxType\": \"과세\",\n\n    // 공급자 사업자번호\n    // └ 하이픈('-') 제외 10자리 숫자값\n    \"invoicerCorpNum\": \"1234567890\",\n\n    // 공급자 문서번호\n    // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoicerMgtKey\": \"20240930-01\",\n\n    // 공급자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoicerTaxRegID\": \"\",\n\n    // 공급자 상호\t\n    \"invoicerCorpName\": \"Seller Company Name\",\n\n    // 공급자 대표자 성명\t\n    \"invoicerCEOName\": \"Seller Company's CEO Name\",\n\n    // 공급자 주소\n    \"invoicerAddr\": \"Seller Address\",\n\n    // 공급자 업태\n    \"invoicerBizClass\": \"Seller Business Class\",\n\n    // 공급자 종목\n    \"invoicerBizType\": \"Seller Business Type\",\n\n    // 공급자 담당자 성명\n    \"invoicerContactName\": \"Business Contractor Name\",\n\n    // 공급자 담당자 연락처\n    \"invoicerTEL\": \"070-4304-2991\",\n\n    // 공급자 담당자 휴대폰\n    \"invoicerHP\": \"010-111-222\",\n\n    // 공급자 담당자 이메일\n    \"invoicerEmail\": \"seller@test.com\",\n\n    // 공급자 문자전송 여부\n    // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoicerSMSSendYN\": false,\n\n    // 공급받는자 구분\n    // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1\n    \"invoiceeType\": \"사업자\",\n\n    // 공급받는자 사업자번호\t\n    // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)\n    // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)\n    // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)\n    \"invoiceeCorpNum\": \"8888888888\",\n\n    // 공급받는자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoiceeTaxRegID\": \"\",\n\n    // 공급받는자 상호\n    \"invoiceeCorpName\": \"Buyer Corp Name\",\n\n    // 공급받는자 대표자 성명\n    \"invoiceeCEOName\": \"Buyer Corp CEO Name\",\n\n    // 공급받는자 주소\n    \"invoiceeAddr\": \"Buyer Address\",\n\n    // \t공급받는자 종목\n    \"invoiceeBizClass\": \"Buyer Business Class\",\n\n    // 공급받는자 업태\n    \"invoiceeBizType\": \"Buyer Business Type\",\n\n    // 공급받는자 주) 담당자 성명\n    \"invoiceeContactName1\": \"Buyer Contacter Name\",\n\n    // 공급받는자 주) 담당자 연락처\n    \"invoiceeTEL1\": \"070-111-222\",\n\n    // 공급받는자 주) 담당자 휴대폰\t\n    \"invoiceeHP1\": \"010-222-333\",\n\n    // 공급받는자 주) 담당자 이메일\n    \"invoiceeEmail1\": \"test@test.com\",\n\n    // 공급받는자 문자전송 여부\n    // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoiceeSMSSendYN\": null,\n\n\n    // 공급가액 합계\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"supplyCostTotal\": \"200000\",\n\n    // 세액 합계\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"taxTotal\": \"20000\",\n\n    // 합계금액\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"totalAmount\": \"220000\",\n\n    // \t수정 사유코드\n    // └ 수정세금계산서 작성시 필수\n    // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1\n    // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,\n    // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급\n    \"modifyCode\": null,\n\n    // 영수/청구\n    // - \"영수\" / \"청구\" / \"없음\" 중 택 1\n    \"purposeType\": \"영수\",\n\n    // 일련번호\n    \"serialNum\": \"\",\n\n    // 현금\n    \"cash\": \"\",\n\n    // 수표\n    \"chkBill\": \"\",\n\n    // 외상\n    \"credit\": \"\",\n\n    // 어음\n    \"note\": \"\",\n    \n    // 비고1\n    // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력\n    \"remark1\": \"remark 1\",\n\n    // 비고2\n    \"remark2\": \"remark 2\",\n\n    // 비고3\n    \"remark3\": \"remark 3\",\n\n    // 사업자등록증 첨부\n    // - true : 첨부, false : 미첨부(Default)     \n    \"businessLicenseYN\": false,\n\n    // 통장사본 첨부\t\n    // └ true : 첨부, false : 미첨부(Default)\n    \"bankBookYN\": false,\n\n    // [리스트] 거래 물품 상세 정보 (최대 99건)\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ],\n\n    // [리스트] 공급받는자 담당자 정보 (최대 5명)\n    \"addContactList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 5)\n            \"serialNum\": 1,\n\n            // 이메일\n            \"email\": \"test@test.com\",\n\n            // 담당자 성명\n            \"contactName\": \"Buyer Contacter Addtion 01\"\n        },\n        {\n            \"serialNum\": 2,\n\n            \"email\": \"test@test.com\",\n\n            \"contactName\": \"Buyer Contacter Addtion 02\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -268,7 +268,7 @@
 							"",
 							"// \t제출아이디",
 							"// └ 최대 36자리 영문, 숫자, '-' 조합으로 구성",
-							"var submitID = '20210930-01';",
+							"var submitID = '20240930-01';",
 							"pm.collectionVariables.set(\"SubmitID\", submitID);",
 							"",
 							"// [리스크] 세금계산서 객체 리스트",
@@ -291,7 +291,7 @@
 							"",
 							"        // 작성일자",
 							"        // - 형식 : yyyyMMdd",
-							"        \"writeDate\": \"20210930\",",
+							"        \"writeDate\": \"20240724\",",
 							"",
 							"        // 과금방향",
 							"        // - \"정과금\" / \"역과금\" 중 택 1",
@@ -502,7 +502,7 @@
 							"            },",
 							"            {",
 							"                \"serialNum\": 2,",
-							"                \"purchaseDT\": \"20210629\",",
+							"                \"purchaseDT\": \"20240724\",",
 							"                \"itemName\": \"Item Name 02\",",
 							"                \"spec\": \"spec\",",
 							"                \"qty\": \"1\",",
@@ -644,7 +644,7 @@
 							" */",
 							"",
 							"// 초대량 발행 접수시 기재한 제출아이디",
-							"var submitID = '20210930-01';",
+							"var submitID = '20240930-01';",
 							"pm.collectionVariables.set(\"GetBulkResult_submitID\", submitID);"
 						],
 						"type": "text/javascript"
@@ -720,7 +720,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\n*\n* 세금계산서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/taxinvoice/java/api/object#Taxinvoice_Input\n*\n*/\n\n{\n    // 거래명세서 동시작성 여부 \n    // └ true = 사용 / false = 미사용(default) \n    \"writeSpecification\" : false,\n\n    // 작성일자\n    // - 형식 : yyyyMMdd\n    \"writeDate\": \"20240717\",\n\n    // 과금방향\n    // - \"정과금\" / \"역과금\" 중 택 1\n    \"chargeDirection\": \"정과금\",\n\n    // 발행형태\n    // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1\n    \"issueType\": \"정발행\",\n\n    // 과세형태\n    // - \"과세\" / \"영세\" / \"면세\" 중 택 1\n    \"taxType\": \"과세\",\n\n    // 공급자 사업자번호\n    // └ 하이픈('-') 제외 10자리 숫자값\n    \"invoicerCorpNum\": \"1234567890\",\n\n    // 공급자 문서번호\n    // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoicerMgtKey\": \"20210930-CEdR002\",\n\n    // 공급자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoicerTaxRegID\": \"\",\n\n    // 공급자 상호\t\n    \"invoicerCorpName\": \"Seller Company Name\",\n\n    // 공급자 대표자 성명\t\n    \"invoicerCEOName\": \"Seller Company's CEO Name\",\n\n    // 공급자 주소\n    \"invoicerAddr\": \"Seller Address\",\n\n    // 공급자 업태\n    \"invoicerBizClass\": \"Seller Business Class\",\n\n    // 공급자 종목\n    \"invoicerBizType\": \"Seller Business Type\",\n\n    // 공급자 담당자 성명\n    \"invoicerContactName\": \"Business Contractor Name\",\n\n    // 공급자 담당자 연락처\n    \"invoicerTEL\": \"070-4304-2991\",\n\n    // 공급자 담당자 휴대폰\n    \"invoicerHP\": \"010-111-222\",\n\n    // 공급자 담당자 이메일\n    \"invoicerEmail\": \"seller@test.com\",\n\n    // 공급자 문자전송 여부\n    // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoicerSMSSendYN\": false,\n\n    // 공급받는자 구분\n    // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1\n    \"invoiceeType\": \"사업자\",\n\n    // 공급받는자 사업자번호\t\n    // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)\n    // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)\n    // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)\n    \"invoiceeCorpNum\": \"8888888888\",\n\n    // 공급받는자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoiceeTaxRegID\": \"\",\n\n    // 공급받는자 상호\n    \"invoiceeCorpName\": \"Buyer Corp Name\",\n\n    // 공급받는자 대표자 성명\n    \"invoiceeCEOName\": \"Buyer Corp CEO Name\",\n\n    // 공급받는자 주소\n    \"invoiceeAddr\": \"Buyer Address\",\n\n    // \t공급받는자 종목\n    \"invoiceeBizClass\": \"Buyer Business Class\",\n\n    // 공급받는자 업태\n    \"invoiceeBizType\": \"Buyer Business Type\",\n\n    // 공급받는자 주) 담당자 성명\n    \"invoiceeContactName1\": \"Buyer Contacter Name\",\n\n    // 공급받는자 주) 담당자 연락처\n    \"invoiceeTEL1\": \"070-111-222\",\n\n    // 공급받는자 주) 담당자 휴대폰\t\n    \"invoiceeHP1\": \"010-222-333\",\n\n    // 공급받는자 주) 담당자 이메일\n    \"invoiceeEmail1\": \"test@test.com\",\n\n    // 공급받는자 문자전송 여부\n    // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoiceeSMSSendYN\": null,\n\n\n    // 공급가액 합계\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"supplyCostTotal\": \"200000\",\n\n    // 세액 합계\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"taxTotal\": \"20000\",\n\n    // 합계금액\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"totalAmount\": \"220000\",\n\n    // \t수정 사유코드\n    // └ 수정세금계산서 작성시 필수\n    // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1\n    // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,\n    // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급\n    \"modifyCode\": null,\n\n    // 영수/청구\n    // - \"영수\" / \"청구\" / \"없음\" 중 택 1\n    \"purposeType\": \"영수\",\n\n    // 일련번호\n    \"serialNum\": \"\",\n\n    // 현금\n    \"cash\": \"\",\n\n    // 수표\n    \"chkBill\": \"\",\n\n    // 외상\n    \"credit\": \"\",\n\n    // 어음\n    \"note\": \"\",\n    \n    // 비고1\n    // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력\n    \"remark1\": \"remark 1\",\n\n    // 비고2\n    \"remark2\": \"remark 2\",\n\n    // 비고3\n    \"remark3\": \"remark 3\",\n\n    // 사업자등록증 첨부\n    // - true : 첨부, false : 미첨부(Default)     \n    \"businessLicenseYN\": false,\n\n    // 통장사본 첨부\t\n    // └ true : 첨부, false : 미첨부(Default)\n    \"bankBookYN\": false,\n\n    // [리스트] 거래 물품 상세 정보 (최대 99건)\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ],\n\n    // [리스트] 공급받는자 담당자 정보 (최대 5명)\n    \"addContactList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 5)\n            \"serialNum\": 1,\n\n            // 이메일\n            \"email\": \"test@test.com\",\n\n            // 담당자 성명\n            \"contactName\": \"Buyer Contacter Addtion 01\"\n        },\n        {\n            \"serialNum\": 2,\n\n            \"email\": \"test@test.com\",\n\n            \"contactName\": \"Buyer Contacter Addtion 02\"\n        }\n    ]\n}",
+					"raw": "/*\n*\n* 세금계산서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/taxinvoice/java/api/object#Taxinvoice_Input\n*\n*/\n\n{\n    // 거래명세서 동시작성 여부 \n    // └ true = 사용 / false = 미사용(default) \n    \"writeSpecification\" : false,\n\n    // 작성일자\n    // - 형식 : yyyyMMdd\n    \"writeDate\": \"20240717\",\n\n    // 과금방향\n    // - \"정과금\" / \"역과금\" 중 택 1\n    \"chargeDirection\": \"정과금\",\n\n    // 발행형태\n    // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1\n    \"issueType\": \"정발행\",\n\n    // 과세형태\n    // - \"과세\" / \"영세\" / \"면세\" 중 택 1\n    \"taxType\": \"과세\",\n\n    // 공급자 사업자번호\n    // └ 하이픈('-') 제외 10자리 숫자값\n    \"invoicerCorpNum\": \"1234567890\",\n\n    // 공급자 문서번호\n    // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoicerMgtKey\": \"20240930-CEdR002\",\n\n    // 공급자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoicerTaxRegID\": \"\",\n\n    // 공급자 상호\t\n    \"invoicerCorpName\": \"Seller Company Name\",\n\n    // 공급자 대표자 성명\t\n    \"invoicerCEOName\": \"Seller Company's CEO Name\",\n\n    // 공급자 주소\n    \"invoicerAddr\": \"Seller Address\",\n\n    // 공급자 업태\n    \"invoicerBizClass\": \"Seller Business Class\",\n\n    // 공급자 종목\n    \"invoicerBizType\": \"Seller Business Type\",\n\n    // 공급자 담당자 성명\n    \"invoicerContactName\": \"Business Contractor Name\",\n\n    // 공급자 담당자 연락처\n    \"invoicerTEL\": \"070-4304-2991\",\n\n    // 공급자 담당자 휴대폰\n    \"invoicerHP\": \"010-111-222\",\n\n    // 공급자 담당자 이메일\n    \"invoicerEmail\": \"seller@test.com\",\n\n    // 공급자 문자전송 여부\n    // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoicerSMSSendYN\": false,\n\n    // 공급받는자 구분\n    // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1\n    \"invoiceeType\": \"사업자\",\n\n    // 공급받는자 사업자번호\t\n    // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)\n    // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)\n    // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)\n    \"invoiceeCorpNum\": \"8888888888\",\n\n    // 공급받는자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoiceeTaxRegID\": \"\",\n\n    // 공급받는자 상호\n    \"invoiceeCorpName\": \"Buyer Corp Name\",\n\n    // 공급받는자 대표자 성명\n    \"invoiceeCEOName\": \"Buyer Corp CEO Name\",\n\n    // 공급받는자 주소\n    \"invoiceeAddr\": \"Buyer Address\",\n\n    // \t공급받는자 종목\n    \"invoiceeBizClass\": \"Buyer Business Class\",\n\n    // 공급받는자 업태\n    \"invoiceeBizType\": \"Buyer Business Type\",\n\n    // 공급받는자 주) 담당자 성명\n    \"invoiceeContactName1\": \"Buyer Contacter Name\",\n\n    // 공급받는자 주) 담당자 연락처\n    \"invoiceeTEL1\": \"070-111-222\",\n\n    // 공급받는자 주) 담당자 휴대폰\t\n    \"invoiceeHP1\": \"010-222-333\",\n\n    // 공급받는자 주) 담당자 이메일\n    \"invoiceeEmail1\": \"test@test.com\",\n\n    // 공급받는자 문자전송 여부\n    // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoiceeSMSSendYN\": null,\n\n\n    // 공급가액 합계\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"supplyCostTotal\": \"200000\",\n\n    // 세액 합계\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"taxTotal\": \"20000\",\n\n    // 합계금액\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"totalAmount\": \"220000\",\n\n    // \t수정 사유코드\n    // └ 수정세금계산서 작성시 필수\n    // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1\n    // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,\n    // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급\n    \"modifyCode\": null,\n\n    // 영수/청구\n    // - \"영수\" / \"청구\" / \"없음\" 중 택 1\n    \"purposeType\": \"영수\",\n\n    // 일련번호\n    \"serialNum\": \"\",\n\n    // 현금\n    \"cash\": \"\",\n\n    // 수표\n    \"chkBill\": \"\",\n\n    // 외상\n    \"credit\": \"\",\n\n    // 어음\n    \"note\": \"\",\n    \n    // 비고1\n    // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력\n    \"remark1\": \"remark 1\",\n\n    // 비고2\n    \"remark2\": \"remark 2\",\n\n    // 비고3\n    \"remark3\": \"remark 3\",\n\n    // 사업자등록증 첨부\n    // - true : 첨부, false : 미첨부(Default)     \n    \"businessLicenseYN\": false,\n\n    // 통장사본 첨부\t\n    // └ true : 첨부, false : 미첨부(Default)\n    \"bankBookYN\": false,\n\n    // [리스트] 거래 물품 상세 정보 (최대 99건)\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ],\n\n    // [리스트] 공급받는자 담당자 정보 (최대 5명)\n    \"addContactList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 5)\n            \"serialNum\": 1,\n\n            // 이메일\n            \"email\": \"test@test.com\",\n\n            // 담당자 성명\n            \"contactName\": \"Buyer Contacter Addtion 01\"\n        },\n        {\n            \"serialNum\": 2,\n\n            \"email\": \"test@test.com\",\n\n            \"contactName\": \"Buyer Contacter Addtion 02\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -757,7 +757,7 @@
 							" */",
 							"",
 							"// 수정할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-02'",
+							"var invoicerMgtKey = '20240930-02'",
 							"pm.collectionVariables.set(\"Update_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -786,7 +786,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\n*\n* 세금계산서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/taxinvoice/java/api/object#Taxinvoice_Input\n*\n*/\n\n{\n    // 작성일자\n    // - 형식 : yyyyMMdd\n    \"writeDate\": \"20210930\",\n\n    // 과금방향\n    // - \"정과금\" / \"역과금\" 중 택 1\n    \"chargeDirection\": \"정과금\",\n\n    // 발행형태\n    // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1\n    \"issueType\": \"정발행\",\n\n    // 과세형태\n    // - \"과세\" / \"영세\" / \"면세\" 중 택 1\n    \"taxType\": \"과세\",\n\n    // 공급자 사업자번호\n    // └ 하이픈('-') 제외 10자리 숫자값\n    \"invoicerCorpNum\": \"1234567890\",\n\n    // 공급자 문서번호\n    // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoicerMgtKey\": \"20210930-02\",\n\n    // 공급자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoicerTaxRegID\": \"\",\n\n    // 공급자 상호\t\n    \"invoicerCorpName\": \"Seller Company Name\",\n\n    // 공급자 대표자 성명\t\n    \"invoicerCEOName\": \"Seller Company's CEO Name\",\n\n    // 공급자 주소\n    \"invoicerAddr\": \"Seller Address\",\n\n    // 공급자 업태\n    \"invoicerBizClass\": \"Seller Business Class\",\n\n    // 공급자 종목\n    \"invoicerBizType\": \"Seller Business Type\",\n\n    // 공급자 담당자 성명\n    \"invoicerContactName\": \"Business Contractor Name\",\n\n    // 공급자 담당자 연락처\n    \"invoicerTEL\": \"070-4304-2991\",\n\n    // 공급자 담당자 휴대폰\n    \"invoicerHP\": \"010-111-222\",\n\n    // 공급자 담당자 이메일\n    \"invoicerEmail\": \"seller@test.com\",\n\n    // 공급자 문자전송 여부\n    // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoicerSMSSendYN\": false,\n\n    // 공급받는자 구분\n    // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1\n    \"invoiceeType\": \"사업자\",\n\n    // 공급받는자 사업자번호\t\n    // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)\n    // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)\n    // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)\n    \"invoiceeCorpNum\": \"8888888888\",\n\n    // 공급받는자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoiceeTaxRegID\": \"\",\n\n    // 공급받는자 상호\n    \"invoiceeCorpName\": \"Buyer Corp Name\",\n\n    // 공급받는자 대표자 성명\n    \"invoiceeCEOName\": \"Buyer Corp CEO Name\",\n\n    // 공급받는자 주소\n    \"invoiceeAddr\": \"Buyer Address\",\n\n    // \t공급받는자 종목\n    \"invoiceeBizClass\": \"Buyer Business Class\",\n\n    // 공급받는자 업태\n    \"invoiceeBizType\": \"Buyer Business Type\",\n\n    // 공급받는자 주) 담당자 성명\n    \"invoiceeContactName1\": \"Buyer Contacter Name\",\n\n    // 공급받는자 주) 담당자 연락처\n    \"invoiceeTEL1\": \"070-111-222\",\n\n    // 공급받는자 주) 담당자 휴대폰\t\n    \"invoiceeHP1\": \"010-222-333\",\n\n    // 공급받는자 주) 담당자 이메일\n    \"invoiceeEmail1\": \"test@test.com\",\n\n    // 공급받는자 문자전송 여부\n    // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoiceeSMSSendYN\": null,\n\n\n    // 공급가액 합계\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"supplyCostTotal\": \"200000\",\n\n    // 세액 합계\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"taxTotal\": \"20000\",\n\n    // 합계금액\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"totalAmount\": \"220000\",\n\n    // \t수정 사유코드\n    // └ 수정세금계산서 작성시 필수\n    // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1\n    // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,\n    // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급\n    \"modifyCode\": null,\n\n    // 영수/청구\n    // - \"영수\" / \"청구\" / \"없음\" 중 택 1\n    \"purposeType\": \"영수\",\n\n    // 일련번호\n    \"serialNum\": \"\",\n\n    // 현금\n    \"cash\": \"\",\n\n    // 수표\n    \"chkBill\": \"\",\n\n    // 외상\n    \"credit\": \"\",\n\n    // 어음\n    \"note\": \"\",\n    \n    // 비고1\n    // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력\n    \"remark1\": \"remark 1\",\n\n    // 비고2\n    \"remark2\": \"remark 2\",\n\n    // 비고3\n    \"remark3\": \"remark 3\",\n\n    // 사업자등록증 첨부\n    // - true : 첨부, false : 미첨부(Default)     \n    \"businessLicenseYN\": false,\n\n    // 통장사본 첨부\t\n    // └ true : 첨부, false : 미첨부(Default)\n    \"bankBookYN\": false,\n\n    // [리스트] 거래 물품 상세 정보 (최대 99건)\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ],\n\n    // [리스트] 공급받는자 담당자 정보 (최대 5명)\n    \"addContactList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 5)\n            \"serialNum\": 1,\n\n            // 이메일\n            \"email\": \"test@test.com\",\n\n            // 담당자 성명\n            \"contactName\": \"Buyer Contacter Addtion 01\"\n        },\n        {\n            \"serialNum\": 2,\n\n            \"email\": \"test@test.com\",\n\n            \"contactName\": \"Buyer Contacter Addtion 02\"\n        }\n    ]\n}",
+					"raw": "/*\n*\n* 세금계산서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/taxinvoice/java/api/object#Taxinvoice_Input\n*\n*/\n\n{\n    // 작성일자\n    // - 형식 : yyyyMMdd\n    \"writeDate\": \"20240724\",\n\n    // 과금방향\n    // - \"정과금\" / \"역과금\" 중 택 1\n    \"chargeDirection\": \"정과금\",\n\n    // 발행형태\n    // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1\n    \"issueType\": \"정발행\",\n\n    // 과세형태\n    // - \"과세\" / \"영세\" / \"면세\" 중 택 1\n    \"taxType\": \"과세\",\n\n    // 공급자 사업자번호\n    // └ 하이픈('-') 제외 10자리 숫자값\n    \"invoicerCorpNum\": \"1234567890\",\n\n    // 공급자 문서번호\n    // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoicerMgtKey\": \"20240930-02\",\n\n    // 공급자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoicerTaxRegID\": \"\",\n\n    // 공급자 상호\t\n    \"invoicerCorpName\": \"Seller Company Name\",\n\n    // 공급자 대표자 성명\t\n    \"invoicerCEOName\": \"Seller Company's CEO Name\",\n\n    // 공급자 주소\n    \"invoicerAddr\": \"Seller Address\",\n\n    // 공급자 업태\n    \"invoicerBizClass\": \"Seller Business Class\",\n\n    // 공급자 종목\n    \"invoicerBizType\": \"Seller Business Type\",\n\n    // 공급자 담당자 성명\n    \"invoicerContactName\": \"Business Contractor Name\",\n\n    // 공급자 담당자 연락처\n    \"invoicerTEL\": \"070-4304-2991\",\n\n    // 공급자 담당자 휴대폰\n    \"invoicerHP\": \"010-111-222\",\n\n    // 공급자 담당자 이메일\n    \"invoicerEmail\": \"seller@test.com\",\n\n    // 공급자 문자전송 여부\n    // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoicerSMSSendYN\": false,\n\n    // 공급받는자 구분\n    // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1\n    \"invoiceeType\": \"사업자\",\n\n    // 공급받는자 사업자번호\t\n    // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)\n    // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)\n    // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)\n    \"invoiceeCorpNum\": \"8888888888\",\n\n    // 공급받는자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoiceeTaxRegID\": \"\",\n\n    // 공급받는자 상호\n    \"invoiceeCorpName\": \"Buyer Corp Name\",\n\n    // 공급받는자 대표자 성명\n    \"invoiceeCEOName\": \"Buyer Corp CEO Name\",\n\n    // 공급받는자 주소\n    \"invoiceeAddr\": \"Buyer Address\",\n\n    // \t공급받는자 종목\n    \"invoiceeBizClass\": \"Buyer Business Class\",\n\n    // 공급받는자 업태\n    \"invoiceeBizType\": \"Buyer Business Type\",\n\n    // 공급받는자 주) 담당자 성명\n    \"invoiceeContactName1\": \"Buyer Contacter Name\",\n\n    // 공급받는자 주) 담당자 연락처\n    \"invoiceeTEL1\": \"070-111-222\",\n\n    // 공급받는자 주) 담당자 휴대폰\t\n    \"invoiceeHP1\": \"010-222-333\",\n\n    // 공급받는자 주) 담당자 이메일\n    \"invoiceeEmail1\": \"test@test.com\",\n\n    // 공급받는자 문자전송 여부\n    // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoiceeSMSSendYN\": null,\n\n\n    // 공급가액 합계\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"supplyCostTotal\": \"200000\",\n\n    // 세액 합계\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"taxTotal\": \"20000\",\n\n    // 합계금액\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"totalAmount\": \"220000\",\n\n    // \t수정 사유코드\n    // └ 수정세금계산서 작성시 필수\n    // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1\n    // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,\n    // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급\n    \"modifyCode\": null,\n\n    // 영수/청구\n    // - \"영수\" / \"청구\" / \"없음\" 중 택 1\n    \"purposeType\": \"영수\",\n\n    // 일련번호\n    \"serialNum\": \"\",\n\n    // 현금\n    \"cash\": \"\",\n\n    // 수표\n    \"chkBill\": \"\",\n\n    // 외상\n    \"credit\": \"\",\n\n    // 어음\n    \"note\": \"\",\n    \n    // 비고1\n    // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력\n    \"remark1\": \"remark 1\",\n\n    // 비고2\n    \"remark2\": \"remark 2\",\n\n    // 비고3\n    \"remark3\": \"remark 3\",\n\n    // 사업자등록증 첨부\n    // - true : 첨부, false : 미첨부(Default)     \n    \"businessLicenseYN\": false,\n\n    // 통장사본 첨부\t\n    // └ true : 첨부, false : 미첨부(Default)\n    \"bankBookYN\": false,\n\n    // [리스트] 거래 물품 상세 정보 (최대 99건)\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ],\n\n    // [리스트] 공급받는자 담당자 정보 (최대 5명)\n    \"addContactList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 5)\n            \"serialNum\": 1,\n\n            // 이메일\n            \"email\": \"test@test.com\",\n\n            // 담당자 성명\n            \"contactName\": \"Buyer Contacter Addtion 01\"\n        },\n        {\n            \"serialNum\": 2,\n\n            \"email\": \"test@test.com\",\n\n            \"contactName\": \"Buyer Contacter Addtion 02\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -825,7 +825,7 @@
 							" */",
 							"",
 							"// 발행할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-11'",
+							"var invoicerMgtKey = '20240930-11'",
 							"pm.collectionVariables.set(\"Issue_invoicerMgtKey\", invoicerMgtKey);",
 							"",
 							"// Iussue info",
@@ -907,7 +907,7 @@
 							" */",
 							"",
 							"// 발행 취소할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-01-96';",
+							"var invoicerMgtKey = '20240930-01-96';",
 							"pm.collectionVariables.set(\"CancelIssue_invoicerMgtKey\", invoicerMgtKey);",
 							"",
 							"// 세금계산서 상태 이력을 관리하기 위한 메모",
@@ -1017,7 +1017,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "/*\n*\n* 세금계산서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/taxinvoice/java/api/object#Taxinvoice_Input\n*\n*/\n\n{\n    // 작성일자\n    // - 형식 : yyyyMMdd\n    \"writeDate\": \"20210930\",\n\n    // 과금방향\n    // - \"정과금\" / \"역과금\" 중 택 1\n    \"chargeDirection\": \"정과금\",\n\n    // 발행형태\n    // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1\n    \"issueType\": \"역발행\",\n\n    // 과세형태\n    // - \"과세\" / \"영세\" / \"면세\" 중 택 1\n    \"taxType\": \"과세\",\n\n    // 공급자 사업자번호\n    // └ 하이픈('-') 제외 10자리 숫자값\n    \"invoicerCorpNum\": \"8888888888\",\n\n    // 공급자 문서번호\n    // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoicerMgtKey\": \"20210930-CER003\",\n\n    // 공급자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoicerTaxRegID\": \"\",\n\n    // 공급자 상호\t\n    \"invoicerCorpName\": \"Seller Company Name\",\n\n    // 공급자 대표자 성명\t\n    \"invoicerCEOName\": \"Seller Company's CEO Name\",\n\n    // 공급자 주소\n    \"invoicerAddr\": \"Seller Address\",\n\n    // 공급자 업태\n    \"invoicerBizClass\": \"Seller Business Class\",\n\n    // 공급자 종목\n    \"invoicerBizType\": \"Seller Business Type\",\n\n    // 공급자 담당자 성명\n    \"invoicerContactName\": \"Business Contractor Name\",\n\n    // 공급자 담당자 연락처\n    \"invoicerTEL\": \"070-4304-2991\",\n\n    // 공급자 담당자 휴대폰\n    \"invoicerHP\": \"010-111-222\",\n\n    // 공급자 담당자 이메일\n    \"invoicerEmail\": \"seller@test.com\",\n\n    // 공급자 문자전송 여부\n    // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoicerSMSSendYN\": false,\n\n    // 공급받는자 구분\n    // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1\n    \"invoiceeType\": \"사업자\",\n\n    // 공급받는자 사업자번호\t\n    // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)\n    // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)\n    // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)\n    \"invoiceeCorpNum\": \"1234567890\",\n\n    // 역발행시 필수, 공급받는자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoiceeMgtKey\" : \"20210930-CEE003\",\n\n    // 공급받는자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoiceeTaxRegID\": \"\",\n\n    // 공급받는자 상호\n    \"invoiceeCorpName\": \"Buyer Corp Name\",\n\n    // 공급받는자 대표자 성명\n    \"invoiceeCEOName\": \"Buyer Corp CEO Name\",\n\n    // 공급받는자 주소\n    \"invoiceeAddr\": \"Buyer Address\",\n\n    // \t공급받는자 종목\n    \"invoiceeBizClass\": \"Buyer Business Class\",\n\n    // 공급받는자 업태\n    \"invoiceeBizType\": \"Buyer Business Type\",\n\n    // 공급받는자 주) 담당자 성명\n    \"invoiceeContactName1\": \"Buyer Contacter Name\",\n\n    // 공급받는자 주) 담당자 연락처\n    \"invoiceeTEL1\": \"070-111-222\",\n\n    // 공급받는자 주) 담당자 휴대폰\t\n    \"invoiceeHP1\": \"010-222-333\",\n\n    // 공급받는자 주) 담당자 이메일\n    \"invoiceeEmail1\": \"test@test.com\",\n\n    // 공급받는자 문자전송 여부\n    // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoiceeSMSSendYN\": null,\n\n\n    // 공급가액 합계\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"supplyCostTotal\": \"200000\",\n\n    // 세액 합계\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"taxTotal\": \"20000\",\n\n    // 합계금액\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"totalAmount\": \"220000\",\n\n    // \t수정 사유코드\n    // └ 수정세금계산서 작성시 필수\n    // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1\n    // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,\n    // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급\n    \"modifyCode\": null,\n\n    // 영수/청구\n    // - \"영수\" / \"청구\" / \"없음\" 중 택 1\n    \"purposeType\": \"영수\",\n\n    // 일련번호\n    \"serialNum\": \"\",\n\n    // 현금\n    \"cash\": \"\",\n\n    // 수표\n    \"chkBill\": \"\",\n\n    // 외상\n    \"credit\": \"\",\n\n    // 어음\n    \"note\": \"\",\n    \n    // 비고1\n    // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력\n    \"remark1\": \"remark 1\",\n\n    // 비고2\n    \"remark2\": \"remark 2\",\n\n    // 비고3\n    \"remark3\": \"remark 3\",\n\n    // 사업자등록증 첨부\n    // - true : 첨부, false : 미첨부(Default)     \n    \"businessLicenseYN\": false,\n\n    // 통장사본 첨부\t\n    // └ true : 첨부, false : 미첨부(Default)\n    \"bankBookYN\": false,\n\n    // [리스트] 거래 물품 상세 정보 (최대 99건)\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ],\n\n    // [리스트] 공급받는자 담당자 정보 (최대 5명)\n    \"addContactList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 5)\n            \"serialNum\": 1,\n\n            // 이메일\n            \"email\": \"test@test.com\",\n\n            // 담당자 성명\n            \"contactName\": \"Buyer Contacter Addtion 01\"\n        },\n        {\n            \"serialNum\": 2,\n\n            \"email\": \"test@test.com\",\n\n            \"contactName\": \"Buyer Contacter Addtion 02\"\n        }\n    ]\n}",
+					"raw": "/*\n*\n* 세금계산서 객체\n*\n* 자세한 설명은 아래의 링크를 참고해 주시기 바랍니다.\n* - https://developers.popbill.com/reference/taxinvoice/java/api/object#Taxinvoice_Input\n*\n*/\n\n{\n    // 작성일자\n    // - 형식 : yyyyMMdd\n    \"writeDate\": \"20240724\",\n\n    // 과금방향\n    // - \"정과금\" / \"역과금\" 중 택 1\n    \"chargeDirection\": \"정과금\",\n\n    // 발행형태\n    // - \"정발행\" / \"역발행\" / \"위수탁\" 중 택 1\n    \"issueType\": \"역발행\",\n\n    // 과세형태\n    // - \"과세\" / \"영세\" / \"면세\" 중 택 1\n    \"taxType\": \"과세\",\n\n    // 공급자 사업자번호\n    // └ 하이픈('-') 제외 10자리 숫자값\n    \"invoicerCorpNum\": \"8888888888\",\n\n    // 공급자 문서번호\n    // └ 정발행시 필수, 공급자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoicerMgtKey\": \"20240930-CER003\",\n\n    // 공급자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoicerTaxRegID\": \"\",\n\n    // 공급자 상호\t\n    \"invoicerCorpName\": \"Seller Company Name\",\n\n    // 공급자 대표자 성명\t\n    \"invoicerCEOName\": \"Seller Company's CEO Name\",\n\n    // 공급자 주소\n    \"invoicerAddr\": \"Seller Address\",\n\n    // 공급자 업태\n    \"invoicerBizClass\": \"Seller Business Class\",\n\n    // 공급자 종목\n    \"invoicerBizType\": \"Seller Business Type\",\n\n    // 공급자 담당자 성명\n    \"invoicerContactName\": \"Business Contractor Name\",\n\n    // 공급자 담당자 연락처\n    \"invoicerTEL\": \"070-4304-2991\",\n\n    // 공급자 담당자 휴대폰\n    \"invoicerHP\": \"010-111-222\",\n\n    // 공급자 담당자 이메일\n    \"invoicerEmail\": \"seller@test.com\",\n\n    // 공급자 문자전송 여부\n    // {issueType} 값이 \"정발행\" 인 경우, 세금계산서 발행시 알림문자 전송여부 : true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급받는자 (주)담당자 휴대폰번호 {invoiceeHP1} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoicerSMSSendYN\": false,\n\n    // 공급받는자 구분\n    // - \"사업자\" / \"개인\" / \"외국인\" 중 택 1\n    \"invoiceeType\": \"사업자\",\n\n    // 공급받는자 사업자번호\t\n    // {invoiceeType} = \"사업자\" 인 경우, 사업자번호 (하이픈 ('-') 제외 10자리)\n    // {invoiceeType} = \"개인\" 인 경우, 주민등록번호 (하이픈 ('-') 제외 13자리)\n    // {invoiceeType} = \"외국인\" 인 경우, \"9999999999999\" (하이픈 ('-') 제외 13자리)\n    \"invoiceeCorpNum\": \"1234567890\",\n\n    // 역발행시 필수, 공급받는자의 문서 관리를 위해 파트너가 할당하는 식별번호\n    // └ 영문 대소문자, 숫자, 특수문자('-','_')만 이용 가능\n    \"invoiceeMgtKey\" : \"20240930-CEE003\",\n\n    // 공급받는자 종사업장 식별번호\t\n    // └ 4자리 숫자값\n    \"invoiceeTaxRegID\": \"\",\n\n    // 공급받는자 상호\n    \"invoiceeCorpName\": \"Buyer Corp Name\",\n\n    // 공급받는자 대표자 성명\n    \"invoiceeCEOName\": \"Buyer Corp CEO Name\",\n\n    // 공급받는자 주소\n    \"invoiceeAddr\": \"Buyer Address\",\n\n    // \t공급받는자 종목\n    \"invoiceeBizClass\": \"Buyer Business Class\",\n\n    // 공급받는자 업태\n    \"invoiceeBizType\": \"Buyer Business Type\",\n\n    // 공급받는자 주) 담당자 성명\n    \"invoiceeContactName1\": \"Buyer Contacter Name\",\n\n    // 공급받는자 주) 담당자 연락처\n    \"invoiceeTEL1\": \"070-111-222\",\n\n    // 공급받는자 주) 담당자 휴대폰\t\n    \"invoiceeHP1\": \"010-222-333\",\n\n    // 공급받는자 주) 담당자 이메일\n    \"invoiceeEmail1\": \"test@test.com\",\n\n    // 공급받는자 문자전송 여부\n    // {issueType} 값이 \"역발행\" 인 경우, 세금계산서 역발행 요청시 알림문자 전송여부: true / false 중 택 1\n    // └ true = 전송, false = 미전송\n    // └ 공급자 담당자 휴대폰번호 {invoicerHP} 값으로 문자 전송\n    // └ 전송시 포인트 차감되며, 실패시 환불 처리\n    \"invoiceeSMSSendYN\": null,\n\n\n    // 공급가액 합계\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"supplyCostTotal\": \"200000\",\n\n    // 세액 합계\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"taxTotal\": \"20000\",\n\n    // 합계금액\t\n    // └ 정수만 입력 가능\n    // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n    \"totalAmount\": \"220000\",\n\n    // \t수정 사유코드\n    // └ 수정세금계산서 작성시 필수\n    // └ 1 / 2 / 3 / 4 / 5 / 6 중 택 1\n    // 1 = 기재사항 착오정정, 2 = 공급가액 변동, 3 = 환입,\n    // 4 = 계약의 해제, 5 = 내국신용장 사후개설, 6 = 착오에 의한 이중발급\n    \"modifyCode\": null,\n\n    // 영수/청구\n    // - \"영수\" / \"청구\" / \"없음\" 중 택 1\n    \"purposeType\": \"영수\",\n\n    // 일련번호\n    \"serialNum\": \"\",\n\n    // 현금\n    \"cash\": \"\",\n\n    // 수표\n    \"chkBill\": \"\",\n\n    // 외상\n    \"credit\": \"\",\n\n    // 어음\n    \"note\": \"\",\n    \n    // 비고1\n    // └ {invoiceeType} = \"외국인\" 인 경우 필수, 외국인 등록번호 또는 여권번호 입력\n    \"remark1\": \"remark 1\",\n\n    // 비고2\n    \"remark2\": \"remark 2\",\n\n    // 비고3\n    \"remark3\": \"remark 3\",\n\n    // 사업자등록증 첨부\n    // - true : 첨부, false : 미첨부(Default)     \n    \"businessLicenseYN\": false,\n\n    // 통장사본 첨부\t\n    // └ true : 첨부, false : 미첨부(Default)\n    \"bankBookYN\": false,\n\n    // [리스트] 거래 물품 상세 정보 (최대 99건)\n    \"detailList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 99)\n            \"serialNum\": 1,\n\n            // 거래일자\n            // └ 형식 : yyyyMMdd\n            \"purchaseDT\": \"20201006\",\n\n            // 품명\n            \"itemName\": \"Item Name 01\",\n\n            // 규격\n            \"spec\": \"spec\",\n\n            // 수량\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 입력 가능\n            \"qty\": \"1\",\n\n            // 단가\n            // └ 소수점 아래 2번째 자리까지 입력 가능\n            // └ 마이너스 금액 입력 가능\n            \"unitCost\": \"110000\",\n\n            // 공급가액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"supplyCost\": \"100000\",\n\n            // 세액\n            // └ 정수만 입력 가능\n            // └ 마이너스 금액 입력 가능, 소수점 아래 자동 절사\n            \"tax\": \"10000\",\n\n            // 비고\n            \"remark\": \"Item reamrk\"\n        },\n        {\n            \"serialNum\": 2,\n            \"purchaseDT\": \"20201006\",\n            \"itemName\": \"Item Name 02\",\n            \"spec\": \"spec\",\n            \"qty\": \"1\",\n            \"unitCost\": \"110000\",\n            \"supplyCost\": \"100000\",\n            \"tax\": \"10000\",\n            \"remark\": \"Item reamrk\"\n        }\n    ],\n\n    // [리스트] 공급받는자 담당자 정보 (최대 5명)\n    \"addContactList\": [\n        {\n            // 일련번호\n            // └ 1부터 순차적으로 입력 (최대 5)\n            \"serialNum\": 1,\n\n            // 이메일\n            \"email\": \"test@test.com\",\n\n            // 담당자 성명\n            \"contactName\": \"Buyer Contacter Addtion 01\"\n        },\n        {\n            \"serialNum\": 2,\n\n            \"email\": \"test@test.com\",\n\n            \"contactName\": \"Buyer Contacter Addtion 02\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1054,7 +1054,7 @@
 							" */",
 							"",
 							"// 역발행 요청할 세금계산서 문서번호",
-							"var invoiceeMgtKey = '20210930-CEE002'",
+							"var invoiceeMgtKey = '20240930-CEE002'",
 							"pm.collectionVariables.set(\"Request_invoiceeMgtKey\", invoiceeMgtKey);",
 							"",
 							"// Request info",
@@ -1134,7 +1134,7 @@
 							" */",
 							"",
 							"// 삭제할 세금계산서 문서번호",
-							"var invoiceeMgtKey = '20210930-CEE001';",
+							"var invoiceeMgtKey = '20240930-CEE001';",
 							"pm.collectionVariables.set(\"CancelRequest_invoiceeMgtKey\", invoiceeMgtKey);",
 							"",
 							"// Request info",
@@ -1215,7 +1215,7 @@
 							" */",
 							"",
 							"// 거부할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-CER003'",
+							"var invoicerMgtKey = '20240930-CER003'",
 							"pm.collectionVariables.set(\"Refuse_invoicerMgtKey\", invoicerMgtKey);",
 							"",
 							"// Refuse info",
@@ -1295,7 +1295,7 @@
 							" */",
 							"",
 							"// 삭제할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-01-96';",
+							"var invoicerMgtKey = '20240930-01-96';",
 							"pm.collectionVariables.set(\"Delete_invoicerMgtKey\", invoicerMgtKey);",
 							""
 						],
@@ -1364,7 +1364,7 @@
 							" */",
 							"",
 							"// 국세청으로 즉시 전송할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-01-97';",
+							"var invoicerMgtKey = '20240930-01-97';",
 							"pm.collectionVariables.set(\"SendToNTS_invoicerMgtKey\", invoicerMgtKey);",
 							"",
 							"// 세금계산서 상태 이력을 관리하기 위한 메모",
@@ -1444,7 +1444,7 @@
 							" */",
 							"",
 							"// 상태 및 요약정보를 확인할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-01-97'",
+							"var invoicerMgtKey = '20240930-01-97'",
 							"pm.collectionVariables.set(\"GetInfo_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -1498,7 +1498,7 @@
 							" */",
 							"",
 							"// 상태 및 요약 정보를 확인할 세금계산서 문서번호 배열 (최대 : 1000건)",
-							"var InovicerMgtKeyList = ['20210930-01-97','20210930-01-95', '20210930-01-93']",
+							"var InovicerMgtKeyList = ['20240930-01-97','20240930-01-95', '20240930-01-93']",
 							"pm.collectionVariables.set(\"GetInfos_InovicerMgtKeyList\", stringify(InovicerMgtKeyList));",
 							"",
 							"function stringify(obj) {",
@@ -1564,7 +1564,7 @@
 							" */",
 							"",
 							"// 상태 및 요약정보를 확인할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20220201-PB-057';",
+							"var invoicerMgtKey = '20240201-PB-057';",
 							"pm.collectionVariables.set(\"GetXML_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -1624,7 +1624,7 @@
 							" */",
 							"",
 							"// 상세정보를 확일할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-01-97'",
+							"var invoicerMgtKey = '20240930-01-97'",
 							"pm.collectionVariables.set(\"GetDetailInfo_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -1689,11 +1689,11 @@
 							"pm.collectionVariables.set(\"Search_DType\", DType);",
 							"",
 							"// 조회 기간의 시작일자 (형식 : yyyyMMdd)",
-							"var SDate = '20210601'",
+							"var SDate = '20240724'",
 							"pm.collectionVariables.set(\"Search_SDate\", SDate);",
 							"",
 							"// 조회 기간의 종료일자 (형식 : yyyyMMdd)",
-							"var EDate = '20210629'",
+							"var EDate = '20240724'",
 							"pm.collectionVariables.set(\"Search_EDate\", EDate);",
 							"",
 							"// [배열] 세금계산서 상태코드",
@@ -1903,7 +1903,7 @@
 							" */",
 							"",
 							"// 확인할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-01-97'",
+							"var invoicerMgtKey = '20240930-01-97'",
 							"pm.collectionVariables.set(\"GetLogs_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -2018,7 +2018,7 @@
 							" */",
 							"",
 							"// 확인할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-CEdR002'",
+							"var invoicerMgtKey = '20240930-CEdR002'",
 							"pm.collectionVariables.set(\"GetPopUpURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -2078,7 +2078,7 @@
 							" */",
 							"",
 							"// 확인할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-01-97'",
+							"var invoicerMgtKey = '20240930-01-97'",
 							"pm.collectionVariables.set(\"GetViewURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -2138,7 +2138,7 @@
 							" */",
 							"",
 							"// 인쇄할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-01-97'",
+							"var invoicerMgtKey = '20240930-01-97'",
 							"pm.collectionVariables.set(\"GetPrintURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -2198,7 +2198,7 @@
 							" */\r",
 							"\r",
 							"// 인쇄할 세금계산서 문서번호\r",
-							"var invoicerMgtKey = '20210930-01-97'\r",
+							"var invoicerMgtKey = '20240930-01-97'\r",
 							"pm.collectionVariables.set(\"GetOldPrintURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -2257,7 +2257,7 @@
 							" */",
 							"",
 							"// 인쇄할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-01-97'",
+							"var invoicerMgtKey = '20240930-01-97'",
 							"pm.collectionVariables.set(\"GetEPrintURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -2317,7 +2317,7 @@
 							" */",
 							"",
 							"// 인쇄할 세금계산서 문서번호 배열 (최대 : 1000 건)",
-							"var InovicerMgtKeyList = ['20210629-01','20210629-02', '20210629-03']",
+							"var InovicerMgtKeyList = ['20240629-01','20240629-02', '20240629-03']",
 							"pm.collectionVariables.set(\"GetMassPrintURL_InovicerMgtKeyList\", stringify(InovicerMgtKeyList));",
 							"",
 							"function stringify(obj) {",
@@ -2389,7 +2389,7 @@
 							" */",
 							"",
 							"// 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210629-02'",
+							"var invoicerMgtKey = '20240629-02'",
 							"pm.collectionVariables.set(\"GetMailURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -2449,7 +2449,7 @@
 							" */",
 							"",
 							"// 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210629-02'",
+							"var invoicerMgtKey = '20240629-02'",
 							"pm.collectionVariables.set(\"GetPDFURL_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -2619,7 +2619,7 @@
 							" */",
 							"",
 							"// 파일을 첨부할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-CEdR002';",
+							"var invoicerMgtKey = '20240930-CEdR002';",
 							"pm.collectionVariables.set(\"AttachFile_invoicerMgtKey\", invoicerMgtKey);",
 							"",
 							"var DisplayName = \"displayName.jpg\";",
@@ -2704,7 +2704,7 @@
 							" */",
 							"",
 							"// 파일을 삭제할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20220328-REGISTER002';",
+							"var invoicerMgtKey = '20240328-REGISTER002';",
 							"pm.collectionVariables.set(\"DeleteFile_invoicerMgtKey\", invoicerMgtKey);",
 							"",
 							"// 삭제할 파일ID",
@@ -2785,7 +2785,7 @@
 							" */",
 							"",
 							"// 첨부파일 목록을 확인할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20220328-REGISTER002';",
+							"var invoicerMgtKey = '20240328-REGISTER002';",
 							"pm.collectionVariables.set(\"GetFiles_invoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
@@ -2840,7 +2840,7 @@
 							" */",
 							"",
 							"// 이메일 재전송할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-02';",
+							"var invoicerMgtKey = '20240930-02';",
 							"pm.collectionVariables.set(\"SendEmail_invoicerMgtKey\", invoicerMgtKey);",
 							"",
 							"// 수신자 이메일주소",
@@ -2920,7 +2920,7 @@
 							" */",
 							"",
 							"// 세금계산서 문서번호 ",
-							"var invoicerMgtKey = '20210930-02';",
+							"var invoicerMgtKey = '20240930-02';",
 							"pm.collectionVariables.set(\"SendSMS_invoicerMgtKey\", invoicerMgtKey);",
 							"",
 							"// SMS 정보",
@@ -3002,7 +3002,7 @@
 							" */",
 							"",
 							"// 세금계산서 문서번호 ",
-							"var invoicerMgtKey = '20210930-02';",
+							"var invoicerMgtKey = '20240930-02';",
 							"pm.collectionVariables.set(\"SendFAX_invoicerMgtKey\", invoicerMgtKey);",
 							"",
 							"// FAX 정보.",
@@ -3083,7 +3083,7 @@
 							" */",
 							"",
 							"// 전자명세서를 첨부할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-02';",
+							"var invoicerMgtKey = '20240930-02';",
 							"pm.collectionVariables.set(\"AttachStatement_invoicerMgtKey\", invoicerMgtKey);",
 							"",
 							"// 전자명세서 정보",
@@ -3093,7 +3093,7 @@
 							"  ItemCode : '121',",
 							"",
 							"  // 첨부할 전자명세서 문서번호",
-							"  MgtKey : '20210930-PTEST101', ",
+							"  MgtKey : '20240930-PTEST101', ",
 							"};",
 							"",
 							"var RequestBody = stringify(reqBodyObj);",
@@ -3169,7 +3169,7 @@
 							" */",
 							"",
 							"// 전자명세서를 첨부해제할 세금계산서 문서번호 ",
-							"var invoicerMgtKey = '20210930-02';",
+							"var invoicerMgtKey = '20240930-02';",
 							"pm.collectionVariables.set(\"DetachStatement_invoicerMgtKey\", invoicerMgtKey);",
 							"",
 							"// Statement Info",
@@ -3179,7 +3179,7 @@
 							"  ItemCode : '121',",
 							"",
 							"  // 전자명세서 문서번호",
-							"  MgtKey : '20210629-PTEST101', ",
+							"  MgtKey : '20240629-PTEST101', ",
 							"};",
 							"",
 							"var RequestBody = stringify(reqBodyObj);",
@@ -3255,7 +3255,7 @@
 							"pm.collectionVariables.set(\"AssignMgtKey_ItemKey\", popbillItemKey);",
 							"",
 							"// 할당할 세금계산서 문서번호",
-							"var invoicerMgtKey = '20210930-21';",
+							"var invoicerMgtKey = '20240930-21';",
 							"pm.collectionVariables.set(\"AssignMgtKey_InvoicerMgtKey\", invoicerMgtKey);"
 						],
 						"type": "text/javascript"
