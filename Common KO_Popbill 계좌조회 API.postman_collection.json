@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b9fc7b26-93a1-4bdb-bf92-10073343085d",
+		"_postman_id": "de7d9a38-cc65-4ddb-8392-88048d3654a3",
 		"name": "Common KO_Popbill 계좌조회 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -232,7 +232,7 @@
 						}
 					]
 				},
-				"description": "ㆍ계좌조회 서비스를 이용할 계좌를 팝빌에 등록합니다..\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/manage#RegistBankAccount"
+				"description": "ㆍ계좌조회 서비스를 이용할 계좌를 팝빌에 등록합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/manage#RegistBankAccount"
 			},
 			"response": []
 		},
@@ -439,7 +439,7 @@
 						"ListBankAccount"
 					]
 				},
-				"description": "ㆍ팝빌에 등록된 계좌 정보를 확인합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/manage#ListBankAccount"
+				"description": "ㆍ팝빌에 등록된 계좌정보 목록을 반환합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/manage#ListBankAccount"
 			},
 			"response": []
 		},
@@ -549,19 +549,22 @@
 					"query": [
 						{
 							"key": "BankCode",
-							"value": "0004"
+							"value": "0004",
+							"description": "은행 기관코드"
 						},
 						{
 							"key": "AccountNumber",
-							"value": "123423123123"
+							"value": "123423123123",
+							"description": "계좌번호"
 						},
 						{
 							"key": "CloseType",
-							"value": "중도"
+							"value": "중도",
+							"description": "정액제 해지 구분"
 						}
 					]
 				},
-				"description": "ㆍ계좌의 정액제 해지를 요청합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/manage#CloseBankAccount"
+				"description": "ㆍ팝빌에 등록된 계좌의 정액제 해지를 요청합니다.\n\nhttps://developers.popbill.com/reference/easyfinbank/java/api/manage#CloseBankAccount"
 			},
 			"response": []
 		},
@@ -615,11 +618,13 @@
 					"query": [
 						{
 							"key": "BankCode",
-							"value": "0004"
+							"value": "0004",
+							"description": "은행 기관코드"
 						},
 						{
 							"key": "AccountNumber",
-							"value": "123423123123"
+							"value": "123423123123",
+							"description": "계좌번호"
 						}
 					]
 				},
@@ -714,7 +719,7 @@
 							" * GetToken을 실행하면 Bearer Token 인증에 사용되는 토큰이 Collection Scope 변수에 저장됩니다.",
 							" */",
 							"",
-							"// 은행코드",
+							"// 은행 기관코드",
 							"var bankCode = '0034';",
 							"pm.collectionVariables.set(\"RequestJob_BankCode\", bankCode);",
 							"",
@@ -722,11 +727,11 @@
 							"var accountNumber = '1107020434717';",
 							"pm.collectionVariables.set(\"RequestJob_AccountNumber\", accountNumber);",
 							"",
-							"// 조회 기간의 시작일자",
+							"// 조회 기간의 시작일자 (yyyyMMdd)",
 							"var SDate = '20220325';",
 							"pm.collectionVariables.set(\"RequestJob_SDate\", SDate);",
 							"",
-							"// 조회 기간의 종료일자",
+							"// 조회 기간의 종료일자 (yyyyMMdd)",
 							"var EDate = '20220421';",
 							"pm.collectionVariables.set(\"RequestJob_EDate\", EDate);"
 						],

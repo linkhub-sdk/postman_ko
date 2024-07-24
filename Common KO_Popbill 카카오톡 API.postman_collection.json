@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "50a74518-0dfb-4374-b024-b311c025170c",
+		"_postman_id": "7e3dd787-79bc-4dd8-86c4-e3840f23e5f2",
 		"name": "Common KO_Popbill 카카오톡 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -551,7 +551,7 @@
 						"ATS"
 					]
 				},
-				"description": "ㆍ승인된 템플릿의 내용을 작성하여 1건의 알림톡 전송을 팝빌에 접수합니다.\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://developers.popbill.com/reference/kakaotalk/java/api/send#SendATSOne"
+				"description": "ㆍ승인된 템플릿의 내용을 작성하여 1건의 알림톡 전송을 팝빌에 접수합니다.\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\n승인된 템플릿과 일치하지 않는 내용(알림톡 내용, 버튼 목록)을 입력하는 경우 '전송실패' 처리됩니다.\n\nhttps://developers.popbill.com/reference/kakaotalk/java/api/send#SendATSOne"
 			},
 			"response": []
 		},
@@ -608,7 +608,7 @@
 						"ATS"
 					]
 				},
-				"description": "ㆍ승인된 템플릿의 내용을 작성하여 다수건의 알림톡 전송을 팝빌에 접수하며, 수신자 별로 개별 내용을 전송합니다. (최대 1,000건)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://developers.popbill.com/reference/kakaotalk/java/api/send#SendATSMulti"
+				"description": "ㆍ승인된 템플릿의 내용을 작성하여 다수건의 알림톡 전송을 팝빌에 접수하며, 수신자 별로 개별 내용을 전송합니다. (최대 1,000건)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nㆍ승인된 템플릿과 일치하지 않는 내용(알림톡 내용, 버튼 목록)을 입력하는 경우 '전송실패' 처리됩니다.\n\nhttps://developers.popbill.com/reference/kakaotalk/java/api/send#SendATSMulti"
 			},
 			"response": []
 		},
@@ -665,7 +665,7 @@
 						"ATS"
 					]
 				},
-				"description": "ㆍ승인된 템플릿 내용을 작성하여 다수건의 알림톡 전송을 팝빌에 접수하며, 모든 수신자에게 동일 내용을 전송합니다. (최대 1,000건)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nhttps://developers.popbill.com/reference/kakaotalk/java/api/send#SendATSSame"
+				"description": "ㆍ승인된 템플릿 내용을 작성하여 다수건의 알림톡 전송을 팝빌에 접수하며, 모든 수신자에게 동일 내용을 전송합니다. (최대 1,000건)\n\nㆍ전송실패시 사전에 지정한 변수 'altSendType' 값으로 대체문자를 전송할 수 있고, 이 경우 문자(SMS/LMS) 요금이 과금됩니다.\n\nㆍ승인된 템플릿과 일치하지 않는 내용(알림톡 내용, 버튼 목록)을 입력하는 경우 '전송실패' 처리됩니다.\n\nhttps://developers.popbill.com/reference/kakaotalk/java/api/send#SendATSSame"
 			},
 			"response": []
 		},
@@ -1266,7 +1266,7 @@
 						"Cancel"
 					]
 				},
-				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 예약접수된 카카오톡을 전송 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://developers.popbill.com/reference/kakaotalk/java/api/send#CancelReserve"
+				"description": "ㆍ팝빌에서 반환받은 접수번호로 예약된 카카오톡을 전송 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://developers.popbill.com/reference/kakaotalk/java/api/send#CancelReserve"
 			},
 			"response": []
 		},
@@ -1319,7 +1319,7 @@
 						"{{requestNum}}"
 					]
 				},
-				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 예약접수된 카카오톡을 전송 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://developers.popbill.com/reference/kakaotalk/java/api/send#CancelReserveRN"
+				"description": "ㆍ파트너가 할당한 요청번호로 예약된 카카오톡을 전송 취소합니다. (예약시간 10분 전까지 가능)\n\nhttps://developers.popbill.com/reference/kakaotalk/java/api/send#CancelReserveRN"
 			},
 			"response": []
 		},
@@ -1552,7 +1552,7 @@
 						"{{senderNumber}}"
 					]
 				},
-				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://developers.popbill.com/reference/kakaotalk/java/api/sendnum#CheckSenderNumber"
+				"description": "ㆍ카카오톡 발신번호 등록여부를 확인합니다.\n\nhttps://developers.popbill.com/reference/kakaotalk/java/api/sendnum#CheckSenderNumber"
 			},
 			"response": []
 		},
@@ -1797,7 +1797,7 @@
 						}
 					]
 				},
-				"description": "ㆍ팝빌 사이트와 동일한 카카오톡 전송내역을 확인하는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/reference/kakaotalk/java/api/info#GetSentListURL"
+				"description": "ㆍ카카오톡 전송내역을 확인하는 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/reference/kakaotalk/java/api/info#GetSentListURL"
 			},
 			"response": []
 		},

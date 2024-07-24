@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e7bca3c0-d851-4997-8ce9-0302de4085f8",
+		"_postman_id": "8210478f-8e54-4ec1-92c7-e033dda49efd",
 		"name": "Common KO_Popbill 홈택스연동 전자세금계산서 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -948,7 +948,7 @@
 						"CertInfo"
 					]
 				},
-				"description": "ㆍ홈택스연동 인증을 위해 팝빌에 등록된 인증서 만료일자를 확인합니다.\n\nhttps://developers.popbill.com/reference/httaxinvoice/java/api/cert#GetCertificateExpireDate"
+				"description": "ㆍ팝빌에 등록된 인증서 만료일자를 확인합니다.\n\nhttps://developers.popbill.com/reference/httaxinvoice/java/api/cert#GetCertificateExpireDate"
 			},
 			"response": []
 		},

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "59622f71-8ea4-4e10-a7af-c82ff3efda55",
+		"_postman_id": "b4feac2f-696a-44c5-90e7-be8940169faf",
 		"name": "Common KO_Popbill 홈택스연동 현금영수증 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -802,7 +802,7 @@
 						"DeptUser"
 					]
 				},
-				"description": "ㆍ팝빌에 등록된 인증서로 홈택스 로그인 가능 여부를 확인합니다.\n\nhttps://developers.popbill.com/reference/htcashbill/java/api/cert#CheckDeptUser"
+				"description": "ㆍ홈택스연동 인증을 위해 팝빌에 등록된 현금영수증 자료조회 부서사용자 계정을 확인합니다.\n\nhttps://developers.popbill.com/reference/htcashbill/java/api/cert#CheckDeptUser"
 			},
 			"response": []
 		},

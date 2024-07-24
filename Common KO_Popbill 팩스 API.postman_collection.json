@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3357ff13-183f-482e-981d-f4f098328878",
+		"_postman_id": "ed134e68-ad29-4503-a04e-55eb380e8a87",
 		"name": "Common KO_Popbill 팩스 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -923,7 +923,7 @@
 						"{{senderNumber}}"
 					]
 				},
-				"description": "ㆍ팝빌에서 반환받은 접수번호를 통해 알림톡/친구톡 전송상태 및 결과를 확인합니다.\n\nhttps://developers.popbill.com/reference/fax/java/api/sendnum#CheckSenderNumber"
+				"description": "ㆍ팩스 발신번호 등록여부를 확인합니다.\n\nㆍ발신번호 상태가 '승인'인 경우에만 리턴값 Response의 변수 'code'가 1로 반환됩니다.\n\n\nhttps://developers.popbill.com/reference/fax/java/api/sendnum#CheckSenderNumber"
 			},
 			"response": []
 		},
@@ -977,7 +977,7 @@
 						"{{requestNum}}"
 					]
 				},
-				"description": "ㆍ파트너가 할당한 전송요청 번호를 통해 팩스 전송상태 및 결과를 확인합니다.\n\nhttps://developers.popbill.com/reference/fax/java/api/info#GetFaxResultRN"
+				"description": "ㆍ파트너가 할당한 요청번호를 통해 팩스 전송상태 및 결과를 확인합니다.\n\nhttps://developers.popbill.com/reference/fax/java/api/info#GetFaxResultRN"
 			},
 			"response": []
 		},
@@ -1159,7 +1159,7 @@
 						}
 					]
 				},
-				"description": "ㆍ팝빌 사이트와 동일한 팩스 전송내역 확인 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/reference/fax/java/api/info#GetSentListURL"
+				"description": "ㆍ팩스 전송내역 확인 페이지의 팝업 URL을 반환합니다.\n\nㆍ반환되는 URL은 보안 정책상 30초 동안 유효하며, 시간을 초과한 후에는 해당 URL을 통한 페이지 접근이 불가합니다.\n\nhttps://developers.popbill.com/reference/fax/java/api/info#GetSentListURL"
 			},
 			"response": []
 		},
